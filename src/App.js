@@ -29,10 +29,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–4 hrs", difficulty: "Moderate",
     resources: { forums: ["r/climbing", "Mountain Project Community"], localGroups: ["Search 'climbing gym' near you", "Meetup.com: Climbing Groups"], sites: ["mountainproject.com", "thecrag.com"] },
     video: { searchQuery: "rock climbing for beginners", url: "https://www.youtube.com/results?search_query=rock+climbing+for+beginners", title: "Rock Climbing for Beginners — Everything You Need to Know" },
-    tutorials: [{ label: "Complete Beginner's Guide", url: "https://www.rei.com/learn/expert-advice/rock-climbing-basics.html" }, { label: "How to Choose Climbing Shoes", url: "https://www.rei.com/learn/expert-advice/climbing-shoes.html" }, { label: "Indoor vs Outdoor Climbing", url: "https://www.mountainproject.com/articles/115197697/indoor-vs-outdoor-climbing" }],
-  },
-    storeQuery: "rock climbing gym",
+    tutorials: [{ label: "Complete Beginner's Guide", url: "https://www.rei.com/learn/expert-advice/rock-climbing-basics.html" }, { label: "How to Choose Climbing Shoes", url: "https://www.rei.com/learn/expert-advice/climbing-shoes.html" }, { label: "Indoor vs Outdoor Climbing", url: "https://www.mountainproject.com/articles/115197697/indoor-vs-outdoor-climbing" }],    storeQuery: "rock climbing gym",
     classQuery: "rock climbing lessons",
+
+  },
   "Bouldering": {
     emoji: "🪨", category: "Physical",
     tags: ["strength", "puzzle-solving", "indoor", "social", "challenge"],
@@ -41,10 +41,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–4 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/bouldering", "Bouldering Obsessed Discord"], localGroups: ["Local bouldering gyms", "Meetup climbing groups"], sites: ["27crags.com", "thecrag.com"] },
     video: { searchQuery: "bouldering for beginners", url: "https://www.youtube.com/results?search_query=bouldering+for+beginners", title: "Bouldering for Beginners — Your First Session Guide" },
-    tutorials: [{ label: "Bouldering Grades Explained", url: "https://www.thecrag.com/en/article/boulderinggradesystem" }, { label: "Top 10 Beginner Mistakes", url: "https://www.reddit.com/r/bouldering/wiki/index" }, { label: "Home Training for Boulderers", url: "https://www.moonclimbing.com/blogs/news/home-training-guide" }],
-  },
-    storeQuery: "bouldering gym",
+    tutorials: [{ label: "Bouldering Grades Explained", url: "https://www.thecrag.com/en/article/boulderinggradesystem" }, { label: "Top 10 Beginner Mistakes", url: "https://www.reddit.com/r/bouldering/wiki/index" }, { label: "Home Training for Boulderers", url: "https://www.moonclimbing.com/blogs/news/home-training-guide" }],    storeQuery: "bouldering gym",
     classQuery: "bouldering class",
+
+  },
   "Trail Running": {
     emoji: "🏃", category: "Physical",
     tags: ["outdoor", "solo", "endurance", "nature", "meditative"],
@@ -53,10 +53,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–6 hrs", difficulty: "Moderate",
     resources: { forums: ["r/ultrarunning", "iRunFar community"], localGroups: ["Local trail running clubs", "Strava running groups"], sites: ["irunfar.com", "trailrunner.com"] },
     video: { searchQuery: "trail running for beginners", url: "https://www.youtube.com/results?search_query=trail+running+for+beginners", title: "Trail Running for Beginners — How to Get Started" },
-    tutorials: [{ label: "Trail Running Beginner Plan", url: "https://www.trailrunner.com/training/trail-running-for-beginners/" }, { label: "How to Choose Trail Shoes", url: "https://www.rei.com/learn/expert-advice/trail-running-shoes.html" }, { label: "Running Uphill Technique", url: "https://www.irunfar.com/uphill-running-technique" }],
-  },
-    storeQuery: "running store",
+    tutorials: [{ label: "Trail Running Beginner Plan", url: "https://www.trailrunner.com/training/trail-running-for-beginners/" }, { label: "How to Choose Trail Shoes", url: "https://www.rei.com/learn/expert-advice/trail-running-shoes.html" }, { label: "Running Uphill Technique", url: "https://www.irunfar.com/uphill-running-technique" }],    storeQuery: "running store",
     classQuery: "trail running club",
+
+  },
   "Cold Water Swimming": {
     emoji: "🌊", category: "Physical",
     tags: ["outdoor", "solo", "nature", "adventurous", "meditative"],
@@ -65,10 +65,10 @@ const HOBBY_DATA = {
     timePerWeek: "1–3 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/coldwaterchallenge", "Outdoor Swimmer Magazine community"], localGroups: ["Wild swimming Facebook groups", "Local open water swim groups"], sites: ["outdoorswimmer.com", "wildswimming.co.uk"] },
     video: { searchQuery: "cold water swimming beginners guide", url: "https://www.youtube.com/results?search_query=cold+water+swimming+beginners+guide", title: "Cold Water Swimming — Beginner's Guide to Wild Swimming" },
-    tutorials: [{ label: "Cold Water Safety Guide", url: "https://www.outdoorswimmer.com/articles/cold-water-swimming-safety/" }, { label: "How to Start Wild Swimming", url: "https://www.wildswimming.co.uk/how-to-start-wild-swimming/" }, { label: "Health Benefits Explained", url: "https://www.bbc.com/future/article/20220128-the-cold-water-swimming-boom" }],
-  },
-    storeQuery: "aquatic center swimming pool",
+    tutorials: [{ label: "Cold Water Safety Guide", url: "https://www.outdoorswimmer.com/articles/cold-water-swimming-safety/" }, { label: "How to Start Wild Swimming", url: "https://www.wildswimming.co.uk/how-to-start-wild-swimming/" }, { label: "Health Benefits Explained", url: "https://www.bbc.com/future/article/20220128-the-cold-water-swimming-boom" }],    storeQuery: "aquatic center swimming pool",
     classQuery: "open water swimming group",
+
+  },
   "Cycling": {
     emoji: "🚴", category: "Physical",
     tags: ["outdoor", "endurance", "social", "solo", "meditative"],
@@ -77,10 +77,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–8 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/cycling", "r/bicycling"], localGroups: ["Local cycling clubs", "Strava cycling segments near you"], sites: ["cyclingnews.com", "velonews.com"] },
     video: { searchQuery: "road cycling for beginners", url: "https://www.youtube.com/results?search_query=road+cycling+for+beginners", title: "Road Cycling for Beginners — Complete Starter Guide" },
-    tutorials: [{ label: "How to Buy Your First Bike", url: "https://www.rei.com/learn/expert-advice/bike-guide.html" }, { label: "Beginner Cycling Training Plan", url: "https://www.cyclingweekly.com/fitness/training/cycling-training-plan-for-beginners" }, { label: "Essential Cycling Gear", url: "https://www.bicycling.com/bikes-gear/a20044419/cycling-gear-for-beginners/" }],
-  },
-    storeQuery: "bike shop",
+    tutorials: [{ label: "How to Buy Your First Bike", url: "https://www.rei.com/learn/expert-advice/bike-guide.html" }, { label: "Beginner Cycling Training Plan", url: "https://www.cyclingweekly.com/fitness/training/cycling-training-plan-for-beginners" }, { label: "Essential Cycling Gear", url: "https://www.bicycling.com/bikes-gear/a20044419/cycling-gear-for-beginners/" }],    storeQuery: "bike shop",
     classQuery: "cycling class group ride",
+
+  },
   "Skateboarding": {
     emoji: "🛹", category: "Physical",
     tags: ["outdoor", "creative", "solo", "adventurous", "urban"],
@@ -89,10 +89,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–5 hrs", difficulty: "Moderate",
     resources: { forums: ["r/NewSkaters", "r/skateboarding"], localGroups: ["Local skate parks", "Skate shop community events"], sites: ["skateboardingmagazine.com", "thrashermagazine.com"] },
     video: { searchQuery: "skateboarding for beginners", url: "https://www.youtube.com/results?search_query=skateboarding+for+beginners", title: "Skateboarding for Beginners — Learn to Ride in One Session" },
-    tutorials: [{ label: "How to Stand & Push", url: "https://www.skatedeluxe.com/blog/en/wiki/skateboarding/skateboarding-for-beginners/" }, { label: "Choosing Your First Board", url: "https://www.tactics.com/info/how-to-choose-a-skateboard" }, { label: "Learn Ollies Step by Step", url: "https://www.wikihow.com/Ollie-on-a-Skateboard" }],
-  },
-    storeQuery: "skate shop",
+    tutorials: [{ label: "How to Stand & Push", url: "https://www.skatedeluxe.com/blog/en/wiki/skateboarding/skateboarding-for-beginners/" }, { label: "Choosing Your First Board", url: "https://www.tactics.com/info/how-to-choose-a-skateboard" }, { label: "Learn Ollies Step by Step", url: "https://www.wikihow.com/Ollie-on-a-Skateboard" }],    storeQuery: "skate shop",
     classQuery: "skateboarding lessons",
+
+  },
   "Martial Arts": {
     emoji: "🥋", category: "Physical",
     tags: ["indoor", "discipline", "social", "challenge", "strength"],
@@ -101,10 +101,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–6 hrs", difficulty: "Moderate",
     resources: { forums: ["r/bjj", "r/MuayThai", "r/amateur_boxing"], localGroups: ["Local dojos and gyms", "Meetup: martial arts near you"], sites: ["bjjheroes.com", "fightinginsider.com"] },
     video: { searchQuery: "BJJ for beginners first class", url: "https://www.youtube.com/results?search_query=BJJ+for+beginners+first+class", title: "BJJ for Beginners — What to Expect at Your First Class" },
-    tutorials: [{ label: "Which Martial Art Should You Learn?", url: "https://www.artofmanliness.com/skills/manly-know-how/which-martial-art-should-you-study/" }, { label: "BJJ Beginner's Guide", url: "https://bjjheroes.com/techniques/bjj-beginners-guide" }, { label: "Muay Thai Fundamentals", url: "https://www.evolve-mma.com/blog/muay-thai-for-beginners-everything-you-need-to-know/" }],
-  },
-    storeQuery: "martial arts school",
+    tutorials: [{ label: "Which Martial Art Should You Learn?", url: "https://www.artofmanliness.com/skills/manly-know-how/which-martial-art-should-you-study/" }, { label: "BJJ Beginner's Guide", url: "https://bjjheroes.com/techniques/bjj-beginners-guide" }, { label: "Muay Thai Fundamentals", url: "https://www.evolve-mma.com/blog/muay-thai-for-beginners-everything-you-need-to-know/" }],    storeQuery: "martial arts school",
     classQuery: "martial arts class beginner",
+
+  },
   "Yoga": {
     emoji: "🧘", category: "Physical",
     tags: ["indoor", "meditative", "solo", "flexibility", "mindfulness"],
@@ -113,10 +113,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–5 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/yoga", "YogaForum.org"], localGroups: ["Local yoga studios", "Community center classes"], sites: ["yogajournal.com", "doyogawithme.com"] },
     video: { searchQuery: "yoga for complete beginners", url: "https://www.youtube.com/results?search_query=yoga+for+complete+beginners", title: "Yoga for Complete Beginners — 20 Minute Home Yoga" },
-    tutorials: [{ label: "Yoga for Beginners Guide", url: "https://www.yogajournal.com/yoga-101/yoga-for-beginners/" }, { label: "Free Classes — Yoga with Adriene", url: "https://www.youtube.com/@yogawithadriene" }, { label: "Which Style of Yoga is Right For You?", url: "https://www.yogajournal.com/yoga-101/types-of-yoga/" }],
-  },
-    storeQuery: "yoga studio",
+    tutorials: [{ label: "Yoga for Beginners Guide", url: "https://www.yogajournal.com/yoga-101/yoga-for-beginners/" }, { label: "Free Classes — Yoga with Adriene", url: "https://www.youtube.com/@yogawithadriene" }, { label: "Which Style of Yoga is Right For You?", url: "https://www.yogajournal.com/yoga-101/types-of-yoga/" }],    storeQuery: "yoga studio",
     classQuery: "yoga class beginner",
+
+  },
   "Rowing / Kayaking": {
     emoji: "🚣", category: "Physical",
     tags: ["outdoor", "nature", "solo", "endurance", "water"],
@@ -125,10 +125,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–4 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/kayaking", "r/whitewater"], localGroups: ["Local paddling clubs", "REI kayak classes"], sites: ["americancanoe.org", "paddling.com"] },
     video: { searchQuery: "kayaking for beginners paddle strokes", url: "https://www.youtube.com/results?search_query=kayaking+for+beginners+paddle+strokes", title: "Kayaking for Beginners — Paddle Strokes & Getting Started" },
-    tutorials: [{ label: "Beginner Kayaking Guide", url: "https://www.rei.com/learn/expert-advice/kayaking.html" }, { label: "How to Choose a Kayak", url: "https://www.paddling.com/plan/articles/how-to-choose-a-kayak/" }, { label: "Basic Paddle Strokes", url: "https://www.americancanoe.org/page/paddling_basics" }],
-  },
-    storeQuery: "kayak rental",
+    tutorials: [{ label: "Beginner Kayaking Guide", url: "https://www.rei.com/learn/expert-advice/kayaking.html" }, { label: "How to Choose a Kayak", url: "https://www.paddling.com/plan/articles/how-to-choose-a-kayak/" }, { label: "Basic Paddle Strokes", url: "https://www.americancanoe.org/page/paddling_basics" }],    storeQuery: "kayak rental",
     classQuery: "kayaking lessons",
+
+  },
   "Archery": {
     emoji: "🏹", category: "Physical",
     tags: ["indoor", "solo", "meditative", "precision", "discipline"],
@@ -137,10 +137,10 @@ const HOBBY_DATA = {
     timePerWeek: "1–3 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/archery", "Archery Talk Forum"], localGroups: ["Local archery ranges", "USA Archery club finder"], sites: ["usarchery.org", "archerytalk.com"] },
     video: { searchQuery: "archery for beginners form technique", url: "https://www.youtube.com/results?search_query=archery+for+beginners+form+technique", title: "Archery for Beginners — Form, Technique & First Steps" },
-    tutorials: [{ label: "USA Archery Beginner Resources", url: "https://www.usarchery.org/resources/getting-started" }, { label: "Recurve vs Compound — Which to Start With", url: "https://archerytalk.com/threads/recurve-vs-compound-for-beginners.html" }, { label: "Proper Archery Form Guide", url: "https://www.liveabout.com/archery-for-beginners-1083315" }],
-  },
-    storeQuery: "archery range",
+    tutorials: [{ label: "USA Archery Beginner Resources", url: "https://www.usarchery.org/resources/getting-started" }, { label: "Recurve vs Compound — Which to Start With", url: "https://archerytalk.com/threads/recurve-vs-compound-for-beginners.html" }, { label: "Proper Archery Form Guide", url: "https://www.liveabout.com/archery-for-beginners-1083315" }],    storeQuery: "archery range",
     classQuery: "archery lessons",
+
+  },
 
   // ── CREATIVE ──────────────────────────────────────────────
   "Ceramics": {
@@ -151,10 +151,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–6 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/Pottery", "Ceramic Arts Network Forum"], localGroups: ["Local community art centers", "YMCA pottery classes"], sites: ["ceramicartsnetwork.org", "bigceramicstore.com"] },
     video: { searchQuery: "pottery wheel for beginners", url: "https://www.youtube.com/results?search_query=pottery+wheel+for+beginners", title: "Pottery for Beginners — Your First Time on the Wheel" },
-    tutorials: [{ label: "Beginner's Guide to Pottery", url: "https://ceramicartsnetwork.org/daily/article/Beginners-Guide-to-Pottery" }, { label: "Finding a Studio Near You", url: "https://www.yelp.com/search?find_desc=pottery+classes" }, { label: "Hand-Building vs Wheel Throwing", url: "https://ceramicartsnetwork.org/daily/article/Hand-Building-vs-Wheel-Throwing" }],
+    tutorials: [{ label: "Beginner's Guide to Pottery", url: "https://ceramicartsnetwork.org/daily/article/Beginners-Guide-to-Pottery" }, { label: "Finding a Studio Near You", url: "https://www.yelp.com/search?find_desc=pottery+classes" }, { label: "Hand-Building vs Wheel Throwing", url: "https://ceramicartsnetwork.org/daily/article/Hand-Building-vs-Wheel-Throwing" }],    storeQuery: "pottery studio clay art center",
+    classQuery: "pottery class beginner wheel throwing",
+
   },
-    storeQuery: "pottery studio",
-    classQuery: "pottery class beginner",
   "Urban Sketching": {
     emoji: "✏️", category: "Creative",
     tags: ["artistic", "outdoor", "solo", "observational", "meditative"],
@@ -163,10 +163,10 @@ const HOBBY_DATA = {
     timePerWeek: "1–5 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/urbansketching", "Urban Sketchers Forum"], localGroups: ["UrbanSketchers.org local chapters", "Facebook: Urban Sketchers [your city]"], sites: ["urbansketchers.org", "sketchbookskool.com"] },
     video: { searchQuery: "urban sketching for beginners", url: "https://www.youtube.com/results?search_query=urban+sketching+for+beginners", title: "Urban Sketching for Beginners — Start Drawing the World Around You" },
-    tutorials: [{ label: "Urban Sketching 101", url: "https://urbansketchers.org/p/about-urban-sketching.html" }, { label: "Starter Supply List", url: "https://www.sketchbookskool.com/blog/urban-sketching-supplies/" }, { label: "Perspective Tips for Beginners", url: "https://www.artistsnetwork.com/art-techniques/urban-sketching-tips/" }],
+    tutorials: [{ label: "Urban Sketching 101", url: "https://urbansketchers.org/p/about-urban-sketching.html" }, { label: "Starter Supply List", url: "https://www.sketchbookskool.com/blog/urban-sketching-supplies/" }, { label: "Perspective Tips for Beginners", url: "https://www.artistsnetwork.com/art-techniques/urban-sketching-tips/" }],    storeQuery: "Blick Art Materials art supply store",
+    classQuery: "drawing class art workshop",
+
   },
-    storeQuery: "art supply store",
-    classQuery: "drawing class workshop",
   "Film Photography": {
     emoji: "📷", category: "Creative",
     tags: ["artistic", "patient", "analog", "solo", "observational"],
@@ -175,10 +175,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–4 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/analog", "Rangefinder Forum"], localGroups: ["Local camera clubs", "Film photography meetups"], sites: ["filmphotographyproject.com", "35mmc.com"] },
     video: { searchQuery: "film photography for beginners 35mm", url: "https://www.youtube.com/results?search_query=film+photography+for+beginners+35mm", title: "Film Photography for Beginners — Everything You Need to Know" },
-    tutorials: [{ label: "Best Beginner Film Cameras", url: "https://www.35mmc.com/best-film-cameras-for-beginners/" }, { label: "How to Develop Your Own Film", url: "https://filmphotographyproject.com/content/develop-black-white-film" }, { label: "Understanding Film Speeds (ISO)", url: "https://www.lomography.com/magazine/318255-a-guide-to-film-speeds" }],
-  },
-    storeQuery: "camera store",
+    tutorials: [{ label: "Best Beginner Film Cameras", url: "https://www.35mmc.com/best-film-cameras-for-beginners/" }, { label: "How to Develop Your Own Film", url: "https://filmphotographyproject.com/content/develop-black-white-film" }, { label: "Understanding Film Speeds (ISO)", url: "https://www.lomography.com/magazine/318255-a-guide-to-film-speeds" }],    storeQuery: "camera store",
     classQuery: "photography workshop",
+
+  },
   "Watercolor Painting": {
     emoji: "🎨", category: "Creative",
     tags: ["artistic", "meditative", "solo", "creative", "tactile"],
@@ -187,10 +187,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–5 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/Watercolor", "WetCanvas Forums"], localGroups: ["Local art classes", "Community art center workshops"], sites: ["watercolorpainting.com", "jacksonart.com"] },
     video: { searchQuery: "watercolor painting for absolute beginners", url: "https://www.youtube.com/results?search_query=watercolor+painting+for+absolute+beginners", title: "Watercolor for Absolute Beginners — Materials & First Painting" },
-    tutorials: [{ label: "Beginner Watercolor Techniques", url: "https://www.artistsnetwork.com/art-techniques/watercolor-techniques-for-beginners/" }, { label: "Best Budget Watercolor Supplies", url: "https://www.jacksonsart.com/blog/2020/01/13/best-watercolour-sets-for-beginners/" }, { label: "Wet on Wet vs Wet on Dry", url: "https://watercolorpainting.com/wet-on-wet-vs-wet-on-dry/" }],
+    tutorials: [{ label: "Beginner Watercolor Techniques", url: "https://www.artistsnetwork.com/art-techniques/watercolor-techniques-for-beginners/" }, { label: "Best Budget Watercolor Supplies", url: "https://www.jacksonsart.com/blog/2020/01/13/best-watercolour-sets-for-beginners/" }, { label: "Wet on Wet vs Wet on Dry", url: "https://watercolorpainting.com/wet-on-wet-vs-wet-on-dry/" }],    storeQuery: "Blick Art Materials art supply store",
+    classQuery: "watercolor painting class workshop",
+
   },
-    storeQuery: "art supply store",
-    classQuery: "watercolor painting class",
   "Screenwriting": {
     emoji: "🎬", category: "Creative",
     tags: ["writing", "solo", "storytelling", "creative", "mental"],
@@ -199,10 +199,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–8 hrs", difficulty: "Moderate",
     resources: { forums: ["r/Screenwriting", "Done Deal Pro Forums"], localGroups: ["Local screenwriting groups", "Meetup: writers rooms"], sites: ["simplyscripts.com", "scriptmag.com"] },
     video: { searchQuery: "screenwriting for beginners how to write a script", url: "https://www.youtube.com/results?search_query=screenwriting+for+beginners+how+to+write+a+script", title: "Screenwriting for Beginners — How to Write Your First Script" },
-    tutorials: [{ label: "Free Screenwriting Software — Fade In", url: "https://www.fadeinpro.com/" }, { label: "The 3-Act Structure Explained", url: "https://www.scriptmag.com/features/the-three-act-structure" }, { label: "Read Free Scripts Online", url: "https://www.simplyscripts.com/" }],
+    tutorials: [{ label: "Free Screenwriting Software — Fade In", url: "https://www.fadeinpro.com/" }, { label: "The 3-Act Structure Explained", url: "https://www.scriptmag.com/features/the-three-act-structure" }, { label: "Read Free Scripts Online", url: "https://www.simplyscripts.com/" }],    storeQuery: "Barnes Noble bookstore",
+    classQuery: "screenwriting workshop class",
+
   },
-    storeQuery: "bookstore",
-    classQuery: "screenwriting workshop",
   "Leatherworking": {
     emoji: "👜", category: "Creative",
     tags: ["hands-on", "craft", "solo", "tactile", "patient"],
@@ -211,10 +211,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–5 hrs", difficulty: "Moderate",
     resources: { forums: ["r/leathercraft", "Leatherworker.net Forum"], localGroups: ["Local makerspace leather classes", "Tandy Leather workshops"], sites: ["leatherworker.net", "springfieldleather.com"] },
     video: { searchQuery: "leatherworking for beginners make a wallet", url: "https://www.youtube.com/results?search_query=leatherworking+for+beginners+make+a+wallet", title: "Leatherworking for Beginners — Make Your First Wallet" },
-    tutorials: [{ label: "Beginner Leatherworking Guide", url: "https://leatherworker.net/forum/viewtopic.php?t=57847" }, { label: "Essential Tools to Start", url: "https://www.tandyleather.com/blogs/craftaid/leatherworking-tools-for-beginners" }, { label: "Hand Stitching Leather Tutorial", url: "https://www.instructables.com/Hand-Stitching-Leather/" }],
-  },
-    storeQuery: "craft supply store",
+    tutorials: [{ label: "Beginner Leatherworking Guide", url: "https://leatherworker.net/forum/viewtopic.php?t=57847" }, { label: "Essential Tools to Start", url: "https://www.tandyleather.com/blogs/craftaid/leatherworking-tools-for-beginners" }, { label: "Hand Stitching Leather Tutorial", url: "https://www.instructables.com/Hand-Stitching-Leather/" }],    storeQuery: "Tandy Leather leather craft store",
     classQuery: "leatherworking class workshop",
+
+  },
   "Candle Making": {
     emoji: "🕯️", category: "Creative",
     tags: ["home", "craft", "creative", "meditative", "tactile"],
@@ -223,10 +223,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–4 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/candlemaking", "Candle Science Community"], localGroups: ["Local craft workshops", "Michaels candle classes"], sites: ["candlescience.com", "makesy.com"] },
     video: { searchQuery: "candle making for beginners", url: "https://www.youtube.com/results?search_query=candle+making+for+beginners", title: "Candle Making for Beginners — Complete Starter Guide" },
-    tutorials: [{ label: "Beginner Candle Making Guide", url: "https://www.candlescience.com/learning/beginner-candle-making-guide/" }, { label: "Choosing the Right Wax", url: "https://www.candlescience.com/learning/choosing-the-right-wax/" }, { label: "Fragrance Load Guide", url: "https://www.candlescience.com/learning/fragrance-calculator/" }],
+    tutorials: [{ label: "Beginner Candle Making Guide", url: "https://www.candlescience.com/learning/beginner-candle-making-guide/" }, { label: "Choosing the Right Wax", url: "https://www.candlescience.com/learning/choosing-the-right-wax/" }, { label: "Fragrance Load Guide", url: "https://www.candlescience.com/learning/fragrance-calculator/" }],    storeQuery: "Michaels craft store Hobby Lobby",
+    classQuery: "candle making class workshop",
+
   },
-    storeQuery: "craft supply store",
-    classQuery: "candle making class",
   "Woodworking": {
     emoji: "🪵", category: "Creative",
     tags: ["hands-on", "craft", "patient", "home", "tactile"],
@@ -236,9 +236,9 @@ const HOBBY_DATA = {
     resources: { forums: ["r/woodworking", "Sawmill Creek Forums"], localGroups: ["Local makerspace woodshops", "Community college woodworking classes"], sites: ["finewoodworking.com", "woodcraft.com"] },
     video: { searchQuery: "woodworking for beginners", url: "https://www.youtube.com/results?search_query=woodworking+for+beginners", title: "Woodworking for Beginners — Everything You Need to Know" },
     tutorials: [{ label: "Essential Beginner Tools", url: "https://www.finewoodworking.com/2018/09/04/10-tools-for-beginners" }, { label: "First Projects to Build", url: "https://www.familyhandyman.com/list/easy-woodworking-projects-for-beginners/" }, { label: "Wood Types Explained", url: "https://www.woodcraft.com/blog/posts/wood-101-hardwoods-vs-softwoods" }],
+    storeQuery: "Woodcraft Rockler woodworking store",
+    classQuery: "woodworking class near me",
   },
-    storeQuery: "hardware store lumber yard",
-    classQuery: "woodworking class beginner",
 
   // ── OUTDOOR / NATURE ──────────────────────────────────────
   "Foraging": {
@@ -249,10 +249,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–4 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/foraging", "r/mycology"], localGroups: ["Local mycological societies", "Wildcraft! app events"], sites: ["foragerchef.com", "wildfoodism.com"] },
     video: { searchQuery: "foraging for beginners wild food", url: "https://www.youtube.com/results?search_query=foraging+for+beginners+wild+food", title: "Foraging for Beginners — How to Find Wild Food Safely" },
-    tutorials: [{ label: "Safe Foraging Rules for Beginners", url: "https://foragerchef.com/foraging-safety/" }, { label: "Best Beginner Plants to Forage", url: "https://www.wildfoodism.com/beginner-foraging/" }, { label: "Find a Foraging Walk Near You", url: "https://www.eventbrite.com/d/online/foraging-walk/" }],
+    tutorials: [{ label: "Safe Foraging Rules for Beginners", url: "https://foragerchef.com/foraging-safety/" }, { label: "Best Beginner Plants to Forage", url: "https://www.wildfoodism.com/beginner-foraging/" }, { label: "Find a Foraging Walk Near You", url: "https://www.eventbrite.com/d/online/foraging-walk/" }],    storeQuery: "nature center arboretum botanical garden",
+    classQuery: "foraging guided walk nature tour",
+
   },
-    storeQuery: "botanical garden nature center",
-    classQuery: "foraging walk guided",
   "Birdwatching": {
     emoji: "🦅", category: "Outdoor",
     tags: ["nature", "solo", "observational", "meditative", "patient"],
@@ -261,10 +261,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–5 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/birding", "eBird Community"], localGroups: ["Local Audubon Society chapters", "eBird local birding groups"], sites: ["ebird.org", "allaboutbirds.org"] },
     video: { searchQuery: "birdwatching for beginners how to start", url: "https://www.youtube.com/results?search_query=birdwatching+for+beginners+how+to+start", title: "Birdwatching for Beginners — How to Get Started" },
-    tutorials: [{ label: "Free Merlin ID App by Cornell Lab", url: "https://merlin.allaboutbirds.org/" }, { label: "Beginner Binoculars Guide", url: "https://www.allaboutbirds.org/news/what-binoculars-are-best-for-birding/" }, { label: "eBird — Track Your Life List", url: "https://ebird.org/home" }],
-  },
-    storeQuery: "wild bird store",
+    tutorials: [{ label: "Free Merlin ID App by Cornell Lab", url: "https://merlin.allaboutbirds.org/" }, { label: "Beginner Binoculars Guide", url: "https://www.allaboutbirds.org/news/what-binoculars-are-best-for-birding/" }, { label: "eBird — Track Your Life List", url: "https://ebird.org/home" }],    storeQuery: "wild bird store",
     classQuery: "birdwatching tour group",
+
+  },
   "Hiking": {
     emoji: "🥾", category: "Outdoor",
     tags: ["outdoor", "nature", "solo", "social", "endurance"],
@@ -273,10 +273,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–6 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/hiking", "r/backpacking"], localGroups: ["AllTrails community", "Local hiking Meetup groups"], sites: ["alltrails.com", "rei.com/learn"] },
     video: { searchQuery: "hiking for beginners everything you need to know", url: "https://www.youtube.com/results?search_query=hiking+for+beginners+everything+you+need+to+know", title: "Hiking for Beginners — Everything You Need to Know" },
-    tutorials: [{ label: "Find Trails on AllTrails", url: "https://www.alltrails.com/" }, { label: "Day Hiking Essentials Checklist", url: "https://www.rei.com/learn/expert-advice/day-hiking-checklist.html" }, { label: "How to Choose Hiking Boots", url: "https://www.rei.com/learn/expert-advice/hiking-boots.html" }],
-  },
-    storeQuery: "outdoor gear store",
+    tutorials: [{ label: "Find Trails on AllTrails", url: "https://www.alltrails.com/" }, { label: "Day Hiking Essentials Checklist", url: "https://www.rei.com/learn/expert-advice/day-hiking-checklist.html" }, { label: "How to Choose Hiking Boots", url: "https://www.rei.com/learn/expert-advice/hiking-boots.html" }],    storeQuery: "outdoor gear store",
     classQuery: "guided hike nature walk",
+
+  },
   "Surfing": {
     emoji: "🏄", category: "Outdoor",
     tags: ["outdoor", "water", "adventurous", "physical", "meditative"],
@@ -285,10 +285,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–6 hrs", difficulty: "Moderate",
     resources: { forums: ["r/surfing", "Surfer Magazine community"], localGroups: ["Local surf schools", "Surf meetup groups"], sites: ["surfline.com", "magicseaweed.com"] },
     video: { searchQuery: "surfing for beginners first lesson", url: "https://www.youtube.com/results?search_query=surfing+for+beginners+first+lesson", title: "Surfing for Beginners — Your First Lesson Explained" },
-    tutorials: [{ label: "Surf Etiquette & Line-Up Rules", url: "https://www.surfer.com/features/surf-etiquette-lineup-rules/" }, { label: "Choosing a Beginner Board", url: "https://www.surfer.com/features/how-to-choose-a-surfboard/" }, { label: "Check Surf Forecasts — Surfline", url: "https://www.surfline.com/" }],
-  },
-    storeQuery: "surf shop",
+    tutorials: [{ label: "Surf Etiquette & Line-Up Rules", url: "https://www.surfer.com/features/surf-etiquette-lineup-rules/" }, { label: "Choosing a Beginner Board", url: "https://www.surfer.com/features/how-to-choose-a-surfboard/" }, { label: "Check Surf Forecasts — Surfline", url: "https://www.surfline.com/" }],    storeQuery: "surf shop",
     classQuery: "surf lessons beginner",
+
+  },
   "Rock Pooling": {
     emoji: "🦀", category: "Outdoor",
     tags: ["nature", "solo", "observational", "educational", "outdoor"],
@@ -297,10 +297,10 @@ const HOBBY_DATA = {
     timePerWeek: "1–3 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/MarineBiology", "iNaturalist community"], localGroups: ["Local nature trusts", "Coastal wildlife groups"], sites: ["inaturalist.org", "seasearch.org.uk"] },
     video: { searchQuery: "rock pooling guide what to look for", url: "https://www.youtube.com/results?search_query=rock+pooling+guide+what+to+look+for", title: "Rock Pooling Guide — What to Look For & How to Explore" },
-    tutorials: [{ label: "Identify What You Find — iNaturalist", url: "https://www.inaturalist.org/" }, { label: "Rock Pool Safety Tips", url: "https://www.wildlifetrusts.org/actions/how-go-rock-pooling" }, { label: "Best Rock Pooling Spots Near You", url: "https://www.discoverwildlife.com/animal-facts/fish/guide-to-rock-pooling/" }],
+    tutorials: [{ label: "Identify What You Find — iNaturalist", url: "https://www.inaturalist.org/" }, { label: "Rock Pool Safety Tips", url: "https://www.wildlifetrusts.org/actions/how-go-rock-pooling" }, { label: "Best Rock Pooling Spots Near You", url: "https://www.discoverwildlife.com/animal-facts/fish/guide-to-rock-pooling/" }],    storeQuery: "beach coastal park nature preserve",
+    classQuery: "coastal nature tour marine wildlife",
+
   },
-    storeQuery: "nature reserve beach park",
-    classQuery: "coastal nature walk tour",
   "Stargazing": {
     emoji: "🔭", category: "Outdoor",
     tags: ["nature", "solo", "meditative", "educational", "patient"],
@@ -309,10 +309,10 @@ const HOBBY_DATA = {
     timePerWeek: "1–3 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/Astronomy", "Cloudy Nights Forum"], localGroups: ["Local astronomy clubs", "Dark sky preserve events"], sites: ["stellarium.org", "skyandtelescope.org"] },
     video: { searchQuery: "stargazing for beginners night sky", url: "https://www.youtube.com/results?search_query=stargazing+for+beginners+night+sky", title: "Stargazing for Beginners — How to Start Exploring the Night Sky" },
-    tutorials: [{ label: "Free Stellarium App", url: "https://stellarium.org/" }, { label: "Choosing Your First Telescope", url: "https://skyandtelescope.org/astronomy-equipment/telescopes/how-to-choose-a-telescope/" }, { label: "Dark Sky Finder Near You", url: "https://www.lightpollutionmap.info/" }],
+    tutorials: [{ label: "Free Stellarium App", url: "https://stellarium.org/" }, { label: "Choosing Your First Telescope", url: "https://skyandtelescope.org/astronomy-equipment/telescopes/how-to-choose-a-telescope/" }, { label: "Dark Sky Finder Near You", url: "https://www.lightpollutionmap.info/" }],    storeQuery: "telescope store astronomy club",
+    classQuery: "astronomy club stargazing event",
+
   },
-    storeQuery: "telescope store",
-    classQuery: "astronomy club stargazing",
   "Mountain Biking": {
     emoji: "🚵", category: "Outdoor",
     tags: ["outdoor", "adventurous", "physical", "social", "challenge"],
@@ -321,10 +321,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–6 hrs", difficulty: "Moderate",
     resources: { forums: ["r/MTB", "MTBR Forums"], localGroups: ["Local trail associations", "IMBA trail finder"], sites: ["mtbproject.com", "pinkbike.com"] },
     video: { searchQuery: "mountain biking for beginners skills gear", url: "https://www.youtube.com/results?search_query=mountain+biking+for+beginners+skills+gear", title: "Mountain Biking for Beginners — Skills, Gear & First Trails" },
-    tutorials: [{ label: "Find MTB Trails Near You", url: "https://www.mtbproject.com/" }, { label: "Essential MTB Skills for Beginners", url: "https://www.pinkbike.com/news/mountain-biking-skills-for-beginners.html" }, { label: "Hardtail vs Full Suspension", url: "https://www.rei.com/learn/expert-advice/mountain-bike.html" }],
-  },
-    storeQuery: "mountain bike shop",
+    tutorials: [{ label: "Find MTB Trails Near You", url: "https://www.mtbproject.com/" }, { label: "Essential MTB Skills for Beginners", url: "https://www.pinkbike.com/news/mountain-biking-skills-for-beginners.html" }, { label: "Hardtail vs Full Suspension", url: "https://www.rei.com/learn/expert-advice/mountain-bike.html" }],    storeQuery: "mountain bike shop",
     classQuery: "mountain bike skills clinic",
+
+  },
 
   // ── CULINARY ──────────────────────────────────────────────
   "Sourdough Baking": {
@@ -335,10 +335,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–6 hrs", difficulty: "Moderate",
     resources: { forums: ["r/sourdough", "The Fresh Loaf forum"], localGroups: ["Local baking classes", "Library bread workshops"], sites: ["thefreshloaf.com", "kingarthurbaking.com"] },
     video: { searchQuery: "sourdough bread for beginners start to finish", url: "https://www.youtube.com/results?search_query=sourdough+bread+for+beginners+start+to+finish", title: "Sourdough Bread for Beginners — Full Process Start to Finish" },
-    tutorials: [{ label: "Beginner Sourdough Guide", url: "https://www.theperfectloaf.com/beginners-sourdough-bread/" }, { label: "How to Make a Starter from Scratch", url: "https://www.kingarthurbaking.com/recipes/sourdough-starter-recipe" }, { label: "Troubleshooting Your Sourdough", url: "https://www.thefreshloaf.com/handbook/troubleshooting" }],
+    tutorials: [{ label: "Beginner Sourdough Guide", url: "https://www.theperfectloaf.com/beginners-sourdough-bread/" }, { label: "How to Make a Starter from Scratch", url: "https://www.kingarthurbaking.com/recipes/sourdough-starter-recipe" }, { label: "Troubleshooting Your Sourdough", url: "https://www.thefreshloaf.com/handbook/troubleshooting" }],    storeQuery: "Sur La Table kitchen store baking supply",
+    classQuery: "bread baking class workshop",
+
   },
-    storeQuery: "kitchen supply baking store",
-    classQuery: "bread baking class",
   "Homebrewing": {
     emoji: "🍺", category: "Culinary",
     tags: ["creative", "science", "patient", "social", "home"],
@@ -347,10 +347,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–4 hrs (brew days every few weeks)", difficulty: "Moderate",
     resources: { forums: ["r/homebrewing", "HomeBrewTalk.com"], localGroups: ["AHA homebrew club finder", "Local homebrew shop events"], sites: ["homebrewersassociation.org", "brewersfriend.com"] },
     video: { searchQuery: "home brewing beer for beginners", url: "https://www.youtube.com/results?search_query=home+brewing+beer+for+beginners", title: "How to Brew Beer at Home — Complete Beginner Guide" },
-    tutorials: [{ label: "Extract vs All-Grain Brewing", url: "https://www.homebrewersassociation.org/how-to-brew/extract-brewing/" }, { label: "Free Recipe Calculator", url: "https://www.brewersfriend.com/" }, { label: "Find a Local Homebrew Club", url: "https://www.homebrewersassociation.org/clubs/" }],
-  },
-    storeQuery: "homebrew supply store",
+    tutorials: [{ label: "Extract vs All-Grain Brewing", url: "https://www.homebrewersassociation.org/how-to-brew/extract-brewing/" }, { label: "Free Recipe Calculator", url: "https://www.brewersfriend.com/" }, { label: "Find a Local Homebrew Club", url: "https://www.homebrewersassociation.org/clubs/" }],    storeQuery: "homebrew supply store",
     classQuery: "homebrewing class",
+
+  },
   "Hot Sauce Making": {
     emoji: "🌶️", category: "Culinary",
     tags: ["home", "science", "creative", "social", "fermentation"],
@@ -359,10 +359,10 @@ const HOBBY_DATA = {
     timePerWeek: "1–3 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/hotsauce", "r/fermentation"], localGroups: ["Local farmers market pepper growers", "Fermentation workshops"], sites: ["peppergeek.com", "chilipeppermadness.com"] },
     video: { searchQuery: "fermented hot sauce beginners", url: "https://www.youtube.com/results?search_query=fermented+hot+sauce+beginners", title: "How to Make Fermented Hot Sauce at Home" },
-    tutorials: [{ label: "Beginner Fermented Hot Sauce Recipe", url: "https://www.chilipeppermadness.com/recipes/fermented-hot-sauce/" }, { label: "Pepper Heat Guide — Scoville Scale", url: "https://www.peppergeek.com/scoville-scale/" }, { label: "Bottling Your Hot Sauce", url: "https://www.peppergeek.com/how-to-bottle-hot-sauce/" }],
+    tutorials: [{ label: "Beginner Fermented Hot Sauce Recipe", url: "https://www.chilipeppermadness.com/recipes/fermented-hot-sauce/" }, { label: "Pepper Heat Guide — Scoville Scale", url: "https://www.peppergeek.com/scoville-scale/" }, { label: "Bottling Your Hot Sauce", url: "https://www.peppergeek.com/how-to-bottle-hot-sauce/" }],    storeQuery: "specialty grocery store farmers market",
+    classQuery: "fermentation class cooking workshop",
+
   },
-    storeQuery: "specialty grocery store",
-    classQuery: "fermentation workshop",
   "Cheesemaking": {
     emoji: "🧀", category: "Culinary",
     tags: ["home", "science", "patient", "creative", "fermentation"],
@@ -371,10 +371,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–4 hrs", difficulty: "Moderate",
     resources: { forums: ["r/cheesemaking", "Cheesemaking.com Forum"], localGroups: ["Local cheesemaking workshops", "Slow Food chapter events"], sites: ["cheesemaking.com", "artisancheesemakingathome.com"] },
     video: { searchQuery: "mozzarella cheese making at home beginners", url: "https://www.youtube.com/results?search_query=mozzarella+cheese+making+at+home+beginners", title: "How to Make Mozzarella at Home — 30 Minute Cheese" },
-    tutorials: [{ label: "30-Minute Mozzarella Recipe", url: "https://www.cheesemaking.com/learn/how-to-make-30-minute-mozzarella.html" }, { label: "Beginner Cheese Making Kit", url: "https://www.cheesemaking.com/store/c/cheese-making-kits.html" }, { label: "Introduction to Cultures & Rennet", url: "https://www.cheesemaking.com/learn/" }],
+    tutorials: [{ label: "30-Minute Mozzarella Recipe", url: "https://www.cheesemaking.com/learn/how-to-make-30-minute-mozzarella.html" }, { label: "Beginner Cheese Making Kit", url: "https://www.cheesemaking.com/store/c/cheese-making-kits.html" }, { label: "Introduction to Cultures & Rennet", url: "https://www.cheesemaking.com/learn/" }],    storeQuery: "Sur La Table Williams Sonoma kitchen store",
+    classQuery: "cheesemaking class cooking workshop",
+
   },
-    storeQuery: "kitchen supply store",
-    classQuery: "cheesemaking class",
   "Cocktail Crafting": {
     emoji: "🍸", category: "Culinary",
     tags: ["creative", "social", "home", "science", "quick"],
@@ -383,10 +383,10 @@ const HOBBY_DATA = {
     timePerWeek: "1–3 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/cocktails", "r/bartenders"], localGroups: ["Cocktail class events on Eventbrite", "Local distillery tours"], sites: ["diffordsguide.com", "punchdrink.com"] },
     video: { searchQuery: "cocktail making for beginners essential cocktails", url: "https://www.youtube.com/results?search_query=cocktail+making+for+beginners+essential+cocktails", title: "Cocktail Making for Beginners — 5 Essential Cocktails to Learn" },
-    tutorials: [{ label: "The 5 Basic Cocktail Techniques", url: "https://www.diffordsguide.com/encyclopedia/1086/bws/cocktail-making-techniques" }, { label: "Build Your Home Bar on a Budget", url: "https://punchdrink.com/articles/how-to-build-a-home-bar/" }, { label: "Free Recipe Database — Difford's", url: "https://www.diffordsguide.com/cocktails" }],
+    tutorials: [{ label: "The 5 Basic Cocktail Techniques", url: "https://www.diffordsguide.com/encyclopedia/1086/bws/cocktail-making-techniques" }, { label: "Build Your Home Bar on a Budget", url: "https://punchdrink.com/articles/how-to-build-a-home-bar/" }, { label: "Free Recipe Database — Difford's", url: "https://www.diffordsguide.com/cocktails" }],    storeQuery: "Total Wine liquor store bar supply",
+    classQuery: "cocktail making class mixology",
+
   },
-    storeQuery: "liquor store",
-    classQuery: "cocktail making class",
 
   "Thrifting": {
     emoji: "🛍️", category: "Outdoor",
@@ -396,10 +396,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–5 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/ThriftStoreHauls", "r/ThriftGod", "r/Flipping"], localGroups: ["Local Facebook Marketplace groups", "Estate sale finder apps (EstateSales.net)", "Flea market calendars near you"], sites: ["estatesales.net", "goodwill.org", "poshmark.com"] },
     video: { searchQuery: "thrifting for beginners tips find best stuff", url: "https://www.youtube.com/results?search_query=thrifting+for+beginners+tips+find+best+stuff", title: "Thrifting for Beginners — How to Find the Best Stuff" },
-    tutorials: [{ label: "Beginner Thrifting Tips & Strategy", url: "https://www.reddit.com/r/ThriftStoreHauls/wiki/index" }, { label: "Find Estate Sales Near You", url: "https://www.estatesales.net/" }, { label: "How to Flip Thrift Finds for Profit", url: "https://www.reddit.com/r/Flipping/wiki/index" }],
-  },
-    storeQuery: "thrift store",
+    tutorials: [{ label: "Beginner Thrifting Tips & Strategy", url: "https://www.reddit.com/r/ThriftStoreHauls/wiki/index" }, { label: "Find Estate Sales Near You", url: "https://www.estatesales.net/" }, { label: "How to Flip Thrift Finds for Profit", url: "https://www.reddit.com/r/Flipping/wiki/index" }],    storeQuery: "thrift store",
     classQuery: "estate sale",
+
+  },
 
   // ── SOCIAL / PERFORMANCE ──────────────────────────────────
   "Improv Comedy": {
@@ -410,10 +410,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–3 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/improv", "ImprovResourceCenter.com"], localGroups: ["Local improv theaters", "Meetup: improv comedy"], sites: ["improvresourcecenter.com", "ucbtheatre.com"] },
     video: { searchQuery: "improv comedy for beginners rules", url: "https://www.youtube.com/results?search_query=improv+comedy+for+beginners+rules", title: "Improv Comedy for Beginners — The Rules & How to Play" },
-    tutorials: [{ label: "The Rules of Improv — Yes And", url: "https://www.improvresourcecenter.com/yes-and" }, { label: "Find an Improv Class Near You", url: "https://www.eventbrite.com/d/online/improv-class/" }, { label: "Improv Games to Play at Home", url: "https://www.dramanotebook.com/drama-games/improv-games/" }],
-  },
-    storeQuery: "comedy club theater",
+    tutorials: [{ label: "The Rules of Improv — Yes And", url: "https://www.improvresourcecenter.com/yes-and" }, { label: "Find an Improv Class Near You", url: "https://www.eventbrite.com/d/online/improv-class/" }, { label: "Improv Games to Play at Home", url: "https://www.dramanotebook.com/drama-games/improv-games/" }],    storeQuery: "comedy club theater",
     classQuery: "improv comedy class",
+
+  },
   "Stand-Up Comedy": {
     emoji: "🎤", category: "Social",
     tags: ["performance", "social", "creative", "high-energy", "challenge"],
@@ -422,10 +422,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–6 hrs", difficulty: "Moderate",
     resources: { forums: ["r/StandUpComedy", "r/OpenMic"], localGroups: ["Local comedy clubs with open mics", "Eventbrite: comedy workshops"], sites: ["comedycouch.com", "backstage.com"] },
     video: { searchQuery: "how to write your first stand up comedy set", url: "https://www.youtube.com/results?search_query=how+to+write+your+first+stand+up+comedy+set", title: "How to Write Your First Stand-Up Comedy Set" },
-    tutorials: [{ label: "How to Write a Joke — Punch Line Structure", url: "https://www.comedycouch.com/blog/how-to-write-a-joke" }, { label: "Finding Open Mics Near You", url: "https://www.openmicfinder.com/" }, { label: "Stand-Up Comedy for Beginners", url: "https://www.backstage.com/magazine/article/stand-up-comedy-tips-beginners-65985/" }],
-  },
-    storeQuery: "comedy club",
+    tutorials: [{ label: "How to Write a Joke — Punch Line Structure", url: "https://www.comedycouch.com/blog/how-to-write-a-joke" }, { label: "Finding Open Mics Near You", url: "https://www.openmicfinder.com/" }, { label: "Stand-Up Comedy for Beginners", url: "https://www.backstage.com/magazine/article/stand-up-comedy-tips-beginners-65985/" }],    storeQuery: "comedy club",
     classQuery: "comedy open mic",
+
+  },
 
   "Swing Dancing": {
     emoji: "💃", category: "Social",
@@ -435,10 +435,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–4 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/swing", "SwingTalk Forum"], localGroups: ["Local swing dance societies", "Lindy Hop Everywhere event map"], sites: ["swingplanit.com", "yehoodi.com"] },
     video: { searchQuery: "swing dancing for beginners basic steps", url: "https://www.youtube.com/results?search_query=swing+dancing+for+beginners+basic+steps", title: "Swing Dancing for Beginners — Basic Steps in 10 Minutes" },
-    tutorials: [{ label: "Find Swing Dance Events Near You", url: "https://www.swingplanit.com/" }, { label: "Lindy Hop vs East Coast Swing", url: "https://yehoodi.com/guide/lindy-hop-vs-east-coast-swing/" }, { label: "Free Online Swing Lessons", url: "https://www.swingdancer.com/lessons/" }],
-  },
-    storeQuery: "dance studio",
+    tutorials: [{ label: "Find Swing Dance Events Near You", url: "https://www.swingplanit.com/" }, { label: "Lindy Hop vs East Coast Swing", url: "https://yehoodi.com/guide/lindy-hop-vs-east-coast-swing/" }, { label: "Free Online Swing Lessons", url: "https://www.swingdancer.com/lessons/" }],    storeQuery: "dance studio",
     classQuery: "swing dance class",
+
+  },
   "Amateur Radio": {
     emoji: "📻", category: "Social",
     tags: ["technical", "social", "educational", "community", "mental"],
@@ -447,10 +447,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–5 hrs", difficulty: "Moderate",
     resources: { forums: ["r/amateurradio", "QRZ Forums"], localGroups: ["ARRL club finder", "Local ham radio clubs"], sites: ["arrl.org", "qrz.com"] },
     video: { searchQuery: "ham radio for beginners getting licensed", url: "https://www.youtube.com/results?search_query=ham+radio+for+beginners+getting+licensed", title: "Ham Radio for Beginners — Getting Your First License" },
-    tutorials: [{ label: "How to Get Your Ham License", url: "https://www.arrl.org/getting-licensed" }, { label: "Free License Practice Tests", url: "https://hamstudy.org/" }, { label: "Best Beginner Handheld Radios", url: "https://www.qrz.com/db/resources/handheld-radios" }],
+    tutorials: [{ label: "How to Get Your Ham License", url: "https://www.arrl.org/getting-licensed" }, { label: "Free License Practice Tests", url: "https://hamstudy.org/" }, { label: "Best Beginner Handheld Radios", url: "https://www.qrz.com/db/resources/handheld-radios" }],    storeQuery: "ham radio store electronics supplier",
+    classQuery: "ham radio club amateur radio license class",
+
   },
-    storeQuery: "electronics store",
-    classQuery: "ham radio license class",
 
   // ── CRAFT / MAKING ────────────────────────────────────────
   "Electronics / Arduino": {
@@ -461,10 +461,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–6 hrs", difficulty: "Moderate",
     resources: { forums: ["r/arduino", "Arduino Forum"], localGroups: ["Local hackerspaces", "Maker Faire events"], sites: ["arduino.cc", "instructables.com"] },
     video: { searchQuery: "arduino for beginners starter course", url: "https://www.youtube.com/results?search_query=arduino+for+beginners+starter+course", title: "Arduino for Beginners — Complete Starter Course" },
-    tutorials: [{ label: "Official Arduino Getting Started Guide", url: "https://www.arduino.cc/en/Guide" }, { label: "Free Arduino Projects — Instructables", url: "https://www.instructables.com/circuits/arduino/projects/" }, { label: "Find a Local Hackerspace", url: "https://www.hackerspaces.org/" }],
+    tutorials: [{ label: "Official Arduino Getting Started Guide", url: "https://www.arduino.cc/en/Guide" }, { label: "Free Arduino Projects — Instructables", url: "https://www.instructables.com/circuits/arduino/projects/" }, { label: "Find a Local Hackerspace", url: "https://www.hackerspaces.org/" }],    storeQuery: "Micro Center electronics store",
+    classQuery: "electronics workshop makerspace",
+
   },
-    storeQuery: "electronics store",
-    classQuery: "electronics workshop",
   "3D Printing": {
     emoji: "🖨️", category: "Craft",
     tags: ["technical", "creative", "home", "hands-on", "patient"],
@@ -473,10 +473,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–8 hrs", difficulty: "Moderate",
     resources: { forums: ["r/3Dprinting", "Printables community"], localGroups: ["Local makerspaces", "Library 3D printing labs"], sites: ["printables.com", "thingiverse.com"] },
     video: { searchQuery: "3D printing for beginners", url: "https://www.youtube.com/results?search_query=3D+printing+for+beginners", title: "3D Printing for Beginners — Everything You Need to Know" },
-    tutorials: [{ label: "Best Beginner 3D Printers", url: "https://www.reddit.com/r/3Dprinting/wiki/printer_guide" }, { label: "Free Models to Print — Printables", url: "https://www.printables.com/" }, { label: "Beginner Slicer Guide — Cura", url: "https://ultimaker.com/software/ultimaker-cura/" }],
-  },
-    storeQuery: "makerspace",
+    tutorials: [{ label: "Best Beginner 3D Printers", url: "https://www.reddit.com/r/3Dprinting/wiki/printer_guide" }, { label: "Free Models to Print — Printables", url: "https://www.printables.com/" }, { label: "Beginner Slicer Guide — Cura", url: "https://ultimaker.com/software/ultimaker-cura/" }],    storeQuery: "makerspace FabLab library 3D printer",
     classQuery: "3D printing class makerspace",
+
+  },
   "Knitting / Crochet": {
     emoji: "🧶", category: "Craft",
     tags: ["meditative", "home", "patient", "tactile", "solo"],
@@ -485,10 +485,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–6 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/knitting", "r/crochet", "Ravelry.com"], localGroups: ["Local yarn shops' stitch circles", "Library knitting groups"], sites: ["ravelry.com", "yarnsub.com"] },
     video: { searchQuery: "knitting for absolute beginners cast on", url: "https://www.youtube.com/results?search_query=knitting+for+absolute+beginners+cast+on", title: "Knitting for Absolute Beginners — Cast On, Knit, Purl" },
-    tutorials: [{ label: "Free Beginner Patterns — Ravelry", url: "https://www.ravelry.com/patterns/search#craft=knitting&difficulty=1-1&sort=best" }, { label: "Knitting vs Crochet — Which to Learn First?", url: "https://www.yarnsub.com/articles/knitting-vs-crochet" }, { label: "Learn to Crochet — Step by Step", url: "https://www.thecrochetcrowd.com/crochet-101/" }],
+    tutorials: [{ label: "Free Beginner Patterns — Ravelry", url: "https://www.ravelry.com/patterns/search#craft=knitting&difficulty=1-1&sort=best" }, { label: "Knitting vs Crochet — Which to Learn First?", url: "https://www.yarnsub.com/articles/knitting-vs-crochet" }, { label: "Learn to Crochet — Step by Step", url: "https://www.thecrochetcrowd.com/crochet-101/" }],    storeQuery: "JOANN Fabric yarn store",
+    classQuery: "knitting crochet class yarn store",
+
   },
-    storeQuery: "yarn store",
-    classQuery: "knitting class yarn store",
   "Bookbinding": {
     emoji: "📚", category: "Craft",
     tags: ["hands-on", "patient", "solo", "tactile", "creative"],
@@ -497,10 +497,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–4 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/bookbinding", "Bookbinding.com Forum"], localGroups: ["Local art center workshops", "Book arts guilds"], sites: ["bookbinding.com", "paperandbook.com"] },
     video: { searchQuery: "bookbinding for beginners make a journal", url: "https://www.youtube.com/results?search_query=bookbinding+for+beginners+make+a+journal", title: "Bookbinding for Beginners — Make Your First Journal" },
-    tutorials: [{ label: "Beginner Bookbinding Projects", url: "https://www.instructables.com/Beginner-Bookbinding/" }, { label: "Essential Tools List", url: "https://bookbinding.com/pages/getting-started" }, { label: "Coptic Stitch Tutorial", url: "https://www.paperandbook.com/coptic-stitch-bookbinding-tutorial/" }],
+    tutorials: [{ label: "Beginner Bookbinding Projects", url: "https://www.instructables.com/Beginner-Bookbinding/" }, { label: "Essential Tools List", url: "https://bookbinding.com/pages/getting-started" }, { label: "Coptic Stitch Tutorial", url: "https://www.paperandbook.com/coptic-stitch-bookbinding-tutorial/" }],    storeQuery: "art supply store Blick Art Materials",
+    classQuery: "bookbinding class art workshop",
+
   },
-    storeQuery: "art supply store",
-    classQuery: "bookbinding workshop",
   "Embroidery": {
     emoji: "🪡", category: "Craft",
     tags: ["meditative", "creative", "home", "patient", "tactile"],
@@ -509,10 +509,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–5 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/Embroidery", "r/CrossStitch"], localGroups: ["Local fiber arts guilds", "Craft store workshops"], sites: ["sublimestitching.com", "embroidery.rockyourcraft.com"] },
     video: { searchQuery: "embroidery for beginners basic stitches", url: "https://www.youtube.com/results?search_query=embroidery+for+beginners+basic+stitches", title: "Embroidery for Beginners — Basic Stitches Step by Step" },
-    tutorials: [{ label: "7 Basic Stitches to Learn First", url: "https://sublimestitching.com/pages/how-to-embroider" }, { label: "Free Beginner Patterns", url: "https://sublimestitching.com/collections/patterns" }, { label: "How to Transfer Patterns", url: "https://www.thesprucecrafts.com/transfer-embroidery-designs-1177872" }],
+    tutorials: [{ label: "7 Basic Stitches to Learn First", url: "https://sublimestitching.com/pages/how-to-embroider" }, { label: "Free Beginner Patterns", url: "https://sublimestitching.com/collections/patterns" }, { label: "How to Transfer Patterns", url: "https://www.thesprucecrafts.com/transfer-embroidery-designs-1177872" }],    storeQuery: "JOANN Fabric craft store",
+    classQuery: "embroidery sewing class workshop",
+
   },
-    storeQuery: "fabric store",
-    classQuery: "embroidery sewing class",
 
   // ── MUSIC ─────────────────────────────────────────────────
   "DJing": {
@@ -523,10 +523,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–6 hrs", difficulty: "Moderate",
     resources: { forums: ["r/DJs", "DJTT Forum"], localGroups: ["Local DJ schools", "Mixcloud community"], sites: ["digitaldjtips.com", "djtechtools.com"] },
     video: { searchQuery: "DJing for beginners how to mix", url: "https://www.youtube.com/results?search_query=DJing+for+beginners+how+to+mix", title: "DJing for Beginners — How to Mix Your First Track" },
-    tutorials: [{ label: "Free DJ Software — Mixxx", url: "https://mixxx.org/" }, { label: "DJ Beginner's Guide", url: "https://www.digitaldjtips.com/how-to-dj/" }, { label: "Choosing Your First Controller", url: "https://www.djtechtools.com/2020/01/07/the-best-dj-controllers-for-beginners/" }],
+    tutorials: [{ label: "Free DJ Software — Mixxx", url: "https://mixxx.org/" }, { label: "DJ Beginner's Guide", url: "https://www.digitaldjtips.com/how-to-dj/" }, { label: "Choosing Your First Controller", url: "https://www.djtechtools.com/2020/01/07/the-best-dj-controllers-for-beginners/" }],    storeQuery: "Guitar Center music instrument store",
+    classQuery: "DJ class music production school",
+
   },
-    storeQuery: "music instrument store",
-    classQuery: "DJ class music school",
   "Guitar": {
     emoji: "🎸", category: "Music",
     tags: ["music", "solo", "creative", "meditative", "social"],
@@ -535,10 +535,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–7 hrs", difficulty: "Moderate",
     resources: { forums: ["r/Guitar", "r/guitarlessons"], localGroups: ["Local music stores' open jams", "Guitar Center workshops"], sites: ["justinguitar.com", "ultimate-guitar.com"] },
     video: { searchQuery: "guitar for beginners first lesson", url: "https://www.youtube.com/results?search_query=guitar+for+beginners+first+lesson", title: "Guitar for Beginners — Your First Lesson" },
-    tutorials: [{ label: "Free Lessons — JustinGuitar", url: "https://www.justinguitar.com/" }, { label: "Chord Library & Tabs", url: "https://www.ultimate-guitar.com/" }, { label: "Choosing Your First Guitar", url: "https://www.guitarworld.com/guitars/acoustic-guitars/acoustic-guitar-buyers-guide" }],
-  },
-    storeQuery: "guitar store",
+    tutorials: [{ label: "Free Lessons — JustinGuitar", url: "https://www.justinguitar.com/" }, { label: "Chord Library & Tabs", url: "https://www.ultimate-guitar.com/" }, { label: "Choosing Your First Guitar", url: "https://www.guitarworld.com/guitars/acoustic-guitars/acoustic-guitar-buyers-guide" }],    storeQuery: "guitar store",
     classQuery: "guitar lessons",
+
+  },
   "Music Production": {
     emoji: "🎛️", category: "Music",
     tags: ["music", "technical", "creative", "solo", "home"],
@@ -547,10 +547,10 @@ const HOBBY_DATA = {
     timePerWeek: "4–8 hrs", difficulty: "Moderate",
     resources: { forums: ["r/WeAreTheMusicMakers", "r/edmproduction"], localGroups: ["Local music production meetups", "Online Discord music communities"], sites: ["landr.com", "attackmagazine.com"] },
     video: { searchQuery: "music production for beginners making a beat", url: "https://www.youtube.com/results?search_query=music+production+for+beginners+making+a+beat", title: "Music Production for Beginners — Making Your First Beat" },
-    tutorials: [{ label: "Free DAW — LMMS", url: "https://lmms.io/" }, { label: "Beginner Beat Making Guide", url: "https://www.landr.com/how-to-make-a-beat/" }, { label: "Music Theory for Producers", url: "https://www.musictheory.net/" }],
+    tutorials: [{ label: "Free DAW — LMMS", url: "https://lmms.io/" }, { label: "Beginner Beat Making Guide", url: "https://www.landr.com/how-to-make-a-beat/" }, { label: "Music Theory for Producers", url: "https://www.musictheory.net/" }],    storeQuery: "Guitar Center music instrument store",
+    classQuery: "music production class recording studio",
+
   },
-    storeQuery: "music instrument store",
-    classQuery: "music production class",
   "Singing / Vocal Training": {
     emoji: "🎵", category: "Music",
     tags: ["music", "performance", "social", "creative", "discipline"],
@@ -559,10 +559,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–6 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/singing", "The Voice Council Forum"], localGroups: ["Local choir groups", "Community theater auditions"], sites: ["singwise.com", "30daysinger.com"] },
     video: { searchQuery: "vocal training for beginners warm up technique", url: "https://www.youtube.com/results?search_query=vocal+training+for+beginners+warm+up+technique", title: "Vocal Training for Beginners — Warm-Ups & Technique" },
-    tutorials: [{ label: "30 Day Singer Free Trial", url: "https://www.30daysinger.com/" }, { label: "Daily Vocal Warm-Up Exercises", url: "https://www.singwise.com/articles/warm-up-exercises" }, { label: "Find a Local Choir", url: "https://www.choralfind.com/" }],
+    tutorials: [{ label: "30 Day Singer Free Trial", url: "https://www.30daysinger.com/" }, { label: "Daily Vocal Warm-Up Exercises", url: "https://www.singwise.com/articles/warm-up-exercises" }, { label: "Find a Local Choir", url: "https://www.choralfind.com/" }],    storeQuery: "music school vocal studio",
+    classQuery: "singing lesson vocal coach near me",
+
   },
-    storeQuery: "music school",
-    classQuery: "singing lessons vocal coach",
 
   // ── MIND / STRATEGY ───────────────────────────────────────
   "Chess": {
@@ -573,10 +573,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–8 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/chess", "Chess.com forums"], localGroups: ["Local chess clubs", "Library chess groups"], sites: ["chess.com", "lichess.org"] },
     video: { searchQuery: "chess for beginners how pieces move", url: "https://www.youtube.com/results?search_query=chess+for+beginners+how+pieces+move", title: "Chess for Beginners — Learn How Every Piece Moves" },
-    tutorials: [{ label: "Play for Free — Lichess", url: "https://lichess.org/" }, { label: "Interactive Lessons — Chess.com", url: "https://www.chess.com/learn-how-to-play-chess" }, { label: "Opening Principles for Beginners", url: "https://www.chess.com/article/view/chess-openings-for-beginners" }],
-  },
-    storeQuery: "board game store",
+    tutorials: [{ label: "Play for Free — Lichess", url: "https://lichess.org/" }, { label: "Interactive Lessons — Chess.com", url: "https://www.chess.com/learn-how-to-play-chess" }, { label: "Opening Principles for Beginners", url: "https://www.chess.com/article/view/chess-openings-for-beginners" }],    storeQuery: "board game store",
     classQuery: "chess club",
+
+  },
   "Language Learning": {
     emoji: "🗣️", category: "Mind",
     tags: ["educational", "mental", "solo", "social", "discipline"],
@@ -585,10 +585,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–7 hrs", difficulty: "Moderate",
     resources: { forums: ["r/languagelearning", "WordReference Forums"], localGroups: ["Language exchange Meetups", "Local cultural centers"], sites: ["italki.com", "ankiweb.net"] },
     video: { searchQuery: "how to learn any language fastest method", url: "https://www.youtube.com/results?search_query=how+to+learn+any+language+fastest+method", title: "How to Learn Any Language — The Best Method Explained" },
-    tutorials: [{ label: "Free App — Duolingo", url: "https://www.duolingo.com/" }, { label: "Find a Language Tutor — iTalki", url: "https://www.italki.com/" }, { label: "Spaced Repetition Flashcards — Anki", url: "https://apps.ankiweb.net/" }],
+    tutorials: [{ label: "Free App — Duolingo", url: "https://www.duolingo.com/" }, { label: "Find a Language Tutor — iTalki", url: "https://www.italki.com/" }, { label: "Spaced Repetition Flashcards — Anki", url: "https://apps.ankiweb.net/" }],    storeQuery: "language school language learning center",
+    classQuery: "language class school near me",
+
   },
-    storeQuery: "language school",
-    classQuery: "language class",
   "Journaling": {
     emoji: "📓", category: "Mind",
     tags: ["solo", "meditative", "writing", "mental", "home"],
@@ -597,10 +597,10 @@ const HOBBY_DATA = {
     timePerWeek: "1–4 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/Journaling", "r/bulletjournal"], localGroups: ["Writing groups on Meetup", "Local library writing circles"], sites: ["bulletjournal.com", "thejournalsmag.com"] },
     video: { searchQuery: "how to start journaling beginners guide", url: "https://www.youtube.com/results?search_query=how+to+start+journaling+beginners+guide", title: "How to Start Journaling — A Beginner's Guide" },
-    tutorials: [{ label: "Bullet Journal System Explained", url: "https://bulletjournal.com/blogs/faq" }, { label: "30 Journal Prompts for Adults", url: "https://www.thejournalsmag.com/articles/journal-prompts-for-adults" }, { label: "Morning Pages — The Artist's Way", url: "https://juliacameronlive.com/basic-tools/morning-pages/" }],
+    tutorials: [{ label: "Bullet Journal System Explained", url: "https://bulletjournal.com/blogs/faq" }, { label: "30 Journal Prompts for Adults", url: "https://www.thejournalsmag.com/articles/journal-prompts-for-adults" }, { label: "Morning Pages — The Artist's Way", url: "https://juliacameronlive.com/basic-tools/morning-pages/" }],    storeQuery: "Paper Source stationery store",
+    classQuery: "writing workshop journaling class",
+
   },
-    storeQuery: "stationery store",
-    classQuery: "writing workshop",
   "Astronomy / Astrophotography": {
     emoji: "🌌", category: "Mind",
     tags: ["outdoor", "technical", "solo", "patient", "educational"],
@@ -609,10 +609,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–5 hrs", difficulty: "Moderate",
     resources: { forums: ["r/astrophotography", "Cloudy Nights Forum"], localGroups: ["Local astronomy clubs", "Dark sky preserve meetups"], sites: ["astrobackyard.com", "cloudynights.com"] },
     video: { searchQuery: "astrophotography for beginners night sky", url: "https://www.youtube.com/results?search_query=astrophotography+for+beginners+night+sky", title: "Astrophotography for Beginners — Shoot the Night Sky" },
-    tutorials: [{ label: "Beginner Astrophotography Guide", url: "https://www.astrobackyard.com/astrophotography-for-beginners/" }, { label: "Choosing Your First Telescope", url: "https://skyandtelescope.org/astronomy-equipment/telescopes/how-to-choose-a-telescope/" }, { label: "Free Planetarium — Stellarium", url: "https://stellarium.org/" }],
+    tutorials: [{ label: "Beginner Astrophotography Guide", url: "https://www.astrobackyard.com/astrophotography-for-beginners/" }, { label: "Choosing Your First Telescope", url: "https://skyandtelescope.org/astronomy-equipment/telescopes/how-to-choose-a-telescope/" }, { label: "Free Planetarium — Stellarium", url: "https://stellarium.org/" }],    storeQuery: "telescope store astronomy equipment",
+    classQuery: "astronomy club astrophotography workshop",
+
   },
-    storeQuery: "telescope store",
-    classQuery: "astronomy club",
   "Puzzle Design": {
     emoji: "🧩", category: "Mind",
     tags: ["mental", "creative", "solo", "patient", "technical"],
@@ -621,10 +621,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–5 hrs", difficulty: "Moderate",
     resources: { forums: ["r/PuzzleDesign", "r/EscapeRoomDesign"], localGroups: ["Local escape room communities", "Puzzle design Discord servers"], sites: ["puzzledesigners.net", "nikoli.com"] },
     video: { searchQuery: "how to design puzzles escape room", url: "https://www.youtube.com/results?search_query=how+to+design+puzzles+escape+room", title: "How to Design Puzzles — Principles & Techniques" },
-    tutorials: [{ label: "Escape Room Puzzle Design 101", url: "https://www.reddit.com/r/EscapeRoomDesign/wiki/index" }, { label: "Free Crossword Constructor", url: "https://www.crosswordcompiler.com/" }, { label: "Puzzle Design Discord Community", url: "https://discord.gg/puzzles" }],
-  },
-    storeQuery: "escape room",
+    tutorials: [{ label: "Escape Room Puzzle Design 101", url: "https://www.reddit.com/r/EscapeRoomDesign/wiki/index" }, { label: "Free Crossword Constructor", url: "https://www.crosswordcompiler.com/" }, { label: "Puzzle Design Discord Community", url: "https://discord.gg/puzzles" }],    storeQuery: "escape room",
     classQuery: "puzzle design workshop",
+
+  },
 
   // ── GAMING ────────────────────────────────────────────────
   "Dungeons & Dragons": {
@@ -635,10 +635,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–6 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/DnD", "r/rpg", "r/DMAcademy"], localGroups: ["Local game stores' public game boards", "D&D Beyond group finder", "Meetup: tabletop RPGs near you"], sites: ["dndbeyond.com", "roll20.net", "reddit.com/r/rpg/wiki/gettingstarted"] },
     video: { searchQuery: "how to play DnD dungeons and dragons beginners", url: "https://www.youtube.com/results?search_query=how+to+play+DnD+dungeons+and+dragons+beginners", title: "How to Play D&D — A Beginner's Guide to Dungeons & Dragons" },
-    tutorials: [{ label: "Free Rules — D&D Beyond", url: "https://www.dndbeyond.com/sources/dnd/free-rules" }, { label: "Find a Game Online — Roll20", url: "https://roll20.net/welcome" }, { label: "Which RPG Should You Play First?", url: "https://www.reddit.com/r/rpg/wiki/gettingstarted" }],
-  },
-    storeQuery: "game store",
+    tutorials: [{ label: "Free Rules — D&D Beyond", url: "https://www.dndbeyond.com/sources/dnd/free-rules" }, { label: "Find a Game Online — Roll20", url: "https://roll20.net/welcome" }, { label: "Which RPG Should You Play First?", url: "https://www.reddit.com/r/rpg/wiki/gettingstarted" }],    storeQuery: "game store",
     classQuery: "tabletop RPG game night",
+
+  },
   "Warhammer 40K": {
     emoji: "⚔️", category: "Gaming",
     tags: ["creative", "painting", "strategy", "social", "patient"],
@@ -647,10 +647,10 @@ const HOBBY_DATA = {
     timePerWeek: "4–10 hrs", difficulty: "Moderate",
     resources: { forums: ["r/Warhammer40k", "r/WarhammerCompetitive", "Bolter & Chainsword"], localGroups: ["Local Games Workshop stores", "Warhammer Community event finder", "FLGS (friendly local game store) boards"], sites: ["warhammer-community.com", "goonhammer.com", "wahapedia.ru"] },
     video: { searchQuery: "warhammer 40K for beginners where to start", url: "https://www.youtube.com/results?search_query=warhammer+40K+for+beginners+where+to+start", title: "Warhammer 40K for Beginners — Where to Start" },
-    tutorials: [{ label: "Which Army to Choose", url: "https://www.goonhammer.com/getting-started-with-warhammer-40000/" }, { label: "Free Rules — Wahapedia", url: "https://wahapedia.ru/" }, { label: "Painting Your First Miniatures", url: "https://www.warhammer-community.com/en-gb/articles/painting-for-beginners/" }],
-  },
-    storeQuery: "Games Workshop",
+    tutorials: [{ label: "Which Army to Choose", url: "https://www.goonhammer.com/getting-started-with-warhammer-40000/" }, { label: "Free Rules — Wahapedia", url: "https://wahapedia.ru/" }, { label: "Painting Your First Miniatures", url: "https://www.warhammer-community.com/en-gb/articles/painting-for-beginners/" }],    storeQuery: "Games Workshop",
     classQuery: "warhammer painting class",
+
+  },
   "Trading Card Games": {
     emoji: "🃏", category: "Gaming",
     tags: ["competitive", "collecting", "mental", "social", "strategy"],
@@ -659,10 +659,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–6 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/magicTCG", "r/pkmntcg", "r/yugioh", "MTGGoldfish community"], localGroups: ["Local game stores' Friday Night Magic", "TCGPlayer local event finder", "Pokémon Player Club locator"], sites: ["tcgplayer.com", "mtggoldfish.com", "limitlesstcg.com"] },
     video: { searchQuery: "magic the gathering for beginners how to play", url: "https://www.youtube.com/results?search_query=magic+the+gathering+for+beginners+how+to+play", title: "Magic: The Gathering for Beginners — Learn to Play in 15 Minutes" },
-    tutorials: [{ label: "Learn MTG — Official Tutorial", url: "https://magic.wizards.com/en/intro" }, { label: "Budget Deck Building Guide", url: "https://www.mtggoldfish.com/articles/budget-magic" }, { label: "Find Local Events — TCGPlayer", url: "https://www.tcgplayer.com/local-game-store" }],
+    tutorials: [{ label: "Learn MTG — Official Tutorial", url: "https://magic.wizards.com/en/intro" }, { label: "Budget Deck Building Guide", url: "https://www.mtggoldfish.com/articles/budget-magic" }, { label: "Find Local Events — TCGPlayer", url: "https://www.tcgplayer.com/local-game-store" }],    storeQuery: "trading card game store hobby shop",
+    classQuery: "Magic the Gathering game store tournament",
+
   },
-    storeQuery: "game store",
-    classQuery: "trading card game tournament",
   "Board Games": {
     emoji: "🎯", category: "Gaming",
     tags: ["social", "strategy", "small-group", "home", "competitive"],
@@ -671,10 +671,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–5 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/boardgames", "r/boardgamerecommendations", "BGG community"], localGroups: ["Local game cafes", "Meetup: board game nights", "BoardGameGeek guild finder"], sites: ["boardgamegeek.com", "boardgamearena.com", "dicetower.com"] },
     video: { searchQuery: "best board games for beginners", url: "https://www.youtube.com/results?search_query=best+board+games+for+beginners", title: "Top 10 Board Games for Beginners — Where to Start" },
-    tutorials: [{ label: "Board Game Recommendations — BGG", url: "https://boardgamegeek.com/browse/boardgame" }, { label: "Play Online Free — Board Game Arena", url: "https://boardgamearena.com/" }, { label: "Find Game Nights Near You", url: "https://www.meetup.com/topics/board-games/" }],
-  },
-    storeQuery: "board game cafe",
+    tutorials: [{ label: "Board Game Recommendations — BGG", url: "https://boardgamegeek.com/browse/boardgame" }, { label: "Play Online Free — Board Game Arena", url: "https://boardgamearena.com/" }, { label: "Find Game Nights Near You", url: "https://www.meetup.com/topics/board-games/" }],    storeQuery: "board game cafe",
     classQuery: "board game night",
+
+  },
   "Video Gaming": {
     emoji: "🎮", category: "Gaming",
     tags: ["solo", "social", "home", "competitive", "creative"],
@@ -683,10 +683,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–10 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/gaming", "r/patientgamers", "r/SteamDeals"], localGroups: ["Local gaming cafes", "LAN party events near you", "Discord gaming communities"], sites: ["store.steampowered.com", "ign.com", "howlongtobeat.com"] },
     video: { searchQuery: "getting into video games as an adult where to start", url: "https://www.youtube.com/results?search_query=getting+into+video+games+as+an+adult+where+to+start", title: "Getting Into Video Games as an Adult — Where to Start" },
-    tutorials: [{ label: "Best Games for New Players — IGN", url: "https://www.ign.com/articles/best-games-for-beginners" }, { label: "How Long Are Games? — HowLongToBeat", url: "https://howlongtobeat.com/" }, { label: "Free Games on Steam", url: "https://store.steampowered.com/genre/Free%20to%20Play/" }],
-  },
-    storeQuery: "video game store",
+    tutorials: [{ label: "Best Games for New Players — IGN", url: "https://www.ign.com/articles/best-games-for-beginners" }, { label: "How Long Are Games? — HowLongToBeat", url: "https://howlongtobeat.com/" }, { label: "Free Games on Steam", url: "https://store.steampowered.com/genre/Free%20to%20Play/" }],    storeQuery: "video game store",
     classQuery: "gaming cafe LAN party",
+
+  },
   "Miniature Painting": {
     emoji: "🖌️", category: "Gaming",
     tags: ["creative", "meditative", "solo", "patient", "tactile"],
@@ -695,10 +695,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–6 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/minipainting", "r/ageofsigmar", "Coolminiornot community"], localGroups: ["Local game stores' painting nights", "Warhammer store free painting sessions"], sites: ["coolminiornot.com", "paintingbig.com", "miniacademy.com"] },
     video: { searchQuery: "miniature painting for beginners first mini", url: "https://www.youtube.com/results?search_query=miniature+painting+for+beginners+first+mini", title: "Miniature Painting for Beginners — Your First Mini" },
-    tutorials: [{ label: "Beginner Painting Guide", url: "https://www.warhammer-community.com/en-gb/articles/painting-for-beginners/" }, { label: "Essential Starter Brushes & Paints", url: "https://www.reddit.com/r/minipainting/wiki/starterpaint" }, { label: "Drybrushing & Washing Explained", url: "https://www.coolminiornot.com/articles/beginner-techniques" }],
+    tutorials: [{ label: "Beginner Painting Guide", url: "https://www.warhammer-community.com/en-gb/articles/painting-for-beginners/" }, { label: "Essential Starter Brushes & Paints", url: "https://www.reddit.com/r/minipainting/wiki/starterpaint" }, { label: "Drybrushing & Washing Explained", url: "https://www.coolminiornot.com/articles/beginner-techniques" }],    storeQuery: "Games Workshop hobby store",
+    classQuery: "miniature painting class hobby store",
+
   },
-    storeQuery: "hobby shop",
-    classQuery: "miniature painting class hobby shop",
   "Retro Gaming / Collecting": {
     emoji: "👾", category: "Gaming",
     tags: ["collecting", "solo", "home", "nostalgic", "technical"],
@@ -707,10 +707,10 @@ const HOBBY_DATA = {
     timePerWeek: "2–6 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/retrogaming", "r/gamecollecting", "AtariAge forums"], localGroups: ["Local retro gaming conventions", "Thrift store and flea market hunting groups"], sites: ["pricecharting.com", "consolevariations.com", "racketboy.com"] },
     video: { searchQuery: "retro game collecting beginners guide", url: "https://www.youtube.com/results?search_query=retro+game+collecting+beginners+guide", title: "How to Start a Retro Game Collection — Beginner's Guide" },
-    tutorials: [{ label: "Track Game Values — PriceCharting", url: "https://www.pricecharting.com/" }, { label: "Best Retro Consoles to Start With", url: "https://www.racketboy.com/guide/best-retro-consoles-for-beginners" }, { label: "Where to Buy Retro Games", url: "https://www.reddit.com/r/gamecollecting/wiki/index" }],
-  },
-    storeQuery: "video game store",
+    tutorials: [{ label: "Track Game Values — PriceCharting", url: "https://www.pricecharting.com/" }, { label: "Best Retro Consoles to Start With", url: "https://www.racketboy.com/guide/best-retro-consoles-for-beginners" }, { label: "Where to Buy Retro Games", url: "https://www.reddit.com/r/gamecollecting/wiki/index" }],    storeQuery: "video game store",
     classQuery: "retro gaming convention",
+
+  },
   "Game Development": {
     emoji: "💻", category: "Gaming",
     tags: ["creative", "technical", "solo", "home", "mental"],
@@ -719,10 +719,10 @@ const HOBBY_DATA = {
     timePerWeek: "4–10 hrs", difficulty: "Moderate",
     resources: { forums: ["r/gamedev", "r/godot", "r/Unity3D", "itch.io community"], localGroups: ["Local game dev meetups", "Global Game Jam local sites", "Discord: game dev servers"], sites: ["itch.io", "godotengine.org", "gamedeveloper.com"] },
     video: { searchQuery: "game development for beginners make your first game godot", url: "https://www.youtube.com/results?search_query=game+development+for+beginners+make+your+first+game+godot", title: "Game Development for Beginners — Make Your First Game in Godot" },
-    tutorials: [{ label: "Free Game Engine — Godot", url: "https://godotengine.org/" }, { label: "Publish Your Game — itch.io", url: "https://itch.io/" }, { label: "Join a Game Jam — Global Game Jam", url: "https://globalgamejam.org/" }],
+    tutorials: [{ label: "Free Game Engine — Godot", url: "https://godotengine.org/" }, { label: "Publish Your Game — itch.io", url: "https://itch.io/" }, { label: "Join a Game Jam — Global Game Jam", url: "https://globalgamejam.org/" }],    storeQuery: "computer store electronics Best Buy",
+    classQuery: "coding bootcamp game development class",
+
   },
-    storeQuery: "coworking space",
-    classQuery: "game development class",
   "Tabletop Wargaming": {
     emoji: "🏰", category: "Gaming",
     tags: ["strategy", "social", "competitive", "historical", "patient"],
@@ -731,10 +731,10 @@ const HOBBY_DATA = {
     timePerWeek: "3–6 hrs", difficulty: "Moderate",
     resources: { forums: ["r/wargaming", "r/HistoricalWargaming", "TMP (The Miniatures Page)"], localGroups: ["FLGS wargaming clubs", "Wargames conventions near you", "Meetup: wargaming groups"], sites: ["theminiaturespage.com", "beasts-of-war.com", "onTableTop.com"] },
     video: { searchQuery: "tabletop wargaming for beginners how to start", url: "https://www.youtube.com/results?search_query=tabletop+wargaming+for+beginners+how+to+start", title: "Tabletop Wargaming for Beginners — How to Get Started" },
-    tutorials: [{ label: "Which Wargame to Start With", url: "https://www.theminiaturespage.com/boards/msg.mv?id=getting-started" }, { label: "Build Terrain on a Budget", url: "https://www.beasts-of-war.com/terrain-building-for-beginners/" }, { label: "Find Opponents Near You", url: "https://www.meetup.com/topics/miniature-wargaming/" }],
+    tutorials: [{ label: "Which Wargame to Start With", url: "https://www.theminiaturespage.com/boards/msg.mv?id=getting-started" }, { label: "Build Terrain on a Budget", url: "https://www.beasts-of-war.com/terrain-building-for-beginners/" }, { label: "Find Opponents Near You", url: "https://www.meetup.com/topics/miniature-wargaming/" }],    storeQuery: "Games Workshop hobby store",
+    classQuery: "wargaming club miniature store",
+
   },
-    storeQuery: "hobby shop",
-    classQuery: "wargaming club",
   "Escape Rooms": {
     emoji: "🔐", category: "Gaming",
     tags: ["social", "mental", "small-group", "high-energy", "puzzle"],
@@ -743,10 +743,10 @@ const HOBBY_DATA = {
     timePerWeek: "1–2 hrs (event-based)", difficulty: "Beginner friendly",
     resources: { forums: ["r/escaperooms", "Room Escape Artist community"], localGroups: ["Local escape room venues", "Meetup: escape room groups"], sites: ["escaperoomgeeks.com", "roomescapeartist.com", "escapetalk.net"] },
     video: { searchQuery: "how to solve escape rooms tips strategies", url: "https://www.youtube.com/results?search_query=how+to+solve+escape+rooms+tips+strategies", title: "How to Solve Escape Rooms — Tips & Strategies" },
-    tutorials: [{ label: "Find Rooms Near You — Escape Room Geeks", url: "https://www.escaperoomgeeks.com/" }, { label: "Best Escape Room Strategies", url: "https://roomescapeartist.com/2016/02/10/escape-room-tips/" }, { label: "Play Online Escape Rooms Free", url: "https://www.escapetalk.net/online-escape-rooms/" }],
-  },
-    storeQuery: "escape room",
+    tutorials: [{ label: "Find Rooms Near You — Escape Room Geeks", url: "https://www.escaperoomgeeks.com/" }, { label: "Best Escape Room Strategies", url: "https://roomescapeartist.com/2016/02/10/escape-room-tips/" }, { label: "Play Online Escape Rooms Free", url: "https://www.escapetalk.net/online-escape-rooms/" }],    storeQuery: "escape room",
     classQuery: "escape room",
+
+  },
 };
 
 // ── QUIZ QUESTIONS ────────────────────────────────────────────────────────────
