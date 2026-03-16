@@ -814,12 +814,12 @@ const QUIZ_QUESTIONS = [
   },
   {
     id: "budget",
-    question: "What's your realistic starter budget for a new hobby?",
+    question: "What\'s your realistic starter budget for a new hobby?",
     options: [
       { label: "Under $50 — ideally free", value: "free", icon: "🆓" },
       { label: "$50–150 to get started", value: "low", icon: "💵" },
-      { label: "$150–500 if I'm serious", value: "medium", icon: "💰" },
-      { label: "I'll spend what it takes", value: "high", icon: "💎" },
+      { label: "$150–500 if I\'m serious", value: "medium", icon: "💰" },
+      { label: "I\'ll spend what it takes", value: "high", icon: "💎" },
     ],
   },
   {
@@ -843,8 +843,28 @@ const QUIZ_QUESTIONS = [
     ],
   },
   {
+    id: "indoor_outdoor",
+    question: "When you picture yourself doing this hobby, where are you?",
+    options: [
+      { label: "Outside — doesn\'t matter what the weather is", value: "outside", icon: "☁️" },
+      { label: "Inside — comfort and control matters", value: "inside", icon: "🛋️" },
+      { label: "Either — I\'ll adapt", value: "either", icon: "🔄" },
+      { label: "On the move — not stuck in one place", value: "mobile", icon: "🚶" },
+    ],
+  },
+  {
+    id: "commitment",
+    question: "Which sounds more like you?",
+    options: [
+      { label: "I want to get genuinely good at something over time", value: "depth", icon: "📈" },
+      { label: "I want variety — try lots of different things", value: "variety", icon: "🎲" },
+      { label: "I want something I can pick up and put down easily", value: "casual", icon: "😌" },
+      { label: "I want something that becomes a core part of who I am", value: "identity", icon: "🪪" },
+    ],
+  },
+  {
     id: "vibe",
-    question: "Pick the word that resonates most with you right now:",
+    question: "Pick the word that resonates most right now:",
     options: [
       { label: "Freedom", value: "freedom", icon: "🦅" },
       { label: "Mastery", value: "mastery", icon: "🏆" },
@@ -854,65 +874,351 @@ const QUIZ_QUESTIONS = [
   },
 ];
 
+// ── HOBBY COST MAP (for hard budget exclusion) ────────────────────────────────
+// Maps each hobby to its minimum realistic entry cost tier
+const HOBBY_MIN_COST = {
+  // Free / under $20
+  "Journaling": "free", "Birdwatching": "free", "Stargazing": "free",
+  "Urban Sketching": "free", "Cold Water Swimming": "free", "Stand-Up Comedy": "free",
+  "Hiking": "free", "Music Production": "free", "Video Gaming": "free",
+  "Game Development": "free", "Thrifting": "free", "Chess": "free",
+  "Language Learning": "free", "Rock Pooling": "free", "Improv Comedy": "free",
+
+  // Low ($20–150)
+  "Embroidery": "low", "Knitting / Crochet": "low", "Hot Sauce Making": "low",
+  "Cocktail Crafting": "low", "Candle Making": "low", "Sourdough Baking": "low",
+  "Film Photography": "low", "Board Games": "low", "Escape Rooms": "low",
+  "Miniature Painting": "low", "Yoga": "low", "Watercolor Painting": "low",
+  "Screenwriting": "low", "Bookbinding": "low", "Amateur Radio": "low",
+  "Foraging": "low", "Swing Dancing": "low", "Singing / Vocal Training": "low",
+  "Puzzle Design": "low", "Dungeons & Dragons": "low",
+
+  // Medium ($150–500)
+  "Ceramics": "medium", "Homebrewing": "medium", "Archery": "medium",
+  "Guitar": "medium", "3D Printing": "medium", "Rock Climbing": "medium",
+  "Rowing / Kayaking": "medium", "Trading Card Games": "medium",
+  "Bouldering": "medium", "Skateboarding": "medium", "Cheesemaking": "medium",
+  "Leatherworking": "medium", "Electronics / Arduino": "medium",
+  "Trail Running": "medium", "DJing": "medium", "Retro Gaming / Collecting": "medium",
+  "Tabletop Wargaming": "medium",
+
+  // High ($500+)
+  "Mountain Biking": "high", "Surfing": "high", "Woodworking": "high",
+  "Astronomy / Astrophotography": "high", "Cycling": "high",
+  "Warhammer 40K": "high", "Martial Arts": "medium",
+};
+
+const BUDGET_ORDER = ["free", "low", "medium", "high"];
+
+function budgetAllowed(hobby, userBudget) {
+  const hobbyCost = HOBBY_MIN_COST[hobby] || "low";
+  const hobbyIdx = BUDGET_ORDER.indexOf(hobbyCost);
+  const userIdx = BUDGET_ORDER.indexOf(userBudget);
+  // Allow hobbies at or below the user's budget tier
+  // Also allow one tier above if user said medium or high (some stretch is ok)
+  if (userBudget === "high") return true;
+  if (userBudget === "medium") return hobbyIdx <= 3; // everything
+  if (userBudget === "low") return hobbyIdx <= 1; // free or low only
+  if (userBudget === "free") return hobbyIdx === 0; // free only
+  return true;
+}
+
 // ── MATCHING ALGORITHM ────────────────────────────────────────────────────────
 
 function matchHobbies(answers) {
   const scores = {};
   Object.keys(HOBBY_DATA).forEach(h => (scores[h] = 0));
-  const { energy, time, style, setting, social, risk, budget, output, learning, vibe } = answers;
+  const { energy, time, style, setting, social, risk, budget, output, learning, indoor_outdoor, commitment, vibe } = answers;
 
   const add = (hobbies, pts) => hobbies.forEach(h => { if (scores[h] !== undefined) scores[h] += pts; });
+  const sub = (hobbies, pts) => hobbies.forEach(h => { if (scores[h] !== undefined) scores[h] -= pts; });
 
-  if (energy === "physical") add(["Rock Climbing","Bouldering","Trail Running","Cold Water Swimming","Cycling","Skateboarding","Martial Arts","Yoga","Mountain Biking","Surfing","Rowing / Kayaking","Archery"], 3);
-  if (energy === "creative") add(["Ceramics","Urban Sketching","Film Photography","DJing","Sourdough Baking","Watercolor Painting","Leatherworking","Woodworking","Music Production","Candle Making","Screenwriting","Embroidery","Miniature Painting","Game Development","Warhammer 40K"], 3);
-  if (energy === "social") add(["Improv Comedy","Stand-Up Comedy","Homebrewing","DJing","Swing Dancing","Guitar","Singing / Vocal Training","Chess","Dungeons & Dragons","Board Games","Trading Card Games","Escape Rooms","Tabletop Wargaming"], 3);
-  if (energy === "outdoor") add(["Foraging","Trail Running","Cold Water Swimming","Urban Sketching","Hiking","Stargazing","Birdwatching","Surfing","Mountain Biking","Rock Pooling","Thrifting"], 3);
+  // ── ENERGY (weight: 4) — most important signal ─────────────────────────────
+  if (energy === "physical") add(["Rock Climbing","Bouldering","Trail Running","Cold Water Swimming","Cycling","Skateboarding","Martial Arts","Yoga","Mountain Biking","Surfing","Rowing / Kayaking","Archery"], 4);
+  if (energy === "creative") add(["Ceramics","Urban Sketching","Film Photography","DJing","Sourdough Baking","Watercolor Painting","Leatherworking","Woodworking","Music Production","Candle Making","Screenwriting","Embroidery","Miniature Painting","Game Development"], 4);
+  if (energy === "social") add(["Improv Comedy","Stand-Up Comedy","Homebrewing","Swing Dancing","Guitar","Singing / Vocal Training","Chess","Dungeons & Dragons","Board Games","Trading Card Games","Escape Rooms"], 4);
+  if (energy === "outdoor") add(["Foraging","Trail Running","Cold Water Swimming","Urban Sketching","Hiking","Stargazing","Birdwatching","Surfing","Mountain Biking","Rock Pooling","Thrifting"], 4);
 
-  // Gaming-specific energy boost
-  add(["Video Gaming","Retro Gaming / Collecting","Game Development","Board Games","Trading Card Games","Dungeons & Dragons","Warhammer 40K","Miniature Painting","Tabletop Wargaming","Escape Rooms"], 1);
+  // PENALTY — actively push away bad energy matches
+  if (energy === "physical") sub(["Journaling","Screenwriting","Chess","Puzzle Design","Bookbinding","Candle Making"], 2);
+  if (energy === "creative") sub(["Trail Running","Cold Water Swimming","Martial Arts","Surfing","Mountain Biking"], 2);
+  if (energy === "social") sub(["Journaling","Film Photography","Birdwatching","Stargazing","Foraging"], 2);
+  if (energy === "outdoor") sub(["Video Gaming","Board Games","Chess","Music Production","Screenwriting","Knitting / Crochet"], 2);
 
-  if (time === "low") add(["Journaling","Birdwatching","Stargazing","Rock Pooling","Archery","Cocktail Crafting","Candle Making","Hot Sauce Making","Embroidery","Escape Rooms","Video Gaming"], 2);
-  if (time === "high" || time === "obsessive") add(["Woodworking","Music Production","Language Learning","Guitar","3D Printing","Martial Arts","Trail Running","Screenwriting","Electronics / Arduino","Warhammer 40K","Game Development","Dungeons & Dragons","Retro Gaming / Collecting"], 2);
+  // ── TIME (weight: 3) ───────────────────────────────────────────────────────
+  if (time === "low") {
+    add(["Journaling","Birdwatching","Stargazing","Rock Pooling","Archery","Cocktail Crafting","Candle Making","Hot Sauce Making","Embroidery","Escape Rooms","Video Gaming","Thrifting","Urban Sketching"], 3);
+    sub(["Woodworking","Martial Arts","Language Learning","Guitar","Music Production","Warhammer 40K","Game Development","Dungeons & Dragons","Rock Climbing","Trail Running"], 3);
+  }
+  if (time === "medium") {
+    add(["Ceramics","Film Photography","Homebrewing","Yoga","Bouldering","Swing Dancing","Chess","Board Games","Sourdough Baking","Cycling","Hiking"], 2);
+  }
+  if (time === "high" || time === "obsessive") {
+    add(["Woodworking","Music Production","Language Learning","Guitar","3D Printing","Martial Arts","Trail Running","Screenwriting","Electronics / Arduino","Warhammer 40K","Game Development","Dungeons & Dragons","Retro Gaming / Collecting","Rock Climbing","Astronomy / Astrophotography"], 3);
+    sub(["Escape Rooms","Cocktail Crafting","Hot Sauce Making","Embroidery","Candle Making","Thrifting"], 2);
+  }
 
-  if (style === "slow" || style === "process") add(["Ceramics","Sourdough Baking","Film Photography","Foraging","Cheesemaking","Knitting / Crochet","Bookbinding","Leatherworking","Woodworking","Language Learning","Astronomy / Astrophotography","Miniature Painting","Warhammer 40K","Tabletop Wargaming"], 2);
-  if (style === "quick") add(["Bouldering","Improv Comedy","Cold Water Swimming","Cocktail Crafting","Hot Sauce Making","Swing Dancing","Video Gaming","Trading Card Games","Escape Rooms"], 2);
+  // ── PATIENCE / STYLE (weight: 2) ──────────────────────────────────────────
+  if (style === "slow" || style === "process") {
+    add(["Ceramics","Sourdough Baking","Film Photography","Foraging","Cheesemaking","Knitting / Crochet","Bookbinding","Leatherworking","Woodworking","Language Learning","Astronomy / Astrophotography","Miniature Painting","Warhammer 40K"], 2);
+    sub(["Improv Comedy","Escape Rooms","Stand-Up Comedy","Video Gaming","Bouldering"], 1);
+  }
+  if (style === "quick") {
+    add(["Bouldering","Improv Comedy","Cold Water Swimming","Cocktail Crafting","Hot Sauce Making","Swing Dancing","Video Gaming","Trading Card Games","Escape Rooms","Thrifting","Skateboarding"], 2);
+    sub(["Woodworking","Cheesemaking","Language Learning","Bookbinding","Astronomy / Astrophotography","Warhammer 40K"], 2);
+  }
+  if (style === "flexible") {
+    add(["Yoga","Cycling","Hiking","Photography","Birdwatching","Chess","Guitar"], 1);
+  }
 
-  if (setting === "outdoor") add(["Trail Running","Foraging","Cold Water Swimming","Urban Sketching","Hiking","Birdwatching","Stargazing","Surfing","Mountain Biking","Rock Pooling","Rowing / Kayaking","Cycling"], 2);
-  if (setting === "indoor-creative") add(["Ceramics","Sourdough Baking","DJing","Film Photography","Watercolor Painting","Leatherworking","Music Production","Candle Making","Screenwriting","Embroidery","Bookbinding","Miniature Painting","Game Development"], 2);
-  if (setting === "indoor-active") add(["Rock Climbing","Bouldering","Martial Arts","Yoga","Archery","Swing Dancing"], 2);
-  if (setting === "home") add(["Sourdough Baking","Homebrewing","DJing","Cheesemaking","3D Printing","Knitting / Crochet","Electronics / Arduino","Music Production","Journaling","Chess","Language Learning","Video Gaming","Retro Gaming / Collecting","Board Games","Game Development","Miniature Painting","Trading Card Games"], 2);
+  // ── SETTING (weight: 3) ────────────────────────────────────────────────────
+  if (setting === "outdoor") {
+    add(["Trail Running","Foraging","Cold Water Swimming","Urban Sketching","Hiking","Birdwatching","Stargazing","Surfing","Mountain Biking","Rock Pooling","Rowing / Kayaking","Cycling","Archery"], 3);
+    sub(["Video Gaming","Board Games","Chess","Music Production","Knitting / Crochet","Candle Making","Sourdough Baking","Screenwriting"], 2);
+  }
+  if (setting === "indoor-creative") {
+    add(["Ceramics","Sourdough Baking","DJing","Film Photography","Watercolor Painting","Leatherworking","Music Production","Candle Making","Screenwriting","Embroidery","Bookbinding","Miniature Painting","Game Development","Guitar","Cheesemaking"], 3);
+    sub(["Trail Running","Surfing","Mountain Biking","Cold Water Swimming","Cycling","Hiking"], 2);
+  }
+  if (setting === "indoor-active") {
+    add(["Rock Climbing","Bouldering","Martial Arts","Yoga","Archery","Swing Dancing","Chess"], 3);
+    sub(["Foraging","Birdwatching","Stargazing","Hiking","Trail Running","Surfing"], 2);
+  }
+  if (setting === "home") {
+    add(["Sourdough Baking","Homebrewing","DJing","Cheesemaking","3D Printing","Knitting / Crochet","Electronics / Arduino","Music Production","Journaling","Chess","Language Learning","Video Gaming","Retro Gaming / Collecting","Board Games","Game Development","Miniature Painting","Trading Card Games","Candle Making","Embroidery"], 3);
+    sub(["Rock Climbing","Surfing","Mountain Biking","Swing Dancing","Martial Arts","Trail Running"], 2);
+  }
 
-  if (social === "solo") add(["Film Photography","Trail Running","Urban Sketching","Foraging","Stargazing","Birdwatching","Journaling","Watercolor Painting","Knitting / Crochet","Video Gaming","Retro Gaming / Collecting","Miniature Painting"], 2);
-  if (social === "community") add(["Improv Comedy","Rock Climbing","Homebrewing","Swing Dancing","Stand-Up Comedy","Amateur Radio","Chess","Trading Card Games","Warhammer 40K","Tabletop Wargaming","Escape Rooms","Thrifting"], 2);
-  if (social === "small-group") add(["Bouldering","Sourdough Baking","Ceramics","Guitar","Hiking","Dungeons & Dragons","Board Games","Escape Rooms"], 2);
-  if (social === "flexible") add(["Video Gaming","Board Games","Trading Card Games"], 1);
+  // ── SOCIAL (weight: 2) ────────────────────────────────────────────────────
+  if (social === "solo") {
+    add(["Film Photography","Trail Running","Urban Sketching","Foraging","Stargazing","Birdwatching","Journaling","Watercolor Painting","Knitting / Crochet","Video Gaming","Retro Gaming / Collecting","Miniature Painting","Archery","Astronomy / Astrophotography"], 2);
+    sub(["Improv Comedy","Swing Dancing","Stand-Up Comedy","Escape Rooms","Dungeons & Dragons","Board Games"], 2);
+  }
+  if (social === "community") {
+    add(["Improv Comedy","Rock Climbing","Homebrewing","Swing Dancing","Stand-Up Comedy","Amateur Radio","Chess","Trading Card Games","Warhammer 40K","Escape Rooms","Thrifting","Martial Arts","Cycling"], 2);
+    sub(["Journaling","Film Photography","Miniature Painting","Stargazing","Knitting / Crochet"], 2);
+  }
+  if (social === "small-group") {
+    add(["Bouldering","Sourdough Baking","Ceramics","Guitar","Hiking","Dungeons & Dragons","Board Games","Escape Rooms","Homebrewing","Tabletop Wargaming"], 2);
+  }
+  if (social === "flexible") {
+    add(["Video Gaming","Board Games","Trading Card Games","Cycling","Yoga","Hiking","Guitar"], 1);
+  }
 
-  if (risk === "adventurous") add(["Rock Climbing","Cold Water Swimming","Bouldering","Trail Running","Skateboarding","Surfing","Mountain Biking"], 2);
-  if (risk === "safe" || risk === "mental") add(["Ceramics","Urban Sketching","Sourdough Baking","Film Photography","Foraging","Birdwatching","Knitting / Crochet","Journaling","Board Games","Video Gaming","Miniature Painting","Retro Gaming / Collecting"], 2);
-  if (risk === "challenge") add(["Improv Comedy","DJing","Homebrewing","Stand-Up Comedy","Martial Arts","Language Learning","Chess","Trading Card Games","Dungeons & Dragons","Warhammer 40K","Tabletop Wargaming","Escape Rooms"], 2);
-  if (risk === "mental") add(["Chess","Game Development","Dungeons & Dragons","Puzzle Design","Trading Card Games","Tabletop Wargaming"], 1);
+  // ── RISK (weight: 2) ──────────────────────────────────────────────────────
+  if (risk === "adventurous") {
+    add(["Rock Climbing","Cold Water Swimming","Bouldering","Trail Running","Skateboarding","Surfing","Mountain Biking","Martial Arts"], 2);
+    sub(["Journaling","Knitting / Crochet","Candle Making","Embroidery","Chess","Screenwriting"], 2);
+  }
+  if (risk === "safe") {
+    add(["Ceramics","Urban Sketching","Sourdough Baking","Film Photography","Foraging","Birdwatching","Knitting / Crochet","Journaling","Board Games","Video Gaming","Miniature Painting","Retro Gaming / Collecting","Watercolor Painting","Chess"], 2);
+    sub(["Rock Climbing","Surfing","Mountain Biking","Cold Water Swimming","Skateboarding","Martial Arts"], 3);
+  }
+  if (risk === "challenge") {
+    add(["Improv Comedy","DJing","Homebrewing","Stand-Up Comedy","Martial Arts","Language Learning","Chess","Trading Card Games","Dungeons & Dragons","Warhammer 40K","Escape Rooms","Rock Climbing","Bouldering"], 2);
+  }
+  if (risk === "mental") {
+    add(["Chess","Game Development","Dungeons & Dragons","Puzzle Design","Trading Card Games","Language Learning","Screenwriting","Music Production","Astronomy / Astrophotography"], 2);
+    sub(["Rock Climbing","Surfing","Mountain Biking","Cold Water Swimming","Skateboarding"], 2);
+  }
 
-  if (budget === "free") add(["Journaling","Chess","Language Learning","Birdwatching","Stargazing","Urban Sketching","Cold Water Swimming","Stand-Up Comedy","Hiking","Music Production","Video Gaming","Game Development","Thrifting"], 2);
-  if (budget === "low") add(["Embroidery","Knitting / Crochet","Hot Sauce Making","Cocktail Crafting","Candle Making","Sourdough Baking","Film Photography","Board Games","Escape Rooms","Miniature Painting"], 2);
-  if (budget === "medium") add(["Ceramics","Homebrewing","Archery","Guitar","3D Printing","Rock Climbing","Rowing / Kayaking","Dungeons & Dragons","Trading Card Games","Tabletop Wargaming"], 2);
-  if (budget === "high") add(["Mountain Biking","Surfing","Woodworking","Astronomy / Astrophotography","Cycling","Warhammer 40K","Retro Gaming / Collecting"], 1);
+  // ── BUDGET — HARD EXCLUSION + soft scoring (weight: varies) ───────────────
+  // First apply hard exclusions — zero out anything the user genuinely can't afford
+  if (budget === "free" || budget === "low") {
+    Object.keys(scores).forEach(hobby => {
+      if (!budgetAllowed(hobby, budget)) {
+        scores[hobby] = -999; // Effectively excluded from results
+      }
+    });
+  }
+  // Then add positive scores for hobbies that fit well within budget
+  if (budget === "free") add(["Journaling","Chess","Language Learning","Birdwatching","Stargazing","Urban Sketching","Cold Water Swimming","Stand-Up Comedy","Hiking","Music Production","Video Gaming","Game Development","Thrifting","Rock Pooling","Improv Comedy"], 3);
+  if (budget === "low") add(["Embroidery","Knitting / Crochet","Hot Sauce Making","Cocktail Crafting","Candle Making","Sourdough Baking","Film Photography","Board Games","Escape Rooms","Miniature Painting","Yoga","Bookbinding","Watercolor Painting","Foraging"], 2);
+  if (budget === "medium") add(["Ceramics","Homebrewing","Archery","Guitar","3D Printing","Rock Climbing","Rowing / Kayaking","Dungeons & Dragons","Trading Card Games","Bouldering","Skateboarding","Cheesemaking","Leatherworking","DJing","Trail Running"], 2);
+  if (budget === "high") add(["Mountain Biking","Surfing","Woodworking","Astronomy / Astrophotography","Cycling","Warhammer 40K","Retro Gaming / Collecting","Martial Arts","Electronics / Arduino"], 2);
 
-  if (output === "tangible") add(["Ceramics","Leatherworking","Woodworking","Sourdough Baking","Candle Making","Embroidery","Knitting / Crochet","3D Printing","Bookbinding","Homebrewing","Cheesemaking","Miniature Painting","Warhammer 40K","Game Development"], 2);
-  if (output === "skill") add(["Martial Arts","Guitar","Singing / Vocal Training","DJing","Swing Dancing","Language Learning","Rock Climbing","Chess","Trading Card Games","Game Development"], 2);
-  if (output === "experience") add(["Cold Water Swimming","Foraging","Hiking","Surfing","Stargazing","Birdwatching","Rock Pooling","Escape Rooms","Dungeons & Dragons","Video Gaming","Thrifting"], 2);
-  if (output === "mental") add(["Yoga","Journaling","Chess","Archery","Film Photography","Urban Sketching","Video Gaming","Board Games"], 2);
+  // ── OUTPUT (weight: 2) ────────────────────────────────────────────────────
+  if (output === "tangible") {
+    add(["Ceramics","Leatherworking","Woodworking","Sourdough Baking","Candle Making","Embroidery","Knitting / Crochet","3D Printing","Bookbinding","Homebrewing","Cheesemaking","Miniature Painting","Warhammer 40K","Game Development","Hot Sauce Making"], 2);
+    sub(["Chess","Language Learning","Yoga","Birdwatching","Trail Running","Stargazing"], 1);
+  }
+  if (output === "skill") {
+    add(["Martial Arts","Guitar","Singing / Vocal Training","DJing","Swing Dancing","Language Learning","Rock Climbing","Chess","Trading Card Games","Game Development","Yoga","Archery"], 2);
+    sub(["Candle Making","Hot Sauce Making","Cheesemaking","Knitting / Crochet","Embroidery"], 1);
+  }
+  if (output === "experience") {
+    add(["Cold Water Swimming","Foraging","Hiking","Surfing","Stargazing","Birdwatching","Rock Pooling","Escape Rooms","Dungeons & Dragons","Video Gaming","Thrifting","Improv Comedy","Trail Running"], 2);
+    sub(["Woodworking","Leatherworking","3D Printing","Candle Making","Knitting / Crochet"], 1);
+  }
+  if (output === "mental") {
+    add(["Yoga","Journaling","Chess","Archery","Film Photography","Urban Sketching","Video Gaming","Board Games","Birdwatching","Stargazing","Cold Water Swimming","Foraging"], 2);
+    sub(["Woodworking","Homebrewing","Cheesemaking","3D Printing"], 1);
+  }
 
-  if (learning === "self-taught") add(["DJing","Music Production","Skateboarding","Chess","Language Learning","3D Printing","Electronics / Arduino","Video Gaming","Retro Gaming / Collecting","Game Development"], 1);
-  if (learning === "structured") add(["Martial Arts","Swing Dancing","Rock Climbing","Guitar","Ceramics","Yoga","Dungeons & Dragons","Trading Card Games"], 1);
-  if (learning === "community") add(["Improv Comedy","Homebrewing","Amateur Radio","Foraging","Dungeons & Dragons","Warhammer 40K","Board Games","Trading Card Games","Tabletop Wargaming"], 1);
-  if (learning === "research") add(["Astronomy / Astrophotography","Language Learning","Chess","Homebrewing","Cheesemaking","Foraging","Warhammer 40K","Tabletop Wargaming","Trading Card Games","Game Development"], 1);
+  // ── LEARNING STYLE (weight: 2) ────────────────────────────────────────────
+  if (learning === "self-taught") add(["DJing","Music Production","Skateboarding","Chess","Language Learning","3D Printing","Electronics / Arduino","Video Gaming","Retro Gaming / Collecting","Game Development","Film Photography","Guitar","Urban Sketching"], 2);
+  if (learning === "structured") add(["Martial Arts","Swing Dancing","Rock Climbing","Guitar","Ceramics","Yoga","Dungeons & Dragons","Trading Card Games","Singing / Vocal Training","Archery","Language Learning"], 2);
+  if (learning === "community") add(["Improv Comedy","Homebrewing","Amateur Radio","Foraging","Dungeons & Dragons","Warhammer 40K","Board Games","Trading Card Games","Bouldering","Chess","Swing Dancing"], 2);
+  if (learning === "research") add(["Astronomy / Astrophotography","Language Learning","Chess","Homebrewing","Cheesemaking","Foraging","Warhammer 40K","Game Development","Sourdough Baking","Electronics / Arduino"], 2);
 
-  if (vibe === "freedom") add(["Trail Running","Cycling","Cold Water Swimming","Surfing","Skateboarding","Foraging","Hiking","Film Photography","Video Gaming","Retro Gaming / Collecting","Thrifting"], 2);
-  if (vibe === "mastery") add(["Martial Arts","Guitar","Chess","Language Learning","Woodworking","Music Production","Rock Climbing","Warhammer 40K","Trading Card Games","Miniature Painting","Game Development","Tabletop Wargaming"], 2);
-  if (vibe === "connection") add(["Improv Comedy","Swing Dancing","Stand-Up Comedy","Amateur Radio","Homebrewing","Dungeons & Dragons","Board Games","Escape Rooms","Trading Card Games"], 2);
-  if (vibe === "stillness") add(["Yoga","Ceramics","Birdwatching","Urban Sketching","Journaling","Archery","Knitting / Crochet","Stargazing","Miniature Painting","Retro Gaming / Collecting"], 2);
+  // ── INDOOR / OUTDOOR (new question, weight: 2) ────────────────────────────
+  if (indoor_outdoor === "outside") {
+    add(["Trail Running","Foraging","Cold Water Swimming","Hiking","Birdwatching","Stargazing","Surfing","Mountain Biking","Rock Pooling","Cycling","Archery","Urban Sketching"], 2);
+    sub(["Video Gaming","Board Games","Chess","Music Production","Knitting / Crochet","Candle Making"], 2);
+  }
+  if (indoor_outdoor === "inside") {
+    add(["Video Gaming","Board Games","Chess","Music Production","Knitting / Crochet","Ceramics","Sourdough Baking","Embroidery","Miniature Painting","Homebrewing","3D Printing","Guitar","Screenwriting"], 2);
+    sub(["Trail Running","Surfing","Mountain Biking","Cold Water Swimming","Foraging","Hiking"], 2);
+  }
+  if (indoor_outdoor === "mobile") {
+    add(["Skateboarding","Cycling","Thrifting","Urban Sketching","Birdwatching","Trail Running","Hiking","Photography"], 2);
+  }
+  if (indoor_outdoor === "either") {
+    add(["Rock Climbing","Bouldering","Yoga","Archery","Guitar","Chess","Swing Dancing"], 1);
+  }
 
-  return Object.entries(scores).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([name]) => name);
+  // ── COMMITMENT DEPTH (new question, weight: 2) ────────────────────────────
+  if (commitment === "depth") {
+    add(["Martial Arts","Guitar","Chess","Language Learning","Woodworking","Music Production","Rock Climbing","Warhammer 40K","Astronomy / Astrophotography","Ceramics","Leatherworking","Film Photography"], 2);
+    sub(["Escape Rooms","Cocktail Crafting","Hot Sauce Making","Thrifting","Video Gaming","Birdwatching"], 1);
+  }
+  if (commitment === "variety") {
+    add(["Thrifting","Escape Rooms","Board Games","Cooking","Cocktail Crafting","Urban Sketching","Birdwatching","Rock Pooling","Hiking","Improv Comedy","Trading Card Games"], 2);
+    sub(["Language Learning","Warhammer 40K","Martial Arts","Chess","Astronomy / Astrophotography"], 1);
+  }
+  if (commitment === "casual") {
+    add(["Video Gaming","Board Games","Birdwatching","Stargazing","Journaling","Cocktail Crafting","Embroidery","Knitting / Crochet","Escape Rooms","Chess","Yoga","Thrifting"], 2);
+    sub(["Martial Arts","Language Learning","Woodworking","Warhammer 40K","Astronomy / Astrophotography","Rock Climbing"], 2);
+  }
+  if (commitment === "identity") {
+    add(["Martial Arts","Rock Climbing","Guitar","Language Learning","Film Photography","Ceramics","Trail Running","DJing","Chess","Surfing","Woodworking"], 2);
+    sub(["Escape Rooms","Cocktail Crafting","Hot Sauce Making","Candle Making","Retro Gaming / Collecting"], 1);
+  }
+
+  // ── VIBE (weight: 2) ──────────────────────────────────────────────────────
+  if (vibe === "freedom") add(["Trail Running","Cycling","Cold Water Swimming","Surfing","Skateboarding","Foraging","Hiking","Film Photography","Video Gaming","Retro Gaming / Collecting","Thrifting","Urban Sketching"], 2);
+  if (vibe === "mastery") add(["Martial Arts","Guitar","Chess","Language Learning","Woodworking","Music Production","Rock Climbing","Warhammer 40K","Trading Card Games","Miniature Painting","Game Development","Archery"], 2);
+  if (vibe === "connection") add(["Improv Comedy","Swing Dancing","Stand-Up Comedy","Amateur Radio","Homebrewing","Dungeons & Dragons","Board Games","Escape Rooms","Trading Card Games","Ceramics"], 2);
+  if (vibe === "stillness") add(["Yoga","Ceramics","Birdwatching","Urban Sketching","Journaling","Archery","Knitting / Crochet","Stargazing","Miniature Painting","Retro Gaming / Collecting","Film Photography","Sourdough Baking"], 2);
+
+  // ── PICK TOP MATCHES + ONE WILDCARD ───────────────────────────────────────
+  // Filter out budget-excluded hobbies (score = -999)
+  const eligible = Object.entries(scores).filter(([, s]) => s > -999);
+
+  // Sort by score descending
+  eligible.sort((a, b) => b[1] - a[1]);
+
+  // Top 5 confident matches
+  const top5 = eligible.slice(0, 5).map(([name]) => name);
+
+  // Wildcard: find the highest-scoring hobby NOT in top 5 that is in a
+  // different category from all top 5 results — deliberately unexpected
+  const top5Categories = new Set(top5.map(n => HOBBY_DATA[n]?.category));
+  const wildcard = eligible
+    .slice(5, 30) // look beyond top 5 but not the bottom
+    .find(([name]) => !top5Categories.has(HOBBY_DATA[name]?.category));
+
+  const results = wildcard ? [...top5, wildcard[0]] : eligible.slice(0, 6).map(([name]) => name);
+  return results;
+}
+
+// ── MOTIVATIONAL QUOTES ───────────────────────────────────────────────────────
+
+const QUOTES = [
+  { text: "You are not your job title. You are what you do when no one is paying you to do it.", author: "Recess" },
+  { text: "The things that make you who you are have nothing to do with your job description.", author: "Recess" },
+  { text: "Rest is not the absence of productivity. It's the presence of yourself.", author: "Recess" },
+  { text: "A hobby is not a luxury. It's proof that your life belongs to you.", author: "Recess" },
+  { text: "You don't need to monetize it, optimize it, or justify it. You just need to do it.", author: "Recess" },
+  { text: "The most radical thing an adult can do is play.", author: "Recess" },
+  { text: "Who were you before the world told you to be productive?", author: "Recess" },
+  { text: "Clocking out is not enough. You have to actually leave.", author: "Recess" },
+  { text: "Your weekend is not a recovery period. It's your life.", author: "Recess" },
+  { text: "The version of you that existed before work schedules deserves to show up occasionally.", author: "Recess" },
+  { text: "Do something today that has absolutely no ROI.", author: "Recess" },
+  { text: "Mastery takes time. That's not a warning — that's the whole point.", author: "Recess" },
+  { text: "You don't have to be good at it. You just have to keep showing up.", author: "Recess" },
+  { text: "A life built only around work is just a long career with some meals in it.", author: "Recess" },
+  { text: "The bell rang. You can go now.", author: "Recess" },
+  { text: "Your hobbies are not what you do instead of working. They're what you do instead of disappearing.", author: "Recess" },
+  { text: "There is no productivity hack for becoming a fuller human being. Just time, and the choice to use it.", author: "Recess" },
+  { text: "The things you loved before adulting took over are still there, waiting.", author: "Recess" },
+  { text: "Making time for yourself is not selfish. It's the whole point.", author: "Recess" },
+  { text: "You weren't born to optimize. You were born to live.", author: "Recess" },
+  // Classic quotes
+  { text: "The object of life is not to be on the side of the majority, but to escape finding oneself in the ranks of the insane.", author: "Marcus Aurelius" },
+  { text: "It is not enough to be busy. The question is: what are we busy about?", author: "Henry David Thoreau" },
+  { text: "Almost everything will work again if you unplug it for a few minutes. Including you.", author: "Anne Lamott" },
+  { text: "What you do in your free time is who you really are.", author: "Unknown" },
+  { text: "We do not stop playing because we grow old; we grow old because we stop playing.", author: "George Bernard Shaw" },
+  { text: "The purpose of life is to live it, to taste experience to the utmost.", author: "Eleanor Roosevelt" },
+  { text: "In the middle of difficulty lies opportunity — and also, sometimes, a really good hobby.", author: "Recess" },
+  { text: "Take care of yourself. You can't pour from an empty cup.", author: "Unknown" },
+  { text: "The soul that sees beauty may sometimes walk alone.", author: "Johann Wolfgang von Goethe" },
+  { text: "Collect moments, not things.", author: "Unknown" },
+  { text: "You owe yourself the love that you so freely give to other people.", author: "Unknown" },
+  { text: "Time you enjoy wasting is not wasted time.", author: "Marthe Troly-Curtin" },
+  { text: "Creativity is intelligence having fun.", author: "Albert Einstein" },
+  { text: "The desire to create is one of the deepest yearnings of the human soul.", author: "Dieter F. Uchtdorf" },
+  { text: "Life is not measured by the number of breaths we take, but by the moments that take our breath away.", author: "Maya Angelou" },
+];
+
+const STREAK_MESSAGES = {
+  3:  { emoji: "🔥", title: "3 days in a row.", body: "You're not just trying anymore — you're doing it." },
+  7:  { emoji: "⚡", title: "One full week.", body: "This is how habits are actually built. One session at a time." },
+  14: { emoji: "💪", title: "Two weeks strong.", body: "Most people quit by now. You didn't. That means something." },
+  21: { emoji: "🌟", title: "21 days.", body: "This hobby is starting to become part of who you are." },
+  30: { emoji: "🏆", title: "30 day streak.", body: "A month of showing up for yourself. That's genuinely remarkable." },
+  50: { emoji: "🔥🔥", title: "50 sessions.", body: "You're not a beginner anymore." },
+  100:{ emoji: "💎", title: "100 sessions.", body: "This is yours now. Completely, fully yours." },
+};
+
+function getDailyQuote() {
+  const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  return QUOTES[dayOfYear % QUOTES.length];
+}
+
+function DailyQuote() {
+  const quote = getDailyQuote();
+  return (
+    <div style={{
+      background: `linear-gradient(135deg, ${COLORS.card}, ${COLORS.surface})`,
+      border: `1px solid ${COLORS.border}`,
+      borderLeft: `3px solid ${COLORS.accent}`,
+      borderRadius: 14, padding: "22px 24px", marginBottom: 32,
+    }}>
+      <div style={{ fontSize: 11, color: COLORS.accent, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", marginBottom: 12 }}>
+        Today's Reminder
+      </div>
+      <div style={{ fontSize: 16, color: COLORS.text, lineHeight: 1.75, fontStyle: "italic", marginBottom: 10 }}>
+        "{quote.text}"
+      </div>
+      <div style={{ fontSize: 12, color: COLORS.muted, fontWeight: 600 }}>
+        — {quote.author}
+      </div>
+    </div>
+  );
+}
+
+function StreakCelebration({ hobby, streak }) {
+  const msg = STREAK_MESSAGES[streak];
+  if (!msg) return null;
+  return (
+    <div style={{
+      background: `linear-gradient(135deg, ${COLORS.orange}15, ${COLORS.pink}10)`,
+      border: `1px solid ${COLORS.orange}40`,
+      borderRadius: 14, padding: "20px 24px", marginBottom: 16,
+      display: "flex", alignItems: "center", gap: 16,
+    }}>
+      <div style={{ fontSize: 36, flexShrink: 0 }}>{msg.emoji}</div>
+      <div>
+        <div style={{ fontWeight: 900, fontSize: 16, color: COLORS.orange, marginBottom: 4 }}>
+          {HOBBY_DATA[hobby]?.emoji} {hobby} — {msg.title}
+        </div>
+        <div style={{ fontSize: 14, color: COLORS.textSoft, lineHeight: 1.6 }}>{msg.body}</div>
+      </div>
+    </div>
+  );
 }
 
 // ── SHARED UI ─────────────────────────────────────────────────────────────────
@@ -952,11 +1258,11 @@ function Wrap({ children, style }) {
 
 function Landing({ onStart }) {
   const features = [
-    { icon: "🎯", label: "10-Question Quiz", desc: "Matched to hobbies you've never tried", color: COLORS.accent },
+    { icon: "🎯", label: "12-Question Quiz", desc: "Matched to hobbies you've never tried", color: COLORS.accent },
     { icon: "💰", label: "Cost Breakdown", desc: "Entry to advanced, no surprises", color: COLORS.lime },
     { icon: "📅", label: "Habit Calendar", desc: "Schedule it so it actually happens", color: COLORS.teal },
     { icon: "🔥", label: "Streak Tracking", desc: "Build momentum day by day", color: COLORS.pink },
-    { icon: "📓", label: "Progress Journal", desc: "Track how your hobbies are growing", color: COLORS.purple },
+    { icon: "👤", label: "Your Profile", desc: "Track hobbies, streaks, and journal entries", color: COLORS.purple },
     { icon: "🎯", label: "Weekly Challenges", desc: "Specific goals to push you forward", color: COLORS.orange },
   ];
   return (
@@ -1075,7 +1381,7 @@ const ONBOARDING_STEPS = [
     id: "matches",
     emoji: "✨",
     title: "Your matches are in.",
-    body: "Based on your answers we've surfaced the hobbies most likely to fit your personality, schedule, and energy. These aren't random — every match is weighted across all 10 of your answers.",
+    body: "Based on your answers we've surfaced the hobbies most likely to fit your personality, schedule, and energy. These aren't random — every match is weighted across all 12 of your answers.",
     cta: "See My Matches →",
   },
   {
@@ -1096,7 +1402,7 @@ const ONBOARDING_STEPS = [
     id: "checkin",
     emoji: "🔥",
     title: "Check in after every session.",
-    body: "One tap — 'Did it' or 'Skip'. That's all. Over time your streaks, journal, and weekly challenges build a picture of who you're becoming outside of work. This is the part that makes it stick.",
+    body: "One tap — 'Did it' or 'Skip'. That's all. Over time your streaks, profile, and weekly challenges build a picture of who you're becoming outside of work. This is the part that makes it stick.",
     cta: "Let's Go →",
   },
 ];
@@ -1274,11 +1580,13 @@ function Results({ matches, onExplore, onSkip }) {
   return (
     <Wrap>
       <div style={{ maxWidth: 760, margin: "0 auto", padding: "60px 24px" }}>
-        <div style={{ marginBottom: 40 }}>
+        <div style={{ marginBottom: 32 }}>
           <div style={{ display: "inline-block", background: `${COLORS.accent}20`, border: `1px solid ${COLORS.accent}40`, borderRadius: 99, padding: "5px 14px", fontSize: 11, color: COLORS.accent, letterSpacing: 2, fontWeight: 700, textTransform: "uppercase", marginBottom: 16 }}>Your Matches</div>
           <h2 style={{ fontSize: "clamp(28px,5vw,44px)", fontWeight: 800, letterSpacing: -1, marginBottom: 8 }}>Here's what fits you.</h2>
-          <p style={{ color: COLORS.textSoft, fontSize: 16 }}>Based on all 10 of your answers. Click any hobby to explore it fully.</p>
+          <p style={{ color: COLORS.textSoft, fontSize: 16 }}>Based on all 12 of your answers — including one wildcard pick you might not have considered.</p>
         </div>
+
+        <DailyQuote />
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 16, marginBottom: 32 }}>
           {matches.map((name, i) => (
@@ -1288,6 +1596,7 @@ function Results({ matches, onExplore, onSkip }) {
               onMouseLeave={e => e.currentTarget.style.borderColor = i === 0 ? COLORS.accent : COLORS.border}
             >
               {i === 0 && <div style={{ position: "absolute", top: -10, right: 16, background: `linear-gradient(90deg, ${COLORS.accent}, ${COLORS.teal})`, color: "#000", borderRadius: 99, padding: "3px 12px", fontSize: 11, fontWeight: 800, letterSpacing: 1, boxShadow: `0 0 12px ${COLORS.accent}60` }}>TOP MATCH</div>}
+              {i === 5 && <div style={{ position: "absolute", top: -10, right: 16, background: `linear-gradient(90deg, ${COLORS.pink}, ${COLORS.purple})`, color: "#fff", borderRadius: 99, padding: "3px 12px", fontSize: 11, fontWeight: 800, letterSpacing: 1, boxShadow: `0 0 12px ${COLORS.pink}60` }}>🎲 WILDCARD</div>}
               <div style={{ fontSize: 40, marginBottom: 10 }}>{HOBBY_DATA[name].emoji}</div>
               <div style={{ fontWeight: 800, fontSize: 20, marginBottom: 6 }}>{name}</div>
               <div style={{ fontSize: 13, color: COLORS.textSoft, lineHeight: 1.6, marginBottom: 12 }}>{HOBBY_DATA[name].description}</div>
@@ -1646,7 +1955,7 @@ function dateKey(year, month, day) {
   return `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
 }
 
-function Calendar({ schedule, onAdd, onRemove, onBack, preselectedHobby }) {
+function Calendar({ schedule, onAdd, onRemove, onBack, preselectedHobby, checkIns, onCheckIn }) {
   const today = new Date();
   const [viewYear, setViewYear] = useState(today.getFullYear());
   const [viewMonth, setViewMonth] = useState(today.getMonth());
@@ -1876,6 +2185,39 @@ function Calendar({ schedule, onAdd, onRemove, onBack, preselectedHobby }) {
           {tod && <span style={{ background: `${COLORS.accent}20`, color: COLORS.accent, borderRadius: 99, padding: "3px 12px", fontSize: 12, fontWeight: 800 }}>Today</span>}
         </div>
 
+        {/* Today check-in summary */}
+        {tod && (() => {
+          const todayEntries = Object.entries(entries).filter(([, h]) => h);
+          const doneCount = todayEntries.filter(([slot]) => checkIns?.[entries[slot]]?.[selectedDate] === true).length;
+          const totalScheduled = todayEntries.length;
+          if (totalScheduled === 0) return null;
+          return (
+            <div style={{ background: doneCount === totalScheduled ? `${COLORS.lime}12` : `${COLORS.accent}10`, border: `1px solid ${doneCount === totalScheduled ? COLORS.lime : COLORS.accent}30`, borderRadius: 12, padding: "12px 16px", marginBottom: 20, display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ fontSize: 20 }}>{doneCount === totalScheduled ? "🎉" : "📋"}</span>
+              <div style={{ fontSize: 14, fontWeight: 700, color: doneCount === totalScheduled ? COLORS.lime : COLORS.accent }}>
+                {doneCount === totalScheduled ? "All done today! You showed up for yourself." : `${doneCount} of ${totalScheduled} sessions checked in`}
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* Streak celebrations */}
+        {tod && Object.entries(entries).filter(([, h]) => h).map(([slot, hobby]) => {
+          if (!hobby) return null;
+          let streak = 0;
+          const d = new Date();
+          for (let i = 0; i < 120; i++) {
+            const key = d.toISOString().split("T")[0];
+            if (checkIns?.[hobby]?.[key] === true) streak++;
+            else if (i > 0) break;
+            d.setDate(d.getDate() - 1);
+          }
+          if (STREAK_MESSAGES[streak]) {
+            return <StreakCelebration key={hobby} hobby={hobby} streak={streak} />;
+          }
+          return null;
+        })}
+
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {TIME_SLOTS.map(slot => {
             const hobby = entries[slot];
@@ -1898,14 +2240,21 @@ function Calendar({ schedule, onAdd, onRemove, onBack, preselectedHobby }) {
                   <>
                     <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 10 }}>
                       <span style={{ fontSize: 24 }}>{HOBBY_DATA[hobby]?.emoji}</span>
-                      <span style={{ fontWeight: 800, fontSize: 15 }}>{hobby}</span>
+                      <div>
+                        <div style={{ fontWeight: 800, fontSize: 15 }}>{hobby}</div>
+                        {checkIns?.[hobby]?.[selectedDate] === true && <div style={{ fontSize: 11, color: COLORS.accent, fontWeight: 700, marginTop: 2 }}>✓ Done</div>}
+                        {checkIns?.[hobby]?.[selectedDate] === false && <div style={{ fontSize: 11, color: COLORS.muted, fontWeight: 700, marginTop: 2 }}>⏭ Skipped</div>}
+                      </div>
                     </div>
-                    <button onClick={() => onRemove(selectedDate, slot)} style={{
-                      background: "none", border: `1px solid ${COLORS.border}`,
-                      color: COLORS.muted, borderRadius: 8,
-                      padding: "6px 14px", cursor: "pointer",
-                      fontSize: 12, fontFamily: "inherit",
-                    }}>Remove</button>
+                    <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+                      {checkIns?.[hobby]?.[selectedDate] === undefined && onCheckIn && (
+                        <>
+                          <button onClick={() => onCheckIn(hobby, selectedDate, true)} style={{ background: `linear-gradient(135deg, ${COLORS.accent}, ${COLORS.teal}80)`, color: "#fff", border: "none", borderRadius: 8, padding: "7px 12px", cursor: "pointer", fontWeight: 800, fontSize: 12, fontFamily: "inherit", boxShadow: `0 0 10px ${COLORS.accent}30` }}>Did it ✓</button>
+                          <button onClick={() => onCheckIn(hobby, selectedDate, false)} style={{ background: COLORS.surface, color: COLORS.muted, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: "7px 10px", cursor: "pointer", fontWeight: 700, fontSize: 12, fontFamily: "inherit" }}>Skip</button>
+                        </>
+                      )}
+                      <button onClick={() => onRemove(selectedDate, slot)} style={{ background: "none", border: `1px solid ${COLORS.border}`, color: COLORS.muted, borderRadius: 8, padding: "7px 10px", cursor: "pointer", fontSize: 11, fontFamily: "inherit" }}>✕</button>
+                    </div>
                   </>
                 ) : (
                   <>
@@ -2070,18 +2419,42 @@ function getChallenge(hobby) {
 
 // ── CHECKIN SCREEN ────────────────────────────────────────────────────────────
 
-function CheckIn({ schedule, checkIns, onCheckIn, onBack }) {
-  const today = new Date();
-  const todayKey = today.toISOString().split("T")[0];
-  // Get hobbies scheduled for today using the date key
-  const todayHobbies = [...new Set(Object.values(schedule[todayKey] || {}))].filter(Boolean);
+
+// ── PROGRESS JOURNAL ──────────────────────────────────────────────────────────
+
+function Profile({ schedule, checkIns, journal, matches, onSaveEntry, onEditEntry, onBack, onNavigate, onRetakeQuiz }) {
+  const [activeTab, setActiveTab] = useState("overview"); // overview | hobbies | journal | thisweek
+  const [selectedHobby, setSelectedHobby] = useState(null);
+  const [newEntryText, setNewEntryText] = useState("");
+  const [editingEntry, setEditingEntry] = useState(null); // { hobby, index, text }
+  const [saved, setSaved] = useState(false);
+
+  // All hobbies ever scheduled (active)
+  const activeHobbies = [...new Set(
+    Object.values(schedule).flatMap(day => Object.values(day))
+  )].filter(Boolean);
+
+  // All hobbies that have journal entries but aren't currently scheduled
+  const journaledHobbies = Object.keys(journal).filter(h => !activeHobbies.includes(h) && journal[h]?.length > 0);
+
+  // Stats
+  const totalSessions = Object.values(checkIns).reduce((acc, days) =>
+    acc + Object.values(days).filter(Boolean).length, 0);
+
+  const firstSessionDate = Object.values(checkIns).reduce((earliest, days) => {
+    const dates = Object.entries(days).filter(([, v]) => v).map(([d]) => d);
+    const min = dates.sort()[0];
+    if (!min) return earliest;
+    if (!earliest || min < earliest) return min;
+    return earliest;
+  }, null);
 
   function getStreak(hobby) {
     let streak = 0;
     const d = new Date();
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 90; i++) {
       const key = d.toISOString().split("T")[0];
-      if (checkIns[hobby]?.[key] === true) { streak++; }
+      if (checkIns[hobby]?.[key] === true) streak++;
       else if (i > 0) break;
       d.setDate(d.getDate() - 1);
     }
@@ -2092,176 +2465,464 @@ function CheckIn({ schedule, checkIns, onCheckIn, onBack }) {
     return Object.values(checkIns[hobby] || {}).filter(Boolean).length;
   }
 
-  // All hobbies ever scheduled
-  const allScheduledHobbies = [...new Set(
-    Object.values(schedule).flatMap(day => Object.values(day))
-  )].filter(Boolean);
+  function getLongestStreak(hobby) {
+    const days = Object.entries(checkIns[hobby] || {})
+      .filter(([, v]) => v).map(([d]) => d).sort();
+    let longest = 0, current = 0;
+    for (let i = 0; i < days.length; i++) {
+      if (i === 0) { current = 1; continue; }
+      const prev = new Date(days[i - 1]);
+      const curr = new Date(days[i]);
+      const diff = (curr - prev) / (1000 * 60 * 60 * 24);
+      if (diff === 1) { current++; } else { current = 1; }
+      if (current > longest) longest = current;
+    }
+    return Math.max(longest, current);
+  }
 
-  return (
-    <Wrap>
-      <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px" }}>
-        <button onClick={onBack} style={{ background: "none", border: "none", color: COLORS.textSoft, cursor: "pointer", fontSize: 14, marginBottom: 24, padding: 0, fontFamily: "inherit" }}>← Back</button>
-
-        <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -1, marginBottom: 6 }}>✅ Check In</h2>
-        <p style={{ color: COLORS.textSoft, marginBottom: 32 }}>
-          {today.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
-        </p>
-
-        {/* Today's scheduled hobbies */}
-        {todayHobbies.length > 0 && (
-          <div style={{ marginBottom: 32 }}>
-            <div style={{ fontWeight: 800, fontSize: 13, color: COLORS.accent, letterSpacing: 1, textTransform: "uppercase", marginBottom: 16 }}>Scheduled Today</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {todayHobbies.map(hobby => {
-                const done = checkIns[hobby]?.[todayKey] === true;
-                const skipped = checkIns[hobby]?.[todayKey] === false;
-                const streak = getStreak(hobby);
-                return (
-                  <div key={hobby} style={{ background: COLORS.card, border: `1px solid ${done ? COLORS.accent : skipped ? COLORS.muted : COLORS.border}`, borderRadius: 14, padding: "20px 24px", display: "flex", alignItems: "center", gap: 16 }}>
-                    <span style={{ fontSize: 32, flexShrink: 0 }}>{HOBBY_DATA[hobby]?.emoji}</span>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 800, fontSize: 16 }}>{hobby}</div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 4 }}>
-                        {streak > 0 && <span style={{ fontSize: 12, color: COLORS.orange, fontWeight: 800, textShadow: `0 0 8px ${COLORS.orange}60` }}>🔥 {streak} day streak</span>}
-                        <span style={{ fontSize: 12, color: COLORS.muted }}>{getTotalSessions(hobby)} total sessions</span>
-                      </div>
-                    </div>
-                    {!done && !skipped ? (
-                      <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
-                        <button onClick={() => onCheckIn(hobby, todayKey, true)} style={{ background: `linear-gradient(135deg, ${COLORS.accent}, ${COLORS.teal}80)`, color: "#fff", border: "none", borderRadius: 8, padding: "8px 16px", cursor: "pointer", fontWeight: 800, fontSize: 13, fontFamily: "inherit", boxShadow: `0 0 12px ${COLORS.accent}40` }}>Did it ✓</button>
-                        <button onClick={() => onCheckIn(hobby, todayKey, false)} style={{ background: COLORS.surface, color: COLORS.muted, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: "8px 16px", cursor: "pointer", fontWeight: 700, fontSize: 13, fontFamily: "inherit" }}>Skip</button>
-                      </div>
-                    ) : (
-                      <div style={{ fontSize: 24, flexShrink: 0 }}>{done ? "✅" : "⏭️"}</div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {todayHobbies.length === 0 && (
-          <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 28, marginBottom: 32, textAlign: "center" }}>
-            <div style={{ fontSize: 32, marginBottom: 12 }}>📅</div>
-            <div style={{ fontWeight: 700, marginBottom: 6 }}>Nothing scheduled today</div>
-            <div style={{ color: COLORS.textSoft, fontSize: 14 }}>Head to the Schedule tab to add hobbies to today.</div>
-          </div>
-        )}
-
-        {/* Streak overview for all hobbies */}
-        {allScheduledHobbies.length > 0 && (
-          <div>
-            <div style={{ fontWeight: 800, fontSize: 13, color: COLORS.accent, letterSpacing: 1, textTransform: "uppercase", marginBottom: 16 }}>All Hobby Streaks</div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 12 }}>
-              {allScheduledHobbies.map(hobby => {
-                const streak = getStreak(hobby);
-                const total = getTotalSessions(hobby);
-                return (
-                  <div key={hobby} style={{ background: COLORS.card, border: `1px solid ${streak > 0 ? COLORS.orange + "60" : COLORS.border}`, borderRadius: 12, padding: "16px", textAlign: "center" }}>
-                    <div style={{ fontSize: 28, marginBottom: 6 }}>{HOBBY_DATA[hobby]?.emoji}</div>
-                    <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8, lineHeight: 1.3 }}>{hobby}</div>
-                    <div style={{ fontSize: 20, fontWeight: 900, color: streak > 0 ? COLORS.orange : COLORS.muted }}>{streak > 0 ? `🔥 ${streak}` : "–"}</div>
-                    <div style={{ fontSize: 10, color: COLORS.muted, marginTop: 2 }}>{total} sessions total</div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </div>
-    </Wrap>
-  );
-}
-
-// ── PROGRESS JOURNAL ──────────────────────────────────────────────────────────
-
-function Journal({ schedule, journal, onSaveEntry, onBack }) {
-  const allHobbies = [...new Set(
-    Object.values(schedule).flatMap(day => Object.values(day))
-  )].filter(Boolean);
-
-  const [selectedHobby, setSelectedHobby] = useState(allHobbies[0] || null);
-  const [text, setText] = useState("");
-  const [saved, setSaved] = useState(false);
-
-  const entries = selectedHobby ? (journal[selectedHobby] || []) : [];
-
-  function save() {
-    if (!text.trim() || !selectedHobby) return;
-    onSaveEntry(selectedHobby, { text: text.trim(), date: new Date().toISOString() });
-    setText("");
+  function saveNewEntry() {
+    if (!newEntryText.trim() || !selectedHobby) return;
+    onSaveEntry(selectedHobby, { text: newEntryText.trim(), date: new Date().toISOString() });
+    setNewEntryText("");
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
 
+  function saveEdit() {
+    if (!editingEntry || !editingEntry.text.trim()) return;
+    onEditEntry(editingEntry.hobby, editingEntry.index, editingEntry.text.trim());
+    setEditingEntry(null);
+  }
+
+  const allJournalHobbies = [...new Set([...activeHobbies, ...journaledHobbies])];
+  const totalEntries = Object.values(journal).reduce((acc, entries) => acc + (entries?.length || 0), 0);
+
+  const tabs = [
+    { id: "overview", label: "Overview", icon: "👤" },
+    { id: "hobbies", label: "Hobbies", icon: "🎯" },
+    { id: "thisweek", label: "This Week", icon: "⚡" },
+    { id: "journal", label: "Journal", icon: "📓" },
+  ];
+
   return (
     <Wrap>
-      <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px" }}>
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>
         <button onClick={onBack} style={{ background: "none", border: "none", color: COLORS.textSoft, cursor: "pointer", fontSize: 14, marginBottom: 24, padding: 0, fontFamily: "inherit" }}>← Back</button>
 
-        <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -1, marginBottom: 6 }}>📓 Progress Journal</h2>
-        <p style={{ color: COLORS.textSoft, marginBottom: 32 }}>Track how your hobbies are feeling over time.</p>
-
-        {allHobbies.length === 0 ? (
-          <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 28, textAlign: "center" }}>
-            <div style={{ fontSize: 32, marginBottom: 12 }}>📅</div>
-            <div style={{ fontWeight: 700, marginBottom: 6 }}>No hobbies scheduled yet</div>
-            <div style={{ color: COLORS.textSoft, fontSize: 14 }}>Add hobbies to your schedule first, then journal about them here.</div>
+        {/* Header */}
+        <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 32 }}>
+          <div style={{
+            width: 64, height: 64, borderRadius: 20,
+            background: `linear-gradient(135deg, ${COLORS.accent}40, ${COLORS.purple}40)`,
+            border: `2px solid ${COLORS.accent}40`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 28,
+          }}>🔔</div>
+          <div>
+            <h2 style={{ fontSize: 28, fontWeight: 900, letterSpacing: -1, marginBottom: 4 }}>Your Profile</h2>
+            <div style={{ fontSize: 13, color: COLORS.textSoft }}>
+              {firstSessionDate
+                ? `Member since ${new Date(firstSessionDate).toLocaleDateString("en-US", { month: "long", year: "numeric" })}`
+                : "Just getting started"}
+            </div>
           </div>
-        ) : (
-          <>
-            {/* Hobby selector */}
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 24 }}>
-              {allHobbies.map(h => (
-                <button key={h} onClick={() => setSelectedHobby(h)} style={{ background: selectedHobby === h ? `${COLORS.accent}20` : COLORS.card, border: `1px solid ${selectedHobby === h ? COLORS.accent : COLORS.border}`, borderRadius: 99, padding: "8px 16px", cursor: "pointer", fontWeight: 700, fontSize: 13, fontFamily: "inherit", color: selectedHobby === h ? COLORS.accent : COLORS.textSoft, display: "flex", alignItems: "center", gap: 6 }}>
-                  {HOBBY_DATA[h]?.emoji} {h}
-                </button>
+        </div>
+
+        {/* Tabs */}
+        <div style={{ display: "flex", gap: 8, marginBottom: 28 }}>
+          {tabs.map(t => (
+            <button key={t.id} onClick={() => setActiveTab(t.id)} style={{
+              background: activeTab === t.id ? COLORS.accent : COLORS.card,
+              color: activeTab === t.id ? "#000" : COLORS.textSoft,
+              border: `1px solid ${activeTab === t.id ? COLORS.accent : COLORS.border}`,
+              borderRadius: 10, padding: "9px 18px", cursor: "pointer",
+              fontWeight: 800, fontSize: 13, fontFamily: "inherit",
+              display: "flex", alignItems: "center", gap: 6,
+              boxShadow: activeTab === t.id ? `0 0 14px ${COLORS.accent}40` : "none",
+              transition: "all 0.15s",
+            }}>
+              <span>{t.icon}</span> {t.label}
+            </button>
+          ))}
+        </div>
+
+        {/* ── OVERVIEW TAB ── */}
+        {activeTab === "overview" && (
+          <div>
+            <DailyQuote />
+            {/* Stats grid */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 12, marginBottom: 28 }}>
+              {[
+                { label: "Total Sessions", value: totalSessions, color: COLORS.accent, icon: "✅" },
+                { label: "Active Hobbies", value: activeHobbies.length, color: COLORS.lime, icon: "🎯" },
+                { label: "Journal Entries", value: totalEntries, color: COLORS.teal, icon: "📓" },
+                { label: "Hobbies Tried", value: activeHobbies.length + journaledHobbies.length, color: COLORS.purple, icon: "🌟" },
+              ].map(s => (
+                <div key={s.label} style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderTop: `2px solid ${s.color}60`, borderRadius: 12, padding: "16px", textAlign: "center" }}>
+                  <div style={{ fontSize: 22, marginBottom: 6 }}>{s.icon}</div>
+                  <div style={{ fontSize: 28, fontWeight: 900, color: s.color, textShadow: `0 0 12px ${s.color}50` }}>{s.value}</div>
+                  <div style={{ fontSize: 11, color: COLORS.muted, marginTop: 4, fontWeight: 600 }}>{s.label}</div>
+                </div>
               ))}
             </div>
 
-            {/* New entry */}
-            {selectedHobby && (
-              <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 24, marginBottom: 28 }}>
-                <div style={{ fontWeight: 700, fontSize: 14, color: COLORS.textSoft, marginBottom: 12 }}>
-                  {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
-                </div>
-                <textarea
-                  value={text}
-                  onChange={e => setText(e.target.value)}
-                  placeholder={`How did ${selectedHobby} go today? What did you work on? How did it feel?`}
-                  style={{ width: "100%", minHeight: 120, background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 10, padding: "14px 16px", color: COLORS.text, fontSize: 15, fontFamily: "inherit", resize: "vertical", outline: "none", boxSizing: "border-box", lineHeight: 1.6 }}
-                />
-                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 12 }}>
-                  <button onClick={save} style={{ background: saved ? COLORS.teal : COLORS.accent, color: saved ? '#000' : '#fff', boxShadow: `0 0 12px ${saved ? COLORS.teal : COLORS.accent}40`, border: "none", borderRadius: 8, padding: "10px 24px", cursor: "pointer", fontWeight: 800, fontSize: 14, fontFamily: "inherit", transition: "all 0.2s" }}>
-                    {saved ? "Saved ✓" : "Save Entry"}
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Past entries */}
-            {entries.length > 0 && (
-              <div>
-                <div style={{ fontWeight: 800, fontSize: 13, color: COLORS.accent, letterSpacing: 1, textTransform: "uppercase", marginBottom: 16 }}>Past Entries — {selectedHobby}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  {[...entries].reverse().map((entry, i) => (
-                    <div key={i} style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 12, padding: "18px 20px" }}>
-                      <div style={{ fontSize: 11, color: COLORS.muted, fontWeight: 600, marginBottom: 8 }}>
-                        {new Date(entry.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}
-                      </div>
-                      <div style={{ fontSize: 14, color: COLORS.textSoft, lineHeight: 1.7 }}>{entry.text}</div>
+            {/* Top matches from quiz */}
+            {matches.length > 0 && (
+              <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 24, marginBottom: 20 }}>
+                <div style={{ fontWeight: 800, fontSize: 13, color: COLORS.accent, letterSpacing: 1, textTransform: "uppercase", marginBottom: 16 }}>Your Quiz Matches</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                  {matches.map((name, i) => (
+                    <div key={name} onClick={() => onNavigate && onNavigate("detail", name)}
+                      style={{ background: COLORS.surface, border: `1px solid ${i === 0 ? COLORS.accent : COLORS.border}`, borderRadius: 10, padding: "10px 14px", display: "flex", alignItems: "center", gap: 8, cursor: "pointer", transition: "all 0.15s" }}
+                      onMouseEnter={e => e.currentTarget.style.borderColor = COLORS.accent}
+                      onMouseLeave={e => e.currentTarget.style.borderColor = i === 0 ? COLORS.accent : COLORS.border}
+                    >
+                      <span style={{ fontSize: 20 }}>{HOBBY_DATA[name]?.emoji}</span>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: i === 0 ? COLORS.accent : COLORS.text }}>{name}</span>
+                      {i === 0 && <span style={{ fontSize: 9, background: `${COLORS.accent}20`, color: COLORS.accent, borderRadius: 99, padding: "1px 6px", fontWeight: 800 }}>TOP</span>}
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {entries.length === 0 && selectedHobby && (
-              <div style={{ textAlign: "center", color: COLORS.muted, fontSize: 14, padding: "20px 0" }}>No entries yet for {selectedHobby}. Write your first one above.</div>
-            )}
-          </>
+            {/* Quick links */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <button onClick={() => setActiveTab("hobbies")} style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 12, padding: "18px", cursor: "pointer", textAlign: "left", fontFamily: "inherit", transition: "all 0.15s" }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = COLORS.lime}
+                onMouseLeave={e => e.currentTarget.style.borderColor = COLORS.border}
+              >
+                <div style={{ fontSize: 24, marginBottom: 8 }}>🎯</div>
+                <div style={{ fontWeight: 800, fontSize: 14, color: COLORS.text, marginBottom: 4 }}>Your Hobbies</div>
+                <div style={{ fontSize: 12, color: COLORS.textSoft }}>{activeHobbies.length} active · {journaledHobbies.length} past</div>
+              </button>
+              <button onClick={() => setActiveTab("journal")} style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 12, padding: "18px", cursor: "pointer", textAlign: "left", fontFamily: "inherit", transition: "all 0.15s" }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = COLORS.teal}
+                onMouseLeave={e => e.currentTarget.style.borderColor = COLORS.border}
+              >
+                <div style={{ fontSize: 24, marginBottom: 8 }}>📓</div>
+                <div style={{ fontWeight: 800, fontSize: 14, color: COLORS.text, marginBottom: 4 }}>Progress Journal</div>
+                <div style={{ fontSize: 12, color: COLORS.textSoft }}>{totalEntries} {totalEntries === 1 ? "entry" : "entries"} written</div>
+              </button>
+            </div>
+          </div>
         )}
+
+        {/* ── HOBBIES TAB ── */}
+        {activeTab === "hobbies" && (
+          <div>
+            {/* Active hobbies */}
+            {activeHobbies.length > 0 && (
+              <div style={{ marginBottom: 32 }}>
+                {/* Lapsed streak nudge */}
+                {(() => {
+                  const lapsed = activeHobbies.filter(h => {
+                    const total = getTotalSessions(h);
+                    const streak = getStreak(h);
+                    return total > 0 && streak === 0;
+                  });
+                  if (lapsed.length === 0) return null;
+                  return (
+                    <div style={{ background: `${COLORS.pink}10`, border: `1px solid ${COLORS.pink}30`, borderRadius: 14, padding: "16px 20px", marginBottom: 20, display: "flex", gap: 14, alignItems: "center" }}>
+                      <span style={{ fontSize: 24, flexShrink: 0 }}>💭</span>
+                      <div>
+                        <div style={{ fontWeight: 800, fontSize: 14, color: COLORS.pink, marginBottom: 3 }}>
+                          {lapsed.length === 1 ? `${lapsed[0]} is waiting for you` : `${lapsed.length} hobbies haven't seen you lately`}
+                        </div>
+                        <div style={{ fontSize: 13, color: COLORS.textSoft, lineHeight: 1.5 }}>
+                          Streaks can be rebuilt. One session is all it takes to start again.
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+                <div style={{ fontWeight: 800, fontSize: 13, color: COLORS.lime, letterSpacing: 1, textTransform: "uppercase", marginBottom: 16 }}>Active Hobbies</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  {activeHobbies.map(hobby => {
+                    const streak = getStreak(hobby);
+                    const total = getTotalSessions(hobby);
+                    const longest = getLongestStreak(hobby);
+                    return (
+                      <div key={hobby} style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: "18px 20px", display: "flex", alignItems: "center", gap: 16 }}>
+                        <span style={{ fontSize: 32, flexShrink: 0 }}>{HOBBY_DATA[hobby]?.emoji}</span>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 6 }}>{hobby}</div>
+                          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                            {streak > 0 && <span style={{ fontSize: 12, color: COLORS.orange, fontWeight: 700 }}>🔥 {streak} day streak</span>}
+                            <span style={{ fontSize: 12, color: COLORS.textSoft }}>{total} sessions</span>
+                            {longest > 0 && <span style={{ fontSize: 12, color: COLORS.textSoft }}>Best: {longest} days</span>}
+                          </div>
+                        </div>
+                        <button onClick={() => { setSelectedHobby(hobby); setActiveTab("journal"); }}
+                          style={{ background: `${COLORS.teal}15`, border: `1px solid ${COLORS.teal}40`, color: COLORS.teal, borderRadius: 8, padding: "6px 12px", cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: "inherit", flexShrink: 0 }}>
+                          Journal
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Past hobbies */}
+            {journaledHobbies.length > 0 && (
+              <div>
+                <div style={{ fontWeight: 800, fontSize: 13, color: COLORS.muted, letterSpacing: 1, textTransform: "uppercase", marginBottom: 16 }}>Past Hobbies</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {journaledHobbies.map(hobby => {
+                    const total = getTotalSessions(hobby);
+                    const entryCount = journal[hobby]?.length || 0;
+                    return (
+                      <div key={hobby} style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 12, padding: "14px 18px", display: "flex", alignItems: "center", gap: 14, opacity: 0.8 }}>
+                        <span style={{ fontSize: 26, flexShrink: 0 }}>{HOBBY_DATA[hobby]?.emoji || "🎯"}</span>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 3 }}>{hobby}</div>
+                          <div style={{ fontSize: 12, color: COLORS.muted }}>
+                            {total > 0 ? `${total} sessions logged` : "No sessions logged"} · {entryCount} {entryCount === 1 ? "entry" : "entries"}
+                          </div>
+                        </div>
+                        <button onClick={() => { setSelectedHobby(hobby); setActiveTab("journal"); }}
+                          style={{ background: "none", border: `1px solid ${COLORS.border}`, color: COLORS.textSoft, borderRadius: 8, padding: "6px 12px", cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: "inherit", flexShrink: 0 }}>
+                          View
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {activeHobbies.length === 0 && journaledHobbies.length === 0 && (
+              <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 32, textAlign: "center" }}>
+                <div style={{ fontSize: 36, marginBottom: 12 }}>🎯</div>
+                <div style={{ fontWeight: 700, marginBottom: 6 }}>No hobbies yet</div>
+                <div style={{ color: COLORS.textSoft, fontSize: 14 }}>Schedule some hobbies and check in after sessions — they'll appear here.</div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── THIS WEEK TAB ── */}
+        {activeTab === "thisweek" && (() => {
+          const allHobbies = [...new Set(Object.values(schedule).flatMap(day => Object.values(day)))].filter(Boolean);
+          const today2 = new Date();
+          const weekStart = new Date(today2); weekStart.setDate(today2.getDate() - today2.getDay());
+          const weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 6);
+          const dayCounts = {};
+          allHobbies.forEach(h => { dayCounts[h] = 0; });
+          Object.entries(schedule).forEach(([dk, slots]) => {
+            const d = new Date(dk);
+            if (d >= weekStart && d <= weekEnd) Object.values(slots).forEach(h => { if (h) dayCounts[h] = (dayCounts[h] || 0) + 1; });
+          });
+          const overScheduled = allHobbies.filter(h => dayCounts[h] >= 3);
+          const underScheduled = allHobbies.filter(h => dayCounts[h] === 1);
+          const totalSessions = Object.values(checkIns).reduce((acc, days) => acc + Object.values(days).filter(Boolean).length, 0);
+          const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
+          const thisWeekSessions = Object.values(checkIns).reduce((acc, days) => acc + Object.entries(days).filter(([date, done]) => done && new Date(date) >= weekAgo).length, 0);
+          const showMonthlyCheckIn = totalSessions >= 8;
+
+          return (
+            <div>
+              {/* Daily quote */}
+              <DailyQuote />
+
+              {/* Week stats */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28 }}>
+                <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 20, textAlign: "center" }}>
+                  <div style={{ fontSize: 36, fontWeight: 900, color: COLORS.accent, textShadow: `0 0 16px ${COLORS.accent}60` }}>{thisWeekSessions}</div>
+                  <div style={{ fontSize: 13, color: COLORS.textSoft, marginTop: 4 }}>sessions this week</div>
+                </div>
+                <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 20, textAlign: "center" }}>
+                  <div style={{ fontSize: 36, fontWeight: 900, color: COLORS.teal, textShadow: `0 0 16px ${COLORS.teal}60` }}>{totalSessions}</div>
+                  <div style={{ fontSize: 13, color: COLORS.textSoft, marginTop: 4 }}>total sessions ever</div>
+                </div>
+              </div>
+
+              {/* Zero sessions nudge */}
+              {thisWeekSessions === 0 && allHobbies.length > 0 && (
+                <div style={{ background: `${COLORS.purple}12`, border: `1px solid ${COLORS.purple}40`, borderRadius: 14, padding: "18px 22px", marginBottom: 28, display: "flex", gap: 14, alignItems: "center" }}>
+                  <span style={{ fontSize: 28, flexShrink: 0 }}>👋</span>
+                  <div>
+                    <div style={{ fontWeight: 800, fontSize: 15, color: COLORS.purple, marginBottom: 4 }}>No sessions yet this week</div>
+                    <div style={{ fontSize: 13, color: COLORS.textSoft, lineHeight: 1.6 }}>
+                      Your hobbies are waiting. Even 20 minutes counts — open the calendar and mark today.
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Weekly challenges */}
+              {allHobbies.length > 0 && (
+                <div style={{ marginBottom: 28 }}>
+                  <div style={{ fontWeight: 800, fontSize: 13, color: COLORS.accent, letterSpacing: 1, textTransform: "uppercase", marginBottom: 16 }}>This Week's Challenges</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    {allHobbies.map(hobby => {
+                      const challenge = getChallenge(hobby);
+                      if (!challenge) return null;
+                      return (
+                        <div key={hobby} style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: "18px 20px", display: "flex", gap: 14, alignItems: "flex-start" }}>
+                          <span style={{ fontSize: 26, flexShrink: 0 }}>{HOBBY_DATA[hobby]?.emoji}</span>
+                          <div>
+                            <div style={{ fontWeight: 800, fontSize: 14, marginBottom: 4 }}>{hobby}</div>
+                            <div style={{ fontSize: 13, color: COLORS.textSoft, lineHeight: 1.6 }}>{challenge}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Rotation suggestions */}
+              {(overScheduled.length > 0 || underScheduled.length > 0) && (
+                <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 22, marginBottom: 28 }}>
+                  <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 14 }}>🔄 Rotation Suggestions</div>
+                  {overScheduled.map(h => (
+                    <div key={h} style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 10 }}>
+                      <span style={{ fontSize: 18, flexShrink: 0 }}>{HOBBY_DATA[h]?.emoji}</span>
+                      <div style={{ fontSize: 13, color: COLORS.textSoft }}>
+                        <strong style={{ color: COLORS.text }}>{h}</strong> is scheduled {dayCounts[h]}× this week — consider spreading it out.
+                      </div>
+                    </div>
+                  ))}
+                  {underScheduled.map(h => (
+                    <div key={h} style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 10 }}>
+                      <span style={{ fontSize: 18, flexShrink: 0 }}>{HOBBY_DATA[h]?.emoji}</span>
+                      <div style={{ fontSize: 13, color: COLORS.textSoft }}>
+                        <strong style={{ color: COLORS.text }}>{h}</strong> only appears once this week — want to add another session?
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Monthly check-in */}
+              {showMonthlyCheckIn && (
+                <div style={{ background: `${COLORS.accent}12`, border: `1px solid ${COLORS.accent}40`, borderRadius: 14, padding: 22 }}>
+                  <div style={{ fontWeight: 800, fontSize: 16, marginBottom: 8 }}>🌱 Time for a Check-In</div>
+                  <div style={{ fontSize: 13, color: COLORS.textSoft, lineHeight: 1.7, marginBottom: 16 }}>
+                    You've logged {totalSessions} sessions — nice work. Have your interests shifted? Retake the quiz to refresh your matches.
+                  </div>
+                  <button onClick={onRetakeQuiz} style={{ background: `linear-gradient(135deg, ${COLORS.accent}, ${COLORS.teal}80)`, color: "#fff", border: "none", borderRadius: 8, padding: "10px 20px", cursor: "pointer", fontWeight: 800, fontSize: 13, fontFamily: "inherit", boxShadow: `0 0 14px ${COLORS.accent}40` }}>
+                    Retake the Quiz →
+                  </button>
+                </div>
+              )}
+
+              {allHobbies.length === 0 && (
+                <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 28, textAlign: "center" }}>
+                  <div style={{ fontSize: 32, marginBottom: 12 }}>📅</div>
+                  <div style={{ fontWeight: 700, marginBottom: 6 }}>No hobbies scheduled yet</div>
+                  <div style={{ color: COLORS.textSoft, fontSize: 14 }}>Add hobbies to your schedule to unlock weekly challenges.</div>
+                </div>
+              )}
+            </div>
+          );
+        })()}
+
+        {/* ── JOURNAL TAB ── */}
+        {activeTab === "journal" && (
+          <div>
+            {/* Hobby selector */}
+            {allJournalHobbies.length > 0 && (
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 24 }}>
+                {allJournalHobbies.map(h => (
+                  <button key={h} onClick={() => setSelectedHobby(h)} style={{
+                    background: selectedHobby === h ? `${COLORS.accent}20` : COLORS.card,
+                    border: `1px solid ${selectedHobby === h ? COLORS.accent : COLORS.border}`,
+                    borderRadius: 99, padding: "7px 14px", cursor: "pointer",
+                    fontWeight: 700, fontSize: 13, fontFamily: "inherit",
+                    color: selectedHobby === h ? COLORS.accent : COLORS.textSoft,
+                    display: "flex", alignItems: "center", gap: 6,
+                    boxShadow: selectedHobby === h ? `0 0 10px ${COLORS.accent}30` : "none",
+                  }}>
+                    {HOBBY_DATA[h]?.emoji} {h}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* New entry box */}
+            {selectedHobby && (
+              <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 22, marginBottom: 24 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                  <span style={{ fontSize: 20 }}>{HOBBY_DATA[selectedHobby]?.emoji}</span>
+                  <div style={{ fontWeight: 700, fontSize: 14, color: COLORS.text }}>{selectedHobby}</div>
+                  <div style={{ marginLeft: "auto", fontSize: 12, color: COLORS.muted }}>
+                    {new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                  </div>
+                </div>
+                <textarea value={newEntryText} onChange={e => setNewEntryText(e.target.value)}
+                  placeholder={`How did ${selectedHobby} go today? What clicked? What didn't?`}
+                  style={{ width: "100%", minHeight: 100, background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 10, padding: "12px 14px", color: COLORS.text, fontSize: 14, fontFamily: "inherit", resize: "vertical", outline: "none", boxSizing: "border-box", lineHeight: 1.7 }}
+                />
+                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 10 }}>
+                  <button onClick={saveNewEntry} style={{ background: saved ? COLORS.teal : COLORS.accent, color: saved ? "#000" : "#fff", border: "none", borderRadius: 8, padding: "9px 22px", cursor: "pointer", fontWeight: 800, fontSize: 13, fontFamily: "inherit", transition: "all 0.2s", boxShadow: `0 0 12px ${saved ? COLORS.teal : COLORS.accent}40` }}>
+                    {saved ? "Saved ✓" : "Save Entry"}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Past entries with edit */}
+            {selectedHobby && (journal[selectedHobby] || []).length > 0 && (
+              <div>
+                <div style={{ fontWeight: 800, fontSize: 13, color: COLORS.accent, letterSpacing: 1, textTransform: "uppercase", marginBottom: 16 }}>
+                  {(journal[selectedHobby] || []).length} {(journal[selectedHobby] || []).length === 1 ? "Entry" : "Entries"} — {selectedHobby}
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  {[...(journal[selectedHobby] || [])].reverse().map((entry, reversedIdx) => {
+                    const realIdx = (journal[selectedHobby] || []).length - 1 - reversedIdx;
+                    const isEditing = editingEntry?.hobby === selectedHobby && editingEntry?.index === realIdx;
+                    return (
+                      <div key={realIdx} style={{ background: COLORS.card, border: `1px solid ${isEditing ? COLORS.accent : COLORS.border}`, borderRadius: 12, padding: "16px 18px", transition: "border-color 0.2s" }}>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+                          <div style={{ fontSize: 11, color: COLORS.muted, fontWeight: 600 }}>
+                            {new Date(entry.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}
+                          </div>
+                          {!isEditing ? (
+                            <button onClick={() => setEditingEntry({ hobby: selectedHobby, index: realIdx, text: entry.text })}
+                              style={{ background: "none", border: `1px solid ${COLORS.border}`, color: COLORS.textSoft, borderRadius: 6, padding: "3px 10px", cursor: "pointer", fontSize: 11, fontWeight: 700, fontFamily: "inherit" }}>
+                              Edit
+                            </button>
+                          ) : (
+                            <div style={{ display: "flex", gap: 6 }}>
+                              <button onClick={saveEdit} style={{ background: COLORS.accent, color: "#000", border: "none", borderRadius: 6, padding: "3px 10px", cursor: "pointer", fontSize: 11, fontWeight: 800, fontFamily: "inherit" }}>Save</button>
+                              <button onClick={() => setEditingEntry(null)} style={{ background: "none", border: `1px solid ${COLORS.border}`, color: COLORS.textSoft, borderRadius: 6, padding: "3px 10px", cursor: "pointer", fontSize: 11, fontWeight: 700, fontFamily: "inherit" }}>Cancel</button>
+                            </div>
+                          )}
+                        </div>
+                        {isEditing ? (
+                          <textarea value={editingEntry.text} onChange={e => setEditingEntry(prev => ({ ...prev, text: e.target.value }))}
+                            style={{ width: "100%", minHeight: 80, background: COLORS.surface, border: `1px solid ${COLORS.accent}40`, borderRadius: 8, padding: "10px 12px", color: COLORS.text, fontSize: 14, fontFamily: "inherit", resize: "vertical", outline: "none", boxSizing: "border-box", lineHeight: 1.6 }}
+                            autoFocus
+                          />
+                        ) : (
+                          <div style={{ fontSize: 14, color: COLORS.textSoft, lineHeight: 1.75 }}>{entry.text}</div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {selectedHobby && (journal[selectedHobby] || []).length === 0 && (
+              <div style={{ textAlign: "center", color: COLORS.muted, fontSize: 14, padding: "24px 0" }}>
+                No entries yet for {selectedHobby}. Write your first one above.
+              </div>
+            )}
+
+            {allJournalHobbies.length === 0 && (
+              <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 32, textAlign: "center" }}>
+                <div style={{ fontSize: 36, marginBottom: 12 }}>📓</div>
+                <div style={{ fontWeight: 700, marginBottom: 6 }}>Nothing to journal yet</div>
+                <div style={{ color: COLORS.textSoft, fontSize: 14 }}>Schedule some hobbies and they'll appear here to write about.</div>
+              </div>
+            )}
+          </div>
+        )}
+
       </div>
     </Wrap>
   );
@@ -2269,129 +2930,6 @@ function Journal({ schedule, journal, onSaveEntry, onBack }) {
 
 // ── THIS WEEK SCREEN (challenges + rotation suggestions + monthly check-in) ───
 
-function ThisWeek({ schedule, checkIns, onRetakeQuiz, onBack, sessionCount }) {
-  const allHobbies = [...new Set(
-    Object.values(schedule).flatMap(day => Object.values(day))
-  )].filter(Boolean);
-
-  // Rotation suggestions — find hobbies not scheduled recently
-  // Count how many times each hobby appears this week
-  const today2 = new Date();
-  const weekStart = new Date(today2); weekStart.setDate(today2.getDate() - today2.getDay());
-  const weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 6);
-  const dayCounts = {};
-  allHobbies.forEach(h => { dayCounts[h] = 0; });
-  Object.entries(schedule).forEach(([dk, slots]) => {
-    const d = new Date(dk);
-    if (d >= weekStart && d <= weekEnd) {
-      Object.values(slots).forEach(h => { if (h) dayCounts[h] = (dayCounts[h] || 0) + 1; });
-    }
-  });
-
-  const overScheduled = allHobbies.filter(h => dayCounts[h] >= 3);
-  const underScheduled = allHobbies.filter(h => dayCounts[h] === 1);
-
-  // Monthly check-in — show if user has 8+ total sessions
-  const totalSessions = Object.values(checkIns).reduce((acc, hobbyCheckins) => acc + Object.values(hobbyCheckins).filter(Boolean).length, 0);
-  const showMonthlyCheckIn = totalSessions >= 8;
-
-  // This week's stats
-  const weekAgo = new Date();
-  weekAgo.setDate(weekAgo.getDate() - 7);
-  const thisWeekSessions = Object.entries(checkIns).reduce((acc, [hobby, days]) => {
-    const count = Object.entries(days).filter(([date, done]) => done && new Date(date) >= weekAgo).length;
-    return acc + count;
-  }, 0);
-
-  return (
-    <Wrap>
-      <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px" }}>
-        <button onClick={onBack} style={{ background: "none", border: "none", color: COLORS.textSoft, cursor: "pointer", fontSize: 14, marginBottom: 24, padding: 0, fontFamily: "inherit" }}>← Back</button>
-
-        <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -1, marginBottom: 6 }}>🎯 This Week</h2>
-        <p style={{ color: COLORS.textSoft, marginBottom: 32 }}>Challenges, suggestions, and your momentum.</p>
-
-        {/* Week stat */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 32 }}>
-          <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 20, textAlign: "center" }}>
-            <div style={{ fontSize: 36, fontWeight: 900, color: COLORS.accent, textShadow: `0 0 16px ${COLORS.accent}60` }}>{thisWeekSessions}</div>
-            <div style={{ fontSize: 13, color: COLORS.textSoft, marginTop: 4 }}>sessions this week</div>
-          </div>
-          <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 20, textAlign: "center" }}>
-            <div style={{ fontSize: 36, fontWeight: 900, color: COLORS.teal, textShadow: `0 0 16px ${COLORS.teal}60` }}>{totalSessions}</div>
-            <div style={{ fontSize: 13, color: COLORS.textSoft, marginTop: 4 }}>total sessions ever</div>
-          </div>
-        </div>
-
-        {/* Weekly challenges */}
-        {allHobbies.length > 0 && (
-          <div style={{ marginBottom: 32 }}>
-            <div style={{ fontWeight: 800, fontSize: 13, color: COLORS.accent, letterSpacing: 1, textTransform: "uppercase", marginBottom: 16 }}>This Week's Challenges</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {allHobbies.map(hobby => {
-                const challenge = getChallenge(hobby);
-                if (!challenge) return null;
-                return (
-                  <div key={hobby} style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: "20px 24px", display: "flex", gap: 16, alignItems: "flex-start" }}>
-                    <span style={{ fontSize: 28, flexShrink: 0 }}>{HOBBY_DATA[hobby]?.emoji}</span>
-                    <div>
-                      <div style={{ fontWeight: 800, fontSize: 14, marginBottom: 4 }}>{hobby}</div>
-                      <div style={{ fontSize: 14, color: COLORS.textSoft, lineHeight: 1.6 }}>{challenge}</div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Rotation suggestions */}
-        {(overScheduled.length > 0 || underScheduled.length > 0) && (
-          <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 24, marginBottom: 32 }}>
-            <div style={{ fontWeight: 800, fontSize: 16, marginBottom: 16 }}>🔄 Rotation Suggestions</div>
-            {overScheduled.map(h => (
-              <div key={h} style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 10 }}>
-                <span style={{ fontSize: 20 }}>{HOBBY_DATA[h]?.emoji}</span>
-                <div style={{ fontSize: 14, color: COLORS.textSoft }}>
-                  <strong style={{ color: COLORS.text }}>{h}</strong> is scheduled {dayCounts[h]}x this week — consider spreading it out to make room for other hobbies.
-                </div>
-              </div>
-            ))}
-            {underScheduled.map(h => (
-              <div key={h} style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 10 }}>
-                <span style={{ fontSize: 20 }}>{HOBBY_DATA[h]?.emoji}</span>
-                <div style={{ fontSize: 14, color: COLORS.textSoft }}>
-                  <strong style={{ color: COLORS.text }}>{h}</strong> only appears once this week — want to add another session?
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Monthly check-in */}
-        {showMonthlyCheckIn && (
-          <div style={{ background: `${COLORS.accent}12`, border: `1px solid ${COLORS.accent}40`, borderRadius: 14, padding: 24 }}>
-            <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 8 }}>🌱 Time for a Check-In</div>
-            <div style={{ fontSize: 14, color: COLORS.textSoft, lineHeight: 1.7, marginBottom: 20 }}>
-              You've logged {totalSessions} sessions — nice work. Have your interests shifted? Retake the quiz to refresh your hobby matches and discover something new.
-            </div>
-            <button onClick={onRetakeQuiz} style={{ background: `linear-gradient(135deg, ${COLORS.accent}, ${COLORS.teal}80)`, color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", cursor: "pointer", fontWeight: 800, fontSize: 14, fontFamily: "inherit", boxShadow: `0 0 16px ${COLORS.accent}40` }}>
-              Retake the Quiz →
-            </button>
-          </div>
-        )}
-
-        {allHobbies.length === 0 && (
-          <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 28, textAlign: "center" }}>
-            <div style={{ fontSize: 32, marginBottom: 12 }}>📅</div>
-            <div style={{ fontWeight: 700, marginBottom: 6 }}>No hobbies scheduled yet</div>
-            <div style={{ color: COLORS.textSoft, fontSize: 14 }}>Add hobbies to your schedule to unlock weekly challenges and suggestions.</div>
-          </div>
-        )}
-      </div>
-    </Wrap>
-  );
-}
 
 // ── NAV ───────────────────────────────────────────────────────────────────────
 
@@ -2399,10 +2937,8 @@ function Nav({ screen, onNavigate, quizDone, onReset }) {
   const tabs = [
     { id: "results", label: "Matches", icon: "✨", disabled: !quizDone },
     { id: "browse", label: "Explore", icon: "🔍" },
-    { id: "calendar", label: "Schedule", icon: "📅" },
-    { id: "checkin", label: "Check In", icon: "✅" },
-    { id: "thisweek", label: "This Week", icon: "🎯" },
-    { id: "journal", label: "Journal", icon: "📓" },
+    { id: "calendar", label: "Calendar", icon: "📅" },
+    { id: "profile", label: "Profile", icon: "👤" },
   ];
   return (
     <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `${COLORS.surface}F0`, backdropFilter: "blur(20px)", borderTop: `1px solid ${COLORS.borderBright}`, zIndex: 50, boxShadow: `0 -4px 24px ${COLORS.bg}80` }}>
@@ -2507,6 +3043,14 @@ export default function App() {
     setJournal(prev => ({ ...prev, [hobby]: [...(prev[hobby] || []), entry] }));
   }
 
+  function handleEditJournalEntry(hobby, index, newText) {
+    setJournal(prev => {
+      const updated = [...(prev[hobby] || [])];
+      updated[index] = { ...updated[index], text: newText, editedAt: new Date().toISOString() };
+      return { ...prev, [hobby]: updated };
+    });
+  }
+
   function handleReset() {
     if (!window.confirm("Reset everything and start fresh?")) return;
     ["hb_matches","hb_quizDone","hb_onboardingDone","hb_schedule","hb_checkIns","hb_journal"].forEach(k => localStorage.removeItem(k));
@@ -2517,17 +3061,15 @@ export default function App() {
   const showNav = !["landing", "quiz", "onboarding", "detail"].includes(screen);
 
   return (
-    <div style={{ paddingBottom: showNav ? 90 : 0 }}>
+    <div style={{ paddingBottom: showNav ? 80 : 0 }}>
       {screen === "landing" && <Landing onStart={() => go("quiz")} />}
       {screen === "quiz" && <Quiz onComplete={handleQuizComplete} />}
       {screen === "onboarding" && <Onboarding matches={matches} onDone={handleOnboardingDone} onExploreHobby={name => { setDetailHobby(name); setPrevScreen("onboarding"); setScreen("detail"); }} />}
       {screen === "results" && <Results matches={matches} onExplore={handleExplore} onSkip={() => go("browse")} />}
       {screen === "browse" && <BrowseAll onSelect={handleExplore} onBack={() => go(prevScreen || "landing")} />}
       {screen === "detail" && detailHobby && <HobbyDetail name={detailHobby} onBack={() => go(prevScreen || "browse")} onAddToCalendar={handleAddToCalendar} />}
-      {screen === "calendar" && <Calendar schedule={schedule} onAdd={(day, slot, hobby) => { addToSchedule(day, slot, hobby); setCalendarPreselect(null); }} onRemove={removeFromSchedule} onBack={() => { setCalendarPreselect(null); go(prevScreen || "browse"); }} preselectedHobby={calendarPreselect} />}
-      {screen === "checkin" && <CheckIn schedule={schedule} checkIns={checkIns} onCheckIn={handleCheckIn} onBack={() => go(prevScreen || "calendar")} />}
-      {screen === "journal" && <Journal schedule={schedule} journal={journal} onSaveEntry={handleSaveJournalEntry} onBack={() => go(prevScreen || "checkin")} />}
-      {screen === "thisweek" && <ThisWeek schedule={schedule} checkIns={checkIns} onRetakeQuiz={handleRetakeQuiz} onBack={() => go(prevScreen || "checkin")} />}
+      {screen === "calendar" && <Calendar schedule={schedule} onAdd={(day, slot, hobby) => { addToSchedule(day, slot, hobby); setCalendarPreselect(null); }} onRemove={removeFromSchedule} onBack={() => { setCalendarPreselect(null); go(prevScreen || "browse"); }} preselectedHobby={calendarPreselect} checkIns={checkIns} onCheckIn={handleCheckIn} />}
+      {screen === "profile" && <Profile schedule={schedule} checkIns={checkIns} journal={journal} matches={matches} onSaveEntry={handleSaveJournalEntry} onEditEntry={handleEditJournalEntry} onBack={() => go(prevScreen || "calendar")} onNavigate={(s, name) => { if (s === "detail") { setDetailHobby(name); setPrevScreen("profile"); setScreen("detail"); } }} onRetakeQuiz={handleRetakeQuiz} />}
       {showNav && <Nav screen={screen} onNavigate={go} quizDone={quizDone} onReset={handleReset} />}
     </div>
   );
