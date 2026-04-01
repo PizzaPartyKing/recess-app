@@ -3,9 +3,7 @@ const HOBBY_DATA = { "Rock Climbing": { emoji: "🧗", category: "Physical", tag
 
 const HOBBY_MIN_COST = { "Journaling": "free", "Birdwatching": "free", "Urban Sketching": "free", "Cold Water Swimming": "free", "Stand-Up Comedy": "free", "Hiking": "free", "Music Production": "free", "Video Gaming": "free", "Game Development": "free", "Thrifting": "free", "Chess": "free", "Language Learning": "free", "Rock Pooling": "free", "Improv Comedy": "free", "Embroidery": "low", "Knitting / Crochet": "low", "Hot Sauce Making": "low", "Cocktail Crafting": "low", "Candle Making": "low", "Sourdough Baking": "low", "Film Photography": "low", "Board Games": "low", "Escape Rooms": "low", "Miniature Painting": "low", "Yoga": "low", "Watercolor Painting": "low", "Screenwriting": "low", "Bookbinding": "low", "Amateur Radio": "low", "Foraging": "low", "Swing Dancing": "low", "Singing / Vocal Training": "low", "Puzzle Design": "low", "Dungeons & Dragons": "low", "Ceramics": "medium", "Homebrewing": "medium", "Archery": "medium", "Guitar": "medium", "3D Printing": "medium", "Rock Climbing": "medium", "Rowing / Kayaking": "medium", "Trading Card Games": "medium", "Bouldering": "medium", "Skateboarding": "medium", "Cheesemaking": "medium", "Leatherworking": "medium", "Electronics / Arduino": "medium", "Trail Running": "medium", "DJing": "medium", "Retro Gaming / Collecting": "medium", "Tabletop Wargaming": "medium", "Mountain Biking": "high", "Surfing": "high", "Woodworking": "high", "Astronomy / Astrophotography": "high", "Cycling": "high", "Warhammer 40K": "high", "Martial Arts": "medium", };
 
-const BUDGET_ORDER = ["free", "low", "medium", "high"];
 
-const BUDGET_ORDER = ["free", "low", "medium", "high"];
 
 const QUOTES = [
   { text: "You are not your job title. You are what you do when no one is paying you to do it.", author: "Recess" },
