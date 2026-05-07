@@ -3019,8 +3019,7 @@ export default function App() {
   const [schedule, setSchedule] = usePersistentState("hb_schedule", {});
   const [checkIns, setCheckIns] = usePersistentState("hb_checkIns", {});
   const [journal, setJournal] = usePersistentState("hb_journal", {});
-  const [theme, setTheme] = usePersistentState("hb_theme", "night");
-  const [theme, setTheme] = usePersistentState("hb_theme", "night");
+  const [appTheme, setAppTheme] = usePersistentState("hb_theme", "night");
   function go(s) { setPrevScreen(screen); setScreen(s); }
 
   function handleQuizComplete(answers) {
