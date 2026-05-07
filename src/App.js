@@ -1,24 +1,20 @@
 import React, { useState } from "react";
 
-const COLORS = {
-  bg: "#080C18",
-  surface: "#0F1628",
-  card: "#141C32",
-  border: "#1E2840",
-  borderBright: "#2A3860",
-  text: "#F0F4FF",
-  textSoft: "#8896B8",
-  muted: "#3A4460",
-  accent: "#5B8EFF",
-  accentDim: "#3A6FE0",
-  lime: "#AAFF4D",
-  pink: "#FF4DAA",
-  teal: "#4DFFEE",
-  purple: "#9B5BFF",
-  orange: "#FF8C47",
-  red: "#FF4D6A",
+const THEMES = {
+  night: {
+    bg: "#080C18", surface: "#0F1628", card: "#141C32", border: "#1E2840",
+    borderBright: "#2A3860", text: "#F0F4FF", textSoft: "#8896B8", muted: "#3A4460",
+    accent: "#5B8EFF", accentDim: "#3A6FE0", lime: "#AAFF4D", pink: "#FF4DAA",
+    teal: "#4DFFEE", purple: "#9B5BFF", orange: "#FF8C47", red: "#FF4D6A",
+  },
+  day: {
+    bg: "#F5F3EE", surface: "#EDEAE3", card: "#E6E2D9", border: "#D4CFBF",
+    borderBright: "#C2BFAD", text: "#1A1814", textSoft: "#5A5648", muted: "#9C9888",
+    accent: "#2D6EE8", accentDim: "#1A5CD4", lime: "#4A8F00", pink: "#CC0077",
+    teal: "#007A7A", purple: "#6B2FCC", orange: "#C45000", red: "#CC1133",
+  },
 };
-
+let COLORS = THEMES.night;
 const HOBBY_DATA = {
   // ── PHYSICAL ──────────────────────────────────────────────
   "Rock Climbing": {
@@ -1240,7 +1236,24 @@ function Btn({ children, onClick, variant = "primary", style }) {
   };
   return <button onClick={onClick} style={{ padding: "14px 28px", borderRadius: 12, border: "none", cursor: "pointer", fontWeight: 800, fontSize: 15, transition: "all 0.15s", fontFamily: "inherit", ...v[variant], ...style }}>{children}</button>;
 }
-
+function ThemeToggle({ theme, onToggle }) {
+  return (
+    <button onClick={onToggle}
+      style={{
+        position: "fixed", top: 16, right: 16, zIndex: 200,
+        width: 40, height: 40, borderRadius: 10,
+        background: COLORS.card, border: `1px solid ${COLORS.border}`,
+        cursor: "pointer", fontSize: 18,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        boxShadow: `0 2px 12px ${COLORS.bg}80`, transition: "all 0.2s",
+      }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = COLORS.accent; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = COLORS.border; }}
+    >
+      {theme === "night" ? "☀️" : "🌙"}
+    </button>
+  );
+}
 function Wrap({ children, style }) {
   return (
     <div style={{ minHeight: "100vh", background: COLORS.bg, color: COLORS.text, fontFamily: "'system-ui','-apple-system','Segoe UI',sans-serif", position: "relative", ...style }}>
@@ -3006,7 +3019,8 @@ export default function App() {
   const [schedule, setSchedule] = usePersistentState("hb_schedule", {});
   const [checkIns, setCheckIns] = usePersistentState("hb_checkIns", {});
   const [journal, setJournal] = usePersistentState("hb_journal", {});
-
+  const [theme, setTheme] = usePersistentState("hb_theme", "night");
+  const [theme, setTheme] = usePersistentState("hb_theme", "night");
   function go(s) { setPrevScreen(screen); setScreen(s); }
 
   function handleQuizComplete(answers) {
@@ -3057,11 +3071,12 @@ export default function App() {
     setMatches([]); setQuizDone(false); setOnboardingDone(false); setSchedule({}); setCheckIns({}); setJournal({});
     setScreen("landing");
   }
-
+  COLORS = THEMES[theme];
   const showNav = !["landing", "quiz", "onboarding", "detail"].includes(screen);
 
   return (
     <div style={{ paddingBottom: showNav ? 80 : 0 }}>
+  <ThemeToggle theme={theme} onToggle={() => setTheme(t => t === "night" ? "day" : "night")} />
       {screen === "landing" && <Landing onStart={() => go("quiz")} />}
       {screen === "quiz" && <Quiz onComplete={handleQuizComplete} />}
       {screen === "onboarding" && <Onboarding matches={matches} onDone={handleOnboardingDone} onExploreHobby={name => { setDetailHobby(name); setPrevScreen("onboarding"); setScreen("detail"); }} />}
