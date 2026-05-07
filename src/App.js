@@ -3071,12 +3071,12 @@ export default function App() {
     setMatches([]); setQuizDone(false); setOnboardingDone(false); setSchedule({}); setCheckIns({}); setJournal({});
     setScreen("landing");
   }
-  COLORS = THEMES[theme];
+  COLORS = THEMES[appTheme];
   const showNav = !["landing", "quiz", "onboarding", "detail"].includes(screen);
 
   return (
     <div style={{ paddingBottom: showNav ? 80 : 0 }}>
-  <ThemeToggle theme={theme} onToggle={() => setTheme(t => t === "night" ? "day" : "night")} />
+  <ThemeToggle theme={appTheme} onToggle={() => setAppTheme(t => t === "night" ? "day" : "night")} />
       {screen === "landing" && <Landing onStart={() => go("quiz")} />}
       {screen === "quiz" && <Quiz onComplete={handleQuizComplete} />}
       {screen === "onboarding" && <Onboarding matches={matches} onDone={handleOnboardingDone} onExploreHobby={name => { setDetailHobby(name); setPrevScreen("onboarding"); setScreen("detail"); }} />}
