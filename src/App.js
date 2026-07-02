@@ -745,6 +745,16 @@ const HOBBY_DATA = {
   },
 };
 
+// FIX: single source of truth for hobby count — no more hardcoded "60"
+const HOBBY_COUNT = Object.keys(HOBBY_DATA).length;
+
+// FIX: dev-time guard — warns if any list references a hobby that doesn't exist
+function validateHobbyNames(names, source) {
+  names.forEach(n => {
+    if (!HOBBY_DATA[n]) console.warn(`[Recess] ${source} references unknown hobby: "${n}"`);
+  });
+}
+
 // ── QUIZ QUESTIONS ────────────────────────────────────────────────────────────
 
 const QUIZ_QUESTIONS = [
@@ -904,6 +914,8 @@ const HOBBY_MIN_COST = {
   "Warhammer 40K": "high", "Martial Arts": "medium",
 };
 
+validateHobbyNames(Object.keys(HOBBY_MIN_COST), "HOBBY_MIN_COST");
+
 const BUDGET_ORDER = ["free", "low", "medium", "high"];
 
 function budgetAllowed(hobby, userBudget) {
@@ -926,8 +938,8 @@ function matchHobbies(answers) {
   Object.keys(HOBBY_DATA).forEach(h => (scores[h] = 0));
   const { energy, time, style, setting, social, risk, budget, output, learning, indoor_outdoor, commitment, vibe } = answers;
 
-  const add = (hobbies, pts) => hobbies.forEach(h => { if (scores[h] !== undefined) scores[h] += pts; });
-  const sub = (hobbies, pts) => hobbies.forEach(h => { if (scores[h] !== undefined) scores[h] -= pts; });
+  const add = (hobbies, pts) => hobbies.forEach(h => { if (scores[h] !== undefined) scores[h] += pts; else console.warn(`[Recess] matchHobbies references unknown hobby: "${h}"`); });
+  const sub = (hobbies, pts) => hobbies.forEach(h => { if (scores[h] !== undefined) scores[h] -= pts; else console.warn(`[Recess] matchHobbies references unknown hobby: "${h}"`); });
 
   // ── ENERGY (weight: 4) — most important signal ─────────────────────────────
   if (energy === "physical") add(["Rock Climbing","Bouldering","Trail Running","Cold Water Swimming","Cycling","Skateboarding","Martial Arts","Yoga","Mountain Biking","Surfing","Rowing / Kayaking","Archery"], 4);
@@ -964,7 +976,7 @@ function matchHobbies(answers) {
     sub(["Woodworking","Cheesemaking","Language Learning","Bookbinding","Astronomy / Astrophotography","Warhammer 40K"], 2);
   }
   if (style === "flexible") {
-    add(["Yoga","Cycling","Hiking","Photography","Birdwatching","Chess","Guitar"], 1);
+    add(["Yoga","Cycling","Hiking","Film Photography","Birdwatching","Chess","Guitar"], 1); // FIX: was "Photography" (didn't exist)
   }
 
   // ── SETTING (weight: 3) ────────────────────────────────────────────────────
@@ -1067,7 +1079,7 @@ function matchHobbies(answers) {
     sub(["Trail Running","Surfing","Mountain Biking","Cold Water Swimming","Foraging","Hiking"], 2);
   }
   if (indoor_outdoor === "mobile") {
-    add(["Skateboarding","Cycling","Thrifting","Urban Sketching","Birdwatching","Trail Running","Hiking","Photography"], 2);
+    add(["Skateboarding","Cycling","Thrifting","Urban Sketching","Birdwatching","Trail Running","Hiking","Film Photography"], 2); // FIX: was "Photography"
   }
   if (indoor_outdoor === "either") {
     add(["Rock Climbing","Bouldering","Yoga","Archery","Guitar","Chess","Swing Dancing"], 1);
@@ -1079,7 +1091,7 @@ function matchHobbies(answers) {
     sub(["Escape Rooms","Cocktail Crafting","Hot Sauce Making","Thrifting","Video Gaming","Birdwatching"], 1);
   }
   if (commitment === "variety") {
-    add(["Thrifting","Escape Rooms","Board Games","Cooking","Cocktail Crafting","Urban Sketching","Birdwatching","Rock Pooling","Hiking","Improv Comedy","Trading Card Games"], 2);
+    add(["Thrifting","Escape Rooms","Board Games","Hot Sauce Making","Cocktail Crafting","Urban Sketching","Birdwatching","Rock Pooling","Hiking","Improv Comedy","Trading Card Games"], 2);
     sub(["Language Learning","Warhammer 40K","Martial Arts","Chess","Astronomy / Astrophotography"], 1);
   }
   if (commitment === "casual") {
@@ -1236,9 +1248,19 @@ function Btn({ children, onClick, variant = "primary", style }) {
   };
   return <button onClick={onClick} style={{ padding: "14px 28px", borderRadius: 12, border: "none", cursor: "pointer", fontWeight: 800, fontSize: 15, transition: "all 0.15s", fontFamily: "inherit", ...v[variant], ...style }}>{children}</button>;
 }
+// FIX (a11y): makes clickable divs reachable by keyboard — spread onto card elements
+function pressable(onClick) {
+  return {
+    role: "button",
+    tabIndex: 0,
+    onClick,
+    onKeyDown: e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } },
+  };
+}
+
 function ThemeToggle({ theme, onToggle }) {
   return (
-    <button onClick={onToggle}
+    <button onClick={onToggle} aria-label={theme === "night" ? "Switch to day theme" : "Switch to night theme"}
       style={{
         position: "fixed", top: 16, right: 16, zIndex: 200,
         width: 40, height: 40, borderRadius: 10,
@@ -1269,7 +1291,7 @@ function Wrap({ children, style }) {
 
 // ── SCREENS ───────────────────────────────────────────────────────────────────
 
-function Landing({ onStart }) {
+function Landing({ onStart, onBrowse }) {
   const features = [
     { icon: "🎯", label: "12-Question Quiz", desc: "Matched to hobbies you've never tried", color: COLORS.accent },
     { icon: "💰", label: "Cost Breakdown", desc: "Entry to advanced, no surprises", color: COLORS.lime },
@@ -1314,7 +1336,7 @@ function Landing({ onStart }) {
         {/* CTAs */}
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 72 }}>
           <Btn onClick={onStart} style={{ fontSize: 17, padding: "18px 48px" }}>Find My Hobbies →</Btn>
-          <Btn variant="ghost" onClick={onStart} style={{ fontSize: 17, padding: "18px 32px" }}>Browse 60 Hobbies</Btn>
+          <Btn variant="ghost" onClick={onBrowse} style={{ fontSize: 17, padding: "18px 32px" }}>Browse {HOBBY_COUNT} Hobbies</Btn>
         </div>
 
         {/* Feature grid */}
@@ -1470,7 +1492,7 @@ function Onboarding({ matches, onDone, onExploreHobby }) {
               {matches.slice(0, 3).map((name, i) => (
                 <div
                   key={name}
-                  onClick={() => onExploreHobby(name)}
+                  {...pressable(() => onExploreHobby(name))}
                   style={{
                     background: i === 0 ? `${COLORS.accent}15` : COLORS.card,
                     border: `1px solid ${i === 0 ? COLORS.accent : COLORS.border}`,
@@ -1603,7 +1625,7 @@ function Results({ matches, onExplore, onSkip }) {
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 16, marginBottom: 32 }}>
           {matches.map((name, i) => (
-            <div key={name} onClick={() => onExplore(name)}
+            <div key={name} {...pressable(() => onExplore(name))}
               style={{ background: COLORS.card, border: `1px solid ${i === 0 ? COLORS.accent : COLORS.border}`, borderRadius: 14, padding: 24, cursor: "pointer", position: "relative", transition: "all 0.2s" }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = COLORS.accent; e.currentTarget.style.boxShadow = `0 0 20px ${COLORS.accent}15`; }}
               onMouseLeave={e => e.currentTarget.style.borderColor = i === 0 ? COLORS.accent : COLORS.border}
@@ -1620,7 +1642,7 @@ function Results({ matches, onExplore, onSkip }) {
             </div>
           ))}
         </div>
-        <Btn onClick={onSkip} variant="ghost">Browse All 60 Hobbies →</Btn>
+        <Btn onClick={onSkip} variant="ghost">Browse All {HOBBY_COUNT} Hobbies →</Btn>
       </div>
     </Wrap>
   );
@@ -1660,7 +1682,7 @@ function LocalStoreFinder({ storeQuery, classQuery, hobbyName }) {
 
   function searchUrl(query) {
     if (coords) {
-      return `https://www.google.com/search?q=${encodeURIComponent(query + " near me")}&near=${coords.lat},${coords.lng}`;
+      return `https://www.google.com/search?q=${encodeURIComponent(query + " near me")}`;
     }
     return `https://www.google.com/search?q=${encodeURIComponent(query + " near me")}`;
   }
@@ -1922,7 +1944,7 @@ function BrowseAll({ onSelect, onBack }) {
     <Wrap>
       <div style={{ maxWidth: 860, margin: "0 auto", padding: "40px 24px" }}>
         <button onClick={onBack} style={{ background: "none", border: "none", color: COLORS.textSoft, cursor: "pointer", fontSize: 14, marginBottom: 24, padding: 0, fontFamily: "inherit" }}>← Back</button>
-        <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 8 }}>All 60 Hobbies</h2>
+        <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 8 }}>All {HOBBY_COUNT} Hobbies</h2>
         <input placeholder="Search hobbies..." value={search} onChange={e => setSearch(e.target.value)}
           style={{ width: "100%", background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 10, padding: "12px 18px", color: COLORS.text, fontSize: 15, fontFamily: "inherit", marginBottom: 20, boxSizing: "border-box", outline: "none" }}
         />
@@ -1936,7 +1958,7 @@ function BrowseAll({ onSelect, onBack }) {
           {filtered.map(name => {
             const h = HOBBY_DATA[name];
             return (
-              <div key={name} onClick={() => onSelect(name)}
+              <div key={name} {...pressable(() => onSelect(name))}
                 style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 12, padding: 20, cursor: "pointer", transition: "all 0.15s" }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = COLORS.accent; e.currentTarget.style.boxShadow = `0 0 20px ${COLORS.accent}15`; }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.boxShadow = 'none'; }}
@@ -1968,6 +1990,13 @@ function dateKey(year, month, day) {
   return `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
 }
 
+// FIX: timezone-safe date key from a Date object — matches dateKey() format.
+// Never use toISOString() for calendar-day logic; it converts to UTC and
+// breaks evening check-ins in any timezone west of UTC.
+function localDateKey(d) {
+  return dateKey(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
 function Calendar({ schedule, onAdd, onRemove, onBack, preselectedHobby, checkIns, onCheckIn }) {
   const today = new Date();
   const [viewYear, setViewYear] = useState(today.getFullYear());
@@ -1975,10 +2004,8 @@ function Calendar({ schedule, onAdd, onRemove, onBack, preselectedHobby, checkIn
   const [selectedDate, setSelectedDate] = useState(null);
   const [addingSlot, setAddingSlot] = useState(null); // { dateKey, slot }
   const [selectedHobby, setSelectedHobby] = useState(preselectedHobby || Object.keys(HOBBY_DATA)[0]);
-  const [view, setView] = useState("year"); // "year" | "month" | "day"
-
-  // When arriving from hobby detail, go straight to month view
-  useState(() => { if (preselectedHobby) setView("month"); });
+  // "year" | "month" | "day" — arriving from hobby detail goes straight to month view
+  const [view, setView] = useState(preselectedHobby ? "month" : "year");
 
   function getDaysInMonth(year, month) {
     return new Date(year, month + 1, 0).getDate();
@@ -2036,7 +2063,7 @@ function Calendar({ schedule, onAdd, onRemove, onBack, preselectedHobby, checkIn
             }
             return (
               <div key={name}
-                onClick={() => { setViewMonth(mi); setView("month"); }}
+                {...pressable(() => { setViewMonth(mi); setView("month"); })}
                 style={{ background: COLORS.card, border: `1px solid ${isCurrentMonth ? COLORS.accent : COLORS.border}`, borderRadius: 12, padding: "14px", cursor: "pointer", transition: "all 0.15s" }}
                 onMouseEnter={e => e.currentTarget.style.borderColor = COLORS.accent}
                 onMouseLeave={e => e.currentTarget.style.borderColor = isCurrentMonth ? COLORS.accent : COLORS.border}
@@ -2116,7 +2143,7 @@ function Calendar({ schedule, onAdd, onRemove, onBack, preselectedHobby, checkIn
 
             return (
               <div key={d}
-                onClick={() => { setSelectedDate(dk); setView("day"); }}
+                {...pressable(() => { setSelectedDate(dk); setView("day"); })}
                 style={{
                   background: tod ? `${COLORS.accent}20` : COLORS.card,
                   border: `1px solid ${tod ? COLORS.accent : filledSlots.length > 0 ? COLORS.borderBright : COLORS.border}`,
@@ -2220,7 +2247,7 @@ function Calendar({ schedule, onAdd, onRemove, onBack, preselectedHobby, checkIn
           let streak = 0;
           const d = new Date();
           for (let i = 0; i < 120; i++) {
-            const key = d.toISOString().split("T")[0];
+            const key = localDateKey(d);
             if (checkIns?.[hobby]?.[key] === true) streak++;
             else if (i > 0) break;
             d.setDate(d.getDate() - 1);
@@ -2423,6 +2450,8 @@ const WEEKLY_CHALLENGES = {
   "Escape Rooms": ["Book a room rated harder than you'd normally choose", "Debrief properly after — what did you miss and why?", "Try an online escape room as a warmup", "Design a simple puzzle for a friend to solve", "Research the game master's perspective on your last room"],
 };
 
+validateHobbyNames(Object.keys(WEEKLY_CHALLENGES), "WEEKLY_CHALLENGES");
+
 function getChallenge(hobby) {
   const challenges = WEEKLY_CHALLENGES[hobby];
   if (!challenges) return null;
@@ -2466,7 +2495,7 @@ function Profile({ schedule, checkIns, journal, matches, onSaveEntry, onEditEntr
     let streak = 0;
     const d = new Date();
     for (let i = 0; i < 90; i++) {
-      const key = d.toISOString().split("T")[0];
+      const key = localDateKey(d);
       if (checkIns[hobby]?.[key] === true) streak++;
       else if (i > 0) break;
       d.setDate(d.getDate() - 1);
@@ -2585,7 +2614,7 @@ function Profile({ schedule, checkIns, journal, matches, onSaveEntry, onEditEntr
                 <div style={{ fontWeight: 800, fontSize: 13, color: COLORS.accent, letterSpacing: 1, textTransform: "uppercase", marginBottom: 16 }}>Your Quiz Matches</div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
                   {matches.map((name, i) => (
-                    <div key={name} onClick={() => onNavigate && onNavigate("detail", name)}
+                    <div key={name} {...pressable(() => onNavigate && onNavigate("detail", name))}
                       style={{ background: COLORS.surface, border: `1px solid ${i === 0 ? COLORS.accent : COLORS.border}`, borderRadius: 10, padding: "10px 14px", display: "flex", alignItems: "center", gap: 8, cursor: "pointer", transition: "all 0.15s" }}
                       onMouseEnter={e => e.currentTarget.style.borderColor = COLORS.accent}
                       onMouseLeave={e => e.currentTarget.style.borderColor = i === 0 ? COLORS.accent : COLORS.border}
@@ -2731,7 +2760,8 @@ function Profile({ schedule, checkIns, journal, matches, onSaveEntry, onEditEntr
           const underScheduled = allHobbies.filter(h => dayCounts[h] === 1);
           const totalSessions = Object.values(checkIns).reduce((acc, days) => acc + Object.values(days).filter(Boolean).length, 0);
           const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
-          const thisWeekSessions = Object.values(checkIns).reduce((acc, days) => acc + Object.entries(days).filter(([date, done]) => done && new Date(date) >= weekAgo).length, 0);
+          const weekAgoKey = localDateKey(weekAgo);
+          const thisWeekSessions = Object.values(checkIns).reduce((acc, days) => acc + Object.entries(days).filter(([date, done]) => done && date >= weekAgoKey).length, 0);
           const showMonthlyCheckIn = totalSessions >= 8;
 
           return (
@@ -2998,6 +3028,9 @@ function usePersistentState(key, defaultValue) {
   return [state, setPersistentState];
 }
 
+// Single source of truth for resettable storage keys (hb_theme survives reset on purpose)
+const STORAGE_KEYS = ["hb_matches","hb_quizDone","hb_onboardingDone","hb_schedule","hb_checkIns","hb_journal"];
+
 export default function App() {
   const [screen, setScreen] = useState(() => {
     try {
@@ -3066,7 +3099,7 @@ export default function App() {
 
   function handleReset() {
     if (!window.confirm("Reset everything and start fresh?")) return;
-    ["hb_matches","hb_quizDone","hb_onboardingDone","hb_schedule","hb_checkIns","hb_journal"].forEach(k => localStorage.removeItem(k));
+    STORAGE_KEYS.forEach(k => localStorage.removeItem(k)); // hb_theme intentionally kept
     setMatches([]); setQuizDone(false); setOnboardingDone(false); setSchedule({}); setCheckIns({}); setJournal({});
     setScreen("landing");
   }
@@ -3074,9 +3107,11 @@ export default function App() {
   const showNav = !["landing", "quiz", "onboarding", "detail"].includes(screen);
 
   return (
-    <div style={{ paddingBottom: showNav ? 80 : 0 }}>
+    // key={appTheme} forces a clean remount on theme toggle — protects the
+    // module-level COLORS pattern from stale styles if memo/lazy is added later
+    <div key={appTheme} style={{ paddingBottom: showNav ? 80 : 0 }}>
   <ThemeToggle theme={appTheme} onToggle={() => setAppTheme(t => t === "night" ? "day" : "night")} />
-      {screen === "landing" && <Landing onStart={() => go("quiz")} />}
+      {screen === "landing" && <Landing onStart={() => go("quiz")} onBrowse={() => go("browse")} />}
       {screen === "quiz" && <Quiz onComplete={handleQuizComplete} />}
       {screen === "onboarding" && <Onboarding matches={matches} onDone={handleOnboardingDone} onExploreHobby={name => { setDetailHobby(name); setPrevScreen("onboarding"); setScreen("detail"); }} />}
       {screen === "results" && <Results matches={matches} onExplore={handleExplore} onSkip={() => go("browse")} />}
