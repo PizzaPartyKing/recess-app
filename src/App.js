@@ -1111,7 +1111,10 @@ function matchHobbies(answers) {
 
   // ── PICK TOP MATCHES + ONE WILDCARD ───────────────────────────────────────
   // Filter out budget-excluded hobbies (score = -999)
-  const eligible = Object.entries(scores).filter(([, s]) => s > -999);
+  // UPGRADE: tiny random jitter (<1) breaks ties fairly. Scores are integers,
+  // so ordering between different scores is never affected — but tied hobbies
+  // no longer always resolve to whichever was defined first in HOBBY_DATA.
+  const eligible = Object.entries(scores).filter(([, s]) => s > -999).map(([n, s]) => [n, s + Math.random() * 0.5]);
 
   // Sort by score descending
   eligible.sort((a, b) => b[1] - a[1]);
@@ -1128,6 +1131,53 @@ function matchHobbies(answers) {
 
   const results = wildcard ? [...top5, wildcard[0]] : eligible.slice(0, 6).map(([name]) => name);
   return results;
+}
+
+// UPGRADE: "why you matched" — derives up to 3 human-readable reasons from the
+// user's quiz answers and the hobby's tags/category/cost. Computed at render
+// time from stored answers, so no migration of saved matches is needed.
+function explainMatch(name, answers) {
+  if (!answers) return [];
+  const h = HOBBY_DATA[name];
+  if (!h) return [];
+  const tags = h.tags || [];
+  const reasons = [];
+  const push = r => { if (r && reasons.length < 3 && !reasons.includes(r)) reasons.push(r); };
+
+  // Energy — the strongest signal in the matcher, so it leads here too
+  if (answers.energy === "physical" && (h.category === "Physical" || tags.includes("physical") || tags.includes("strength"))) push("Gets your body moving");
+  if (answers.energy === "creative" && (h.category === "Creative" || tags.includes("creative") || tags.includes("artistic"))) push("Feeds your maker side");
+  if (answers.energy === "social" && (h.category === "Social" || tags.includes("social"))) push("Puts you around people");
+  if (answers.energy === "outdoor" && (h.category === "Outdoor" || tags.includes("outdoor") || tags.includes("nature"))) push("Gets you outside");
+
+  // Social preference
+  if (answers.social === "solo" && tags.includes("solo")) push("Works great solo");
+  if (answers.social === "community" && (tags.includes("community") || tags.includes("social"))) push("Built-in community");
+  if (answers.social === "small-group" && (tags.includes("small-group") || tags.includes("social"))) push("Perfect for a small crew");
+
+  // Setting
+  if ((answers.setting === "home" || answers.indoor_outdoor === "inside") && (tags.includes("home") || tags.includes("indoor"))) push("Doable from home");
+  if ((answers.setting === "outdoor" || answers.indoor_outdoor === "outside") && (tags.includes("outdoor") || tags.includes("nature"))) push("Fresh air included");
+
+  // Patience / style
+  if ((answers.style === "slow" || answers.style === "process") && (tags.includes("patient") || tags.includes("meditative"))) push("Rewards patience");
+  if (answers.style === "quick" && (tags.includes("quick") || tags.includes("high-energy"))) push("Quick wins early");
+
+  // Risk appetite
+  if (answers.risk === "adventurous" && (tags.includes("adventurous") || tags.includes("challenge"))) push("Has real edge");
+  if (answers.risk === "mental" && (tags.includes("mental") || tags.includes("strategy") || tags.includes("puzzle"))) push("A workout for your brain");
+  if (answers.risk === "safe" && (tags.includes("meditative") || tags.includes("patient"))) push("Low-stakes learning");
+
+  // Output
+  if (answers.output === "tangible" && (tags.includes("hands-on") || tags.includes("craft") || tags.includes("tactile"))) push("You'll make real things");
+  if (answers.output === "mental" && (tags.includes("meditative") || tags.includes("mindfulness"))) push("Clears your head");
+
+  // Budget
+  const cost = HOBBY_MIN_COST[name];
+  if (answers.budget === "free" && cost === "free") push("Free to start");
+  if (answers.budget === "low" && (cost === "free" || cost === "low")) push("Fits your budget");
+
+  return reasons;
 }
 
 // ── MOTIVATIONAL QUOTES ───────────────────────────────────────────────────────
@@ -1172,14 +1222,37 @@ const QUOTES = [
 ];
 
 const STREAK_MESSAGES = {
-  3:  { emoji: "🔥", title: "3 days in a row.", body: "You're not just trying anymore — you're doing it." },
-  7:  { emoji: "⚡", title: "One full week.", body: "This is how habits are actually built. One session at a time." },
-  14: { emoji: "💪", title: "Two weeks strong.", body: "Most people quit by now. You didn't. That means something." },
-  21: { emoji: "🌟", title: "21 days.", body: "This hobby is starting to become part of who you are." },
-  30: { emoji: "🏆", title: "30 day streak.", body: "A month of showing up for yourself. That's genuinely remarkable." },
+  3:  { emoji: "🔥", title: "3 sessions in a row.", body: "You're not just trying anymore — you're doing it." },
+  7:  { emoji: "⚡", title: "7 sessions strong.", body: "This is how habits are actually built. One session at a time." },
+  14: { emoji: "💪", title: "14 sessions deep.", body: "Most people quit by now. You didn't. That means something." },
+  21: { emoji: "🌟", title: "21 sessions.", body: "This hobby is starting to become part of who you are." },
+  30: { emoji: "🏆", title: "30 sessions.", body: "Thirty times you showed up for yourself. That's genuinely remarkable." },
   50: { emoji: "🔥🔥", title: "50 sessions.", body: "You're not a beginner anymore." },
   100:{ emoji: "💎", title: "100 sessions.", body: "This is yours now. Completely, fully yours." },
 };
+
+// UPGRADE: session-based streaks. A hobby scheduled Tue/Thu could never build
+// a "day streak" past 1, making every milestone unreachable. Streaks now count
+// consecutive COMPLETED check-ins — skips break them, gaps between sessions don't.
+function getSessionStreak(hobbyCheckIns) {
+  const entries = Object.entries(hobbyCheckIns || {}).sort((a, b) => b[0].localeCompare(a[0]));
+  let streak = 0;
+  for (const [, done] of entries) {
+    if (done === true) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function getLongestSessionStreak(hobbyCheckIns) {
+  const entries = Object.entries(hobbyCheckIns || {}).sort((a, b) => a[0].localeCompare(b[0]));
+  let longest = 0, current = 0;
+  for (const [, done] of entries) {
+    if (done === true) { current++; if (current > longest) longest = current; }
+    else current = 0;
+  }
+  return longest;
+}
 
 function getDailyQuote() {
   const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
@@ -1296,7 +1369,7 @@ function Landing({ onStart, onBrowse }) {
     { icon: "🎯", label: "12-Question Quiz", desc: "Matched to hobbies you've never tried", color: COLORS.accent },
     { icon: "💰", label: "Cost Breakdown", desc: "Entry to advanced, no surprises", color: COLORS.lime },
     { icon: "📅", label: "Habit Calendar", desc: "Schedule it so it actually happens", color: COLORS.teal },
-    { icon: "🔥", label: "Streak Tracking", desc: "Build momentum day by day", color: COLORS.pink },
+    { icon: "🔥", label: "Streak Tracking", desc: "Build momentum session by session", color: COLORS.pink },
     { icon: "👤", label: "Your Profile", desc: "Track hobbies, streaks, and journal entries", color: COLORS.purple },
     { icon: "🎯", label: "Weekly Challenges", desc: "Specific goals to push you forward", color: COLORS.orange },
   ];
@@ -1561,7 +1634,7 @@ function Onboarding({ matches, onDone, onExploreHobby }) {
               {[
                 { emoji: "✅", label: "Did it", desc: "Session logged, streak continues", color: COLORS.accent },
                 { emoji: "⏭️", label: "Skipped", desc: "No judgment — just honest data", color: COLORS.muted },
-                { emoji: "🔥", label: "7-day streak", desc: "The number that makes it real", color: COLORS.orange },
+                { emoji: "🔥", label: "7-session streak", desc: "The number that makes it real", color: COLORS.orange },
               ].map(item => (
                 <div key={item.label} style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 12, padding: "14px 18px", display: "flex", alignItems: "center", gap: 14 }}>
                   <span style={{ fontSize: 24, flexShrink: 0 }}>{item.emoji}</span>
@@ -1611,7 +1684,7 @@ function Onboarding({ matches, onDone, onExploreHobby }) {
   );
 }
 
-function Results({ matches, onExplore, onSkip }) {
+function Results({ matches, quizAnswers, onExplore, onSkip }) {
   return (
     <Wrap>
       <div style={{ maxWidth: 760, margin: "0 auto", padding: "60px 24px" }}>
@@ -1624,7 +1697,7 @@ function Results({ matches, onExplore, onSkip }) {
         <DailyQuote />
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 16, marginBottom: 32 }}>
-          {matches.map((name, i) => (
+          {matches.map((name, i) => { const reasons = explainMatch(name, quizAnswers); return (
             <div key={name} {...pressable(() => onExplore(name))}
               style={{ background: COLORS.card, border: `1px solid ${i === 0 ? COLORS.accent : COLORS.border}`, borderRadius: 14, padding: 24, cursor: "pointer", position: "relative", transition: "all 0.2s" }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = COLORS.accent; e.currentTarget.style.boxShadow = `0 0 20px ${COLORS.accent}15`; }}
@@ -1635,12 +1708,19 @@ function Results({ matches, onExplore, onSkip }) {
               <div style={{ fontSize: 40, marginBottom: 10 }}>{HOBBY_DATA[name].emoji}</div>
               <div style={{ fontWeight: 800, fontSize: 20, marginBottom: 6 }}>{name}</div>
               <div style={{ fontSize: 13, color: COLORS.textSoft, lineHeight: 1.6, marginBottom: 12 }}>{HOBBY_DATA[name].description}</div>
+              {reasons.length > 0 && (
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+                  {reasons.map(r => (
+                    <span key={r} style={{ fontSize: 11, color: COLORS.lime, background: `${COLORS.lime}12`, border: `1px solid ${COLORS.lime}30`, borderRadius: 99, padding: "3px 10px", fontWeight: 700 }}>✓ {r}</span>
+                  ))}
+                </div>
+              )}
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 <Tag>{HOBBY_DATA[name].category}</Tag>
                 <Tag>{HOBBY_DATA[name].difficulty}</Tag>
               </div>
             </div>
-          ))}
+          ); })}
         </div>
         <Btn onClick={onSkip} variant="ghost">Browse All {HOBBY_COUNT} Hobbies →</Btn>
       </div>
@@ -2244,14 +2324,7 @@ function Calendar({ schedule, onAdd, onRemove, onBack, preselectedHobby, checkIn
         {/* Streak celebrations */}
         {tod && Object.entries(entries).filter(([, h]) => h).map(([slot, hobby]) => {
           if (!hobby) return null;
-          let streak = 0;
-          const d = new Date();
-          for (let i = 0; i < 120; i++) {
-            const key = localDateKey(d);
-            if (checkIns?.[hobby]?.[key] === true) streak++;
-            else if (i > 0) break;
-            d.setDate(d.getDate() - 1);
-          }
+          const streak = getSessionStreak(checkIns?.[hobby]);
           if (STREAK_MESSAGES[streak]) {
             return <StreakCelebration key={hobby} hobby={hobby} streak={streak} />;
           }
@@ -2492,15 +2565,7 @@ function Profile({ schedule, checkIns, journal, matches, onSaveEntry, onEditEntr
   }, null);
 
   function getStreak(hobby) {
-    let streak = 0;
-    const d = new Date();
-    for (let i = 0; i < 90; i++) {
-      const key = localDateKey(d);
-      if (checkIns[hobby]?.[key] === true) streak++;
-      else if (i > 0) break;
-      d.setDate(d.getDate() - 1);
-    }
-    return streak;
+    return getSessionStreak(checkIns[hobby]);
   }
 
   function getTotalSessions(hobby) {
@@ -2508,18 +2573,47 @@ function Profile({ schedule, checkIns, journal, matches, onSaveEntry, onEditEntr
   }
 
   function getLongestStreak(hobby) {
-    const days = Object.entries(checkIns[hobby] || {})
-      .filter(([, v]) => v).map(([d]) => d).sort();
-    let longest = 0, current = 0;
-    for (let i = 0; i < days.length; i++) {
-      if (i === 0) { current = 1; continue; }
-      const prev = new Date(days[i - 1]);
-      const curr = new Date(days[i]);
-      const diff = (curr - prev) / (1000 * 60 * 60 * 24);
-      if (diff === 1) { current++; } else { current = 1; }
-      if (current > longest) longest = current;
-    }
-    return Math.max(longest, current);
+    return getLongestSessionStreak(checkIns[hobby]);
+  }
+
+  // UPGRADE: backup & restore — everything lives in localStorage until the
+  // Supabase backend ships, so one cleared browser wipes a tester's history.
+  function exportBackup() {
+    const data = {};
+    [...STORAGE_KEYS, "hb_theme"].forEach(k => {
+      const v = localStorage.getItem(k);
+      if (v !== null) data[k] = v;
+    });
+    const blob = new Blob([JSON.stringify({ app: "recess", exportedAt: new Date().toISOString(), data }, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `recess-backup-${localDateKey(new Date())}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importBackup(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result);
+        if (!parsed || parsed.app !== "recess" || !parsed.data) {
+          alert("That doesn't look like a Recess backup file.");
+          return;
+        }
+        Object.entries(parsed.data).forEach(([k, v]) => {
+          if (k.startsWith("hb_") && typeof v === "string") localStorage.setItem(k, v);
+        });
+        window.location.reload();
+      } catch (err) {
+        alert("Couldn't read that backup file.");
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
   }
 
   function saveNewEntry() {
@@ -2647,6 +2741,21 @@ function Profile({ schedule, checkIns, journal, matches, onSaveEntry, onEditEntr
                 <div style={{ fontSize: 12, color: COLORS.textSoft }}>{totalEntries} {totalEntries === 1 ? "entry" : "entries"} written</div>
               </button>
             </div>
+
+            {/* Backup & restore */}
+            <div style={{ marginTop: 28, background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: "20px 24px" }}>
+              <div style={{ fontSize: 11, color: COLORS.textSoft, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>Your Data</div>
+              <div style={{ fontSize: 13, color: COLORS.textSoft, lineHeight: 1.6, marginBottom: 14 }}>
+                Everything is stored on this device. Download a backup so your streaks and journal survive a cleared browser or a new phone.
+              </div>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                <Btn variant="ghost" onClick={exportBackup} style={{ fontSize: 13, padding: "10px 18px" }}>⬇ Download Backup</Btn>
+                <label style={{ display: "inline-block" }}>
+                  <span style={{ display: "inline-block", padding: "10px 18px", borderRadius: 12, border: `1px solid ${COLORS.border}`, color: COLORS.text, fontWeight: 800, fontSize: 13, cursor: "pointer", fontFamily: "inherit" }}>⬆ Restore Backup</span>
+                  <input type="file" accept="application/json,.json" onChange={importBackup} style={{ display: "none" }} />
+                </label>
+              </div>
+            </div>
           </div>
         )}
 
@@ -2690,7 +2799,7 @@ function Profile({ schedule, checkIns, journal, matches, onSaveEntry, onEditEntr
                         <div style={{ flex: 1 }}>
                           <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 6 }}>{hobby}</div>
                           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                            {streak > 0 && <span style={{ fontSize: 12, color: COLORS.orange, fontWeight: 700 }}>🔥 {streak} day streak</span>}
+                            {streak > 0 && <span style={{ fontSize: 12, color: COLORS.orange, fontWeight: 700 }}>🔥 {streak} session streak</span>}
                             <span style={{ fontSize: 12, color: COLORS.textSoft }}>{total} sessions</span>
                             {longest > 0 && <span style={{ fontSize: 12, color: COLORS.textSoft }}>Best: {longest} days</span>}
                           </div>
@@ -3029,7 +3138,7 @@ function usePersistentState(key, defaultValue) {
 }
 
 // Single source of truth for resettable storage keys (hb_theme survives reset on purpose)
-const STORAGE_KEYS = ["hb_matches","hb_quizDone","hb_onboardingDone","hb_schedule","hb_checkIns","hb_journal"];
+const STORAGE_KEYS = ["hb_matches","hb_quizAnswers","hb_quizDone","hb_onboardingDone","hb_schedule","hb_checkIns","hb_journal"];
 
 export default function App() {
   const [screen, setScreen] = useState(() => {
@@ -3047,6 +3156,7 @@ export default function App() {
 
   // Everything below persists across sessions
   const [matches, setMatches] = usePersistentState("hb_matches", []);
+  const [quizAnswers, setQuizAnswers] = usePersistentState("hb_quizAnswers", null);
   const [quizDone, setQuizDone] = usePersistentState("hb_quizDone", false);
   const [onboardingDone, setOnboardingDone] = usePersistentState("hb_onboardingDone", false);
   const [schedule, setSchedule] = usePersistentState("hb_schedule", {});
@@ -3056,6 +3166,7 @@ export default function App() {
   function go(s) { setPrevScreen(screen); setScreen(s); }
 
   function handleQuizComplete(answers) {
+    setQuizAnswers(answers); // stored so Results can explain each match
     setMatches(matchHobbies(answers));
     setQuizDone(true);
     setScreen("onboarding");
@@ -3114,7 +3225,7 @@ export default function App() {
       {screen === "landing" && <Landing onStart={() => go("quiz")} onBrowse={() => go("browse")} />}
       {screen === "quiz" && <Quiz onComplete={handleQuizComplete} />}
       {screen === "onboarding" && <Onboarding matches={matches} onDone={handleOnboardingDone} onExploreHobby={name => { setDetailHobby(name); setPrevScreen("onboarding"); setScreen("detail"); }} />}
-      {screen === "results" && <Results matches={matches} onExplore={handleExplore} onSkip={() => go("browse")} />}
+      {screen === "results" && <Results matches={matches} quizAnswers={quizAnswers} onExplore={handleExplore} onSkip={() => go("browse")} />}
       {screen === "browse" && <BrowseAll onSelect={handleExplore} onBack={() => go(prevScreen || "landing")} />}
       {screen === "detail" && detailHobby && <HobbyDetail name={detailHobby} onBack={() => go(prevScreen || "browse")} onAddToCalendar={handleAddToCalendar} />}
       {screen === "calendar" && <Calendar schedule={schedule} onAdd={(day, slot, hobby) => { addToSchedule(day, slot, hobby); setCalendarPreselect(null); }} onRemove={removeFromSchedule} onBack={() => { setCalendarPreselect(null); go(prevScreen || "browse"); }} preselectedHobby={calendarPreselect} checkIns={checkIns} onCheckIn={handleCheckIn} />}
