@@ -72,7 +72,7 @@ const HOBBY_DATA = {
     cost: { entry: "$300–600 (entry road bike)", mid: "$800–2000 (quality bike + gear)", advanced: "$3000+ (performance setup)" },
     timePerWeek: "3–8 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/cycling", "r/bicycling"], localGroups: ["Local cycling clubs", "Strava cycling segments near you"], sites: ["cyclingnews.com", "velonews.com"] },
-    video: { searchQuery: "road cycling for beginners", url: "https://www.youtube.com/results?search_query=road+cycling+for+beginners", title: "Road Cycling for Beginners — Complete Starter Guide" },
+    video: { searchQuery: "cycling for beginners", url: "https://www.youtube.com/results?search_query=cycling+for+beginners", title: "Cycling for Beginners — Complete Starter Guide" },
     tutorials: [{ label: "How to Buy Your First Bike", url: "https://www.rei.com/learn/expert-advice/bike-guide.html" }, { label: "Beginner Cycling Training Plan", url: "https://www.cyclingweekly.com/fitness/training/cycling-training-plan-for-beginners" }, { label: "Essential Cycling Gear", url: "https://www.bicycling.com/bikes-gear/a20044419/cycling-gear-for-beginners/" }],    storeQuery: "bike shop",
     classQuery: "cycling class group ride",
 
@@ -96,7 +96,7 @@ const HOBBY_DATA = {
     cost: { entry: "$50–100/mo (gym membership)", mid: "$150–250/mo (classes + gear)", advanced: "$300+/mo (competition prep)" },
     timePerWeek: "3–6 hrs", difficulty: "Moderate",
     resources: { forums: ["r/bjj", "r/MuayThai", "r/amateur_boxing"], localGroups: ["Local dojos and gyms", "Meetup: martial arts near you"], sites: ["bjjheroes.com", "fightinginsider.com"] },
-    video: { searchQuery: "BJJ for beginners first class", url: "https://www.youtube.com/results?search_query=BJJ+for+beginners+first+class", title: "BJJ for Beginners — What to Expect at Your First Class" },
+    video: { searchQuery: "martial arts for beginners which style", url: "https://www.youtube.com/results?search_query=martial+arts+for+beginners+which+style", title: "Martial Arts for Beginners — Which Style Should You Choose?" },
     tutorials: [{ label: "Which Martial Art Should You Learn?", url: "https://www.artofmanliness.com/skills/manly-know-how/which-martial-art-should-you-study/" }, { label: "BJJ Beginner's Guide", url: "https://bjjheroes.com/techniques/bjj-beginners-guide" }, { label: "Muay Thai Fundamentals", url: "https://www.evolve-mma.com/blog/muay-thai-for-beginners-everything-you-need-to-know/" }],    storeQuery: "martial arts school",
     classQuery: "martial arts class beginner",
 
@@ -120,7 +120,7 @@ const HOBBY_DATA = {
     cost: { entry: "$30–60 (rental per session)", mid: "$400–900 (beginner kayak + gear)", advanced: "$1500+ (quality boat + accessories)" },
     timePerWeek: "2–4 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/kayaking", "r/whitewater"], localGroups: ["Local paddling clubs", "REI kayak classes"], sites: ["americancanoe.org", "paddling.com"] },
-    video: { searchQuery: "kayaking for beginners paddle strokes", url: "https://www.youtube.com/results?search_query=kayaking+for+beginners+paddle+strokes", title: "Kayaking for Beginners — Paddle Strokes & Getting Started" },
+    video: { searchQuery: "kayaking and rowing for beginners", url: "https://www.youtube.com/results?search_query=kayaking+and+rowing+for+beginners", title: "Kayaking & Rowing for Beginners — Getting Started on the Water" },
     tutorials: [{ label: "Beginner Kayaking Guide", url: "https://www.rei.com/learn/expert-advice/kayaking.html" }, { label: "How to Choose a Kayak", url: "https://www.paddling.com/plan/articles/how-to-choose-a-kayak/" }, { label: "Basic Paddle Strokes", url: "https://www.americancanoe.org/page/paddling_basics" }],    storeQuery: "kayak rental",
     classQuery: "kayaking lessons",
 
@@ -146,7 +146,7 @@ const HOBBY_DATA = {
     cost: { entry: "$30–60 (community studio drop-in)", mid: "$200–400 (course + tools)", advanced: "$1000+ (home wheel, kiln access)" },
     timePerWeek: "2–6 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/Pottery", "Ceramic Arts Network Forum"], localGroups: ["Local community art centers", "YMCA pottery classes"], sites: ["ceramicartsnetwork.org", "bigceramicstore.com"] },
-    video: { searchQuery: "pottery wheel for beginners", url: "https://www.youtube.com/results?search_query=pottery+wheel+for+beginners", title: "Pottery for Beginners — Your First Time on the Wheel" },
+    video: { searchQuery: "pottery for beginners", url: "https://www.youtube.com/results?search_query=pottery+for+beginners", title: "Pottery for Beginners — Wheel Throwing & Hand-Building" },
     tutorials: [{ label: "Beginner's Guide to Pottery", url: "https://ceramicartsnetwork.org/daily/article/Beginners-Guide-to-Pottery" }, { label: "Finding a Studio Near You", url: "https://www.yelp.com/search?find_desc=pottery+classes" }, { label: "Hand-Building vs Wheel Throwing", url: "https://ceramicartsnetwork.org/daily/article/Hand-Building-vs-Wheel-Throwing" }],    storeQuery: "pottery studio clay art center",
     classQuery: "pottery class beginner wheel throwing",
 
@@ -342,7 +342,7 @@ const HOBBY_DATA = {
     cost: { entry: "$60–100 (starter kit)", mid: "$200–400 (equipment upgrade)", advanced: "$500+ (kegging system)" },
     timePerWeek: "2–4 hrs (brew days every few weeks)", difficulty: "Moderate",
     resources: { forums: ["r/homebrewing", "HomeBrewTalk.com"], localGroups: ["AHA homebrew club finder", "Local homebrew shop events"], sites: ["homebrewersassociation.org", "brewersfriend.com"] },
-    video: { searchQuery: "home brewing beer for beginners", url: "https://www.youtube.com/results?search_query=home+brewing+beer+for+beginners", title: "How to Brew Beer at Home — Complete Beginner Guide" },
+    video: { searchQuery: "homebrewing for beginners beer cider mead", url: "https://www.youtube.com/results?search_query=homebrewing+for+beginners+beer+cider+mead", title: "Homebrewing for Beginners — Beer, Cider & Mead" },
     tutorials: [{ label: "Extract vs All-Grain Brewing", url: "https://www.homebrewersassociation.org/how-to-brew/extract-brewing/" }, { label: "Free Recipe Calculator", url: "https://www.brewersfriend.com/" }, { label: "Find a Local Homebrew Club", url: "https://www.homebrewersassociation.org/clubs/" }],    storeQuery: "homebrew supply store",
     classQuery: "homebrewing class",
 
@@ -366,7 +366,7 @@ const HOBBY_DATA = {
     cost: { entry: "$30–60 (beginner kit)", mid: "$100–200 (cultures, molds, press)", advanced: "$400+ (aging cave setup)" },
     timePerWeek: "2–4 hrs", difficulty: "Moderate",
     resources: { forums: ["r/cheesemaking", "Cheesemaking.com Forum"], localGroups: ["Local cheesemaking workshops", "Slow Food chapter events"], sites: ["cheesemaking.com", "artisancheesemakingathome.com"] },
-    video: { searchQuery: "mozzarella cheese making at home beginners", url: "https://www.youtube.com/results?search_query=mozzarella+cheese+making+at+home+beginners", title: "How to Make Mozzarella at Home — 30 Minute Cheese" },
+    video: { searchQuery: "cheese making at home for beginners", url: "https://www.youtube.com/results?search_query=cheese+making+at+home+for+beginners", title: "Cheesemaking for Beginners — Your First Cheese at Home" },
     tutorials: [{ label: "30-Minute Mozzarella Recipe", url: "https://www.cheesemaking.com/learn/how-to-make-30-minute-mozzarella.html" }, { label: "Beginner Cheese Making Kit", url: "https://www.cheesemaking.com/store/c/cheese-making-kits.html" }, { label: "Introduction to Cultures & Rennet", url: "https://www.cheesemaking.com/learn/" }],    storeQuery: "Sur La Table Williams Sonoma kitchen store",
     classQuery: "cheesemaking class cooking workshop",
 
@@ -480,7 +480,7 @@ const HOBBY_DATA = {
     cost: { entry: "$20–40 (yarn + beginner needles)", mid: "$80–200 (quality yarn + tools)", advanced: "$300+ (spinning wheel, premium fibers)" },
     timePerWeek: "2–6 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/knitting", "r/crochet", "Ravelry.com"], localGroups: ["Local yarn shops' stitch circles", "Library knitting groups"], sites: ["ravelry.com", "yarnsub.com"] },
-    video: { searchQuery: "knitting for absolute beginners cast on", url: "https://www.youtube.com/results?search_query=knitting+for+absolute+beginners+cast+on", title: "Knitting for Absolute Beginners — Cast On, Knit, Purl" },
+    video: { searchQuery: "knitting vs crochet for beginners", url: "https://www.youtube.com/results?search_query=knitting+vs+crochet+for+beginners", title: "Knitting vs Crochet — Which Should You Learn First?" },
     tutorials: [{ label: "Free Beginner Patterns — Ravelry", url: "https://www.ravelry.com/patterns/search#craft=knitting&difficulty=1-1&sort=best" }, { label: "Knitting vs Crochet — Which to Learn First?", url: "https://www.yarnsub.com/articles/knitting-vs-crochet" }, { label: "Learn to Crochet — Step by Step", url: "https://www.thecrochetcrowd.com/crochet-101/" }],    storeQuery: "JOANN Fabric yarn store",
     classQuery: "knitting crochet class yarn store",
 
@@ -654,7 +654,7 @@ const HOBBY_DATA = {
     cost: { entry: "$15–30 (preconstructed starter deck)", mid: "$100–300 (competitive deck)", advanced: "$500+ (tournament play, rare card collecting)" },
     timePerWeek: "2–6 hrs", difficulty: "Beginner friendly",
     resources: { forums: ["r/magicTCG", "r/pkmntcg", "r/yugioh", "MTGGoldfish community"], localGroups: ["Local game stores' Friday Night Magic", "TCGPlayer local event finder", "Pokémon Player Club locator"], sites: ["tcgplayer.com", "mtggoldfish.com", "limitlesstcg.com"] },
-    video: { searchQuery: "magic the gathering for beginners how to play", url: "https://www.youtube.com/results?search_query=magic+the+gathering+for+beginners+how+to+play", title: "Magic: The Gathering for Beginners — Learn to Play in 15 Minutes" },
+    video: { searchQuery: "best trading card game for beginners", url: "https://www.youtube.com/results?search_query=best+trading+card+game+for+beginners", title: "Which Trading Card Game Should You Play First?" },
     tutorials: [{ label: "Learn MTG — Official Tutorial", url: "https://magic.wizards.com/en/intro" }, { label: "Budget Deck Building Guide", url: "https://www.mtggoldfish.com/articles/budget-magic" }, { label: "Find Local Events — TCGPlayer", url: "https://www.tcgplayer.com/local-game-store" }],    storeQuery: "trading card game store hobby shop",
     classQuery: "Magic the Gathering game store tournament",
 
@@ -714,7 +714,7 @@ const HOBBY_DATA = {
     cost: { entry: "$0 (Godot is free, Unity free tier)", mid: "$50–200 (assets, courses, tools)", advanced: "$500+ (professional software, hardware, game jam travel)" },
     timePerWeek: "4–10 hrs", difficulty: "Moderate",
     resources: { forums: ["r/gamedev", "r/godot", "r/Unity3D", "itch.io community"], localGroups: ["Local game dev meetups", "Global Game Jam local sites", "Discord: game dev servers"], sites: ["itch.io", "godotengine.org", "gamedeveloper.com"] },
-    video: { searchQuery: "game development for beginners make your first game godot", url: "https://www.youtube.com/results?search_query=game+development+for+beginners+make+your+first+game+godot", title: "Game Development for Beginners — Make Your First Game in Godot" },
+    video: { searchQuery: "game development for beginners where to start", url: "https://www.youtube.com/results?search_query=game+development+for+beginners+where+to+start", title: "Game Development for Beginners — Where to Start" },
     tutorials: [{ label: "Free Game Engine — Godot", url: "https://godotengine.org/" }, { label: "Publish Your Game — itch.io", url: "https://itch.io/" }, { label: "Join a Game Jam — Global Game Jam", url: "https://globalgamejam.org/" }],    storeQuery: "computer store electronics Best Buy",
     classQuery: "coding bootcamp game development class",
 
@@ -1178,6 +1178,138 @@ function explainMatch(name, answers) {
   if (answers.budget === "low" && (cost === "free" || cost === "low")) push("Fits your budget");
 
   return reasons;
+}
+
+// UPGRADE: shareable results card. Renders a 1080x1350 branded image of the
+// user's top matches to a canvas, then opens the native share sheet on mobile
+// (falls back to a PNG download on desktop). The link uses whatever domain the
+// app is running on, so it keeps working after the takerecess.app move.
+function roundedRect(ctx, x, y, w, h, r) {
+  if (ctx.roundRect) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); return; }
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function buildShareCardBlob(matches) {
+  const W = 1080, H = 1350;
+  const T = THEMES.night; // the share card always wears the brand look
+  const sans = "system-ui, -apple-system, 'Segoe UI', sans-serif";
+  const canvas = document.createElement("canvas");
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  // Background + glow atmosphere
+  ctx.fillStyle = T.bg; ctx.fillRect(0, 0, W, H);
+  let g = ctx.createRadialGradient(180, 160, 0, 180, 160, 720);
+  g.addColorStop(0, "rgba(91,142,255,0.12)"); g.addColorStop(1, "rgba(91,142,255,0)");
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  g = ctx.createRadialGradient(920, 1220, 0, 920, 1220, 720);
+  g.addColorStop(0, "rgba(155,91,255,0.12)"); g.addColorStop(1, "rgba(155,91,255,0)");
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+  // Header
+  ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = T.text;
+  ctx.font = `900 58px ${sans}`;
+  ctx.fillText("🔔 recess", W / 2, 128);
+  ctx.fillStyle = T.lime;
+  ctx.font = `700 26px ${sans}`;
+  try { ctx.letterSpacing = "6px"; } catch (e) {}
+  ctx.fillText("MY HOBBY MATCHES", W / 2, 196);
+  try { ctx.letterSpacing = "0px"; } catch (e) {}
+  ctx.fillStyle = T.text;
+  ctx.font = `900 74px ${sans}`;
+  ctx.fillText("Here's what fits me.", W / 2, 296);
+
+  // Top 3 match cards
+  const top = matches.slice(0, 3);
+  const cardX = 90, cardW = W - 180, cardH = 190, gap = 30;
+  let y = 380;
+  top.forEach((name, i) => {
+    const h = HOBBY_DATA[name] || { emoji: "🎯", category: "", difficulty: "" };
+    ctx.fillStyle = i === 0 ? "rgba(91,142,255,0.10)" : T.card;
+    roundedRect(ctx, cardX, y, cardW, cardH, 22);
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = i === 0 ? T.accent : T.border;
+    roundedRect(ctx, cardX, y, cardW, cardH, 22);
+    ctx.stroke();
+
+    ctx.textAlign = "left";
+    ctx.font = `86px ${sans}`;
+    ctx.fillStyle = T.text;
+    ctx.fillText(h.emoji, cardX + 44, y + 122);
+    // Shrink long hobby names to fit the card (e.g. "Astronomy / Astrophotography")
+    let nameSize = 52;
+    ctx.font = `800 ${nameSize}px ${sans}`;
+    while (nameSize > 30 && ctx.measureText(name).width > cardW - 240) {
+      nameSize -= 2;
+      ctx.font = `800 ${nameSize}px ${sans}`;
+    }
+    ctx.fillText(name, cardX + 180, y + 88);
+    ctx.font = `500 30px ${sans}`;
+    ctx.fillStyle = T.textSoft;
+    ctx.fillText(`${h.category} · ${h.difficulty}`, cardX + 180, y + 138);
+
+    if (i === 0) {
+      ctx.fillStyle = T.accent;
+      roundedRect(ctx, cardX + cardW - 220, y - 18, 200, 44, 22);
+      ctx.fill();
+      ctx.fillStyle = "#000";
+      ctx.font = `800 24px ${sans}`;
+      ctx.textAlign = "center";
+      ctx.fillText("TOP MATCH", cardX + cardW - 120, y + 12);
+    }
+    y += cardH + gap;
+  });
+
+  // Wildcard line
+  const wildcard = matches[5];
+  if (wildcard && HOBBY_DATA[wildcard]) {
+    ctx.textAlign = "center";
+    ctx.fillStyle = T.pink;
+    ctx.font = `700 34px ${sans}`;
+    ctx.fillText(`🎲 Wildcard: ${HOBBY_DATA[wildcard].emoji} ${wildcard}`, W / 2, y + 44);
+  }
+
+  // Footer
+  ctx.textAlign = "center";
+  ctx.fillStyle = T.textSoft;
+  ctx.font = `italic 500 34px ${sans}`;
+  ctx.fillText("You are more than your job.", W / 2, H - 138);
+  ctx.fillStyle = T.accent;
+  ctx.font = `700 40px ${sans}`;
+  const host = (typeof window !== "undefined" && window.location && window.location.hostname) || "recess";
+  ctx.fillText(`Find yours → ${host}`, W / 2, H - 72);
+
+  return new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+}
+
+async function shareResults(matches) {
+  try {
+    const blob = await buildShareCardBlob(matches);
+    if (!blob) return;
+    const file = new File([blob], "my-recess-matches.png", { type: "image/png" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: "My Recess hobby matches" });
+      return;
+    }
+    // Desktop fallback: download the image
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "my-recess-matches.png";
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    if (err && err.name === "AbortError") return; // user closed the share sheet
+    console.warn("[Recess] share failed", err);
+  }
 }
 
 // ── MOTIVATIONAL QUOTES ───────────────────────────────────────────────────────
@@ -1722,7 +1854,10 @@ function Results({ matches, quizAnswers, onExplore, onSkip }) {
             </div>
           ); })}
         </div>
-        <Btn onClick={onSkip} variant="ghost">Browse All {HOBBY_COUNT} Hobbies →</Btn>
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+          <Btn onClick={() => shareResults(matches)}>📤 Share My Matches</Btn>
+          <Btn onClick={onSkip} variant="ghost">Browse All {HOBBY_COUNT} Hobbies →</Btn>
+        </div>
       </div>
     </Wrap>
   );
